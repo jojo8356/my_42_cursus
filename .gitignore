@@ -92,3 +92,17 @@ pipex/tests/community/yoo0lh/test_std/*
 !pipex/tests/community/yoo0lh/pipe/.gitkeep
 !pipex/tests/community/yoo0lh/test_std/.gitkeep
 pipex/tests/community/vfurmane/wc -w
+
+# ---------------------------------------------------------------------------- #
+#  push_swap — build artefacts and tester by-products                          #
+# ---------------------------------------------------------------------------- #
+push_swap/obj/
+push_swap/push_swap
+push_swap/checker
+push_swap/.audit.out
+push_swap/tests/community/louisabricot/push_swap_result.log
+push_swap/tests/community/louisabricot/push_swap_benchmark.log
+push_swap/tests/community/louisabricot/push_swap_run_args.log
+push_swap/tests/community/leofu/stdout
+push_swap/tests/community/leofu/stderr
+push_swap/tests/community/leofu/trace_basic/*/test_case_*.log
