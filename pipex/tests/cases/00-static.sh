@@ -11,6 +11,12 @@ ko()  { FAIL=$((FAIL + 1)); printf '  \033[31m[KO]\033[0m %s\n' "$1"; }
 ok()  { PASS=$((PASS + 1)); }
 check() { if eval "$2"; then ok; else ko "$1"; fi; }
 
+# The static audit inspects the compiled binary's imported symbols, so a build
+# has to exist before anything is checked. A fresh clone has none.
+if [ ! -x pipex ] || [ -z "$(ls obj/*/*.o 2>/dev/null)" ]; then
+	make >/dev/null 2>&1
+fi
+
 echo "== 1. Deliverables named by the subject =="
 check "pipex binary exists at the root"          '[ -x pipex ]'
 check "Makefile exists"                          '[ -f Makefile ]'
