@@ -46,6 +46,7 @@ Beyond passing 42 evaluations, each repository module is structured according to
 | **Rank 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | Asynchronous UNIX IPC (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), bit-packing FSM, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 end-to-end tests** (~39 ms / 100 chars, 20k stress, PID guards) |
 | **Rank 02** | [**`born2beroot/`**](born2beroot/README.md) | Debian VM + `monitoring.sh` | LUKS2 + LVM partitioning, `pam_pwquality`/`login.defs` policy, `sudoers` hardening, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 static + 167 requirement checks + 5 community testers (80 checks) + `verify.sh` (64)** |
 | **Rank 02** | [**`pipex/`**](pipex/README.md) | `pipex` binary | UNIX pipes: `fork` + `dup2` + `execve`, N-pipe chains, here_doc, PATH resolution, fd hygiene (no deadlock, no leak) | ✅ N pipes + here_doc | **131 checks** (differential vs bash, ASan/UBSan, robustness) + **3 community testers (71)** |
+| **Rank 02** | [**`so_long/`**](so_long/README.md) | `so_long` & `so_long_bonus` binaries | miniLibX windowing, XPM textures, event hooks, map parsing & validation, tile rendering, game loop | ✅ Enemies · animation · on-screen counter | **106 checks** (10 map rules, gameplay, bonuses, ASan/UBSan over 41 maps, Norm) + **community tester (44)** |
 
 ---
 
@@ -89,6 +90,12 @@ my_42_cursus/
 │   ├── config/                         # vm.conf, partitions.layout, sshd, sudoers, ufw, pwquality
 │   ├── scripts/                        # setup.sh orchestrator, 10 steps, monitoring.sh, verify.sh
 │   └── tests/                          # VM emulator, per-requirement cases, 5 community testers
+├── so_long/                            # Rank 02 — 2D game with the miniLibX
+│   ├── include/                        # so_long.h
+│   ├── src/                            # Parsing, rendering, hooks + src/bonus
+│   ├── assets/                         # 9 XPM sprites, 2 frames per entity
+│   ├── docs/                           # Official PDF + EN & FR transcriptions
+│   └── tests/                          # miniLibX shim, 6 suites, 1 community tester
 ├── minitalk/                           # Rank 02 — UNIX signal bit-stream IPC
 │   ├── include/                        # minitalk.h & minitalk_bonus.h
 │   ├── src/                            # Client, server, bit transfer & strict PID utils
@@ -194,6 +201,7 @@ Chaque projet est structuré proprement selon les standards de l'industrie adapt
 | **Rang 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | IPC UNIX par signaux (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), encodage bit-à-bit avec ACK, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 tests bout-en-bout** (~39 ms / 100 chars, 20 000 chars, erreurs PID) |
 | **Rang 02** | [**`born2beroot/`**](born2beroot/README.fr.md) | VM Debian + `monitoring.sh` | Partitionnement LUKS2 + LVM, politique `pam_pwquality`/`login.defs`, durcissement `sudoers`, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 vérifications statiques + 167 exigences + 5 testeurs communautaires (80 contrôles) + `verify.sh` (64)** |
 | **Rang 02** | [**`pipex/`**](pipex/README.md) | binaire `pipex` | Pipes UNIX : `fork` + `dup2` + `execve`, chaînes de N pipes, here_doc, résolution du `PATH`, hygiène des descripteurs (ni deadlock ni fuite) | ✅ N pipes + here_doc | **131 contrôles** (différentiels vs bash, ASan/UBSan, robustesse) + **3 testeurs tiers (71)** |
+| **Rang 02** | [**`so_long/`**](so_long/README.fr.md) | binaires `so_long` & `so_long_bonus` | Fenêtrage miniLibX, textures XPM, hooks d’événements, parsing et validation de carte, rendu par tuiles, boucle de jeu | ✅ Ennemis · animation · compteur à l’écran | **106 contrôles** (10 règles de carte, gameplay, bonus, ASan/UBSan sur 41 cartes, Norme) + **testeur tiers (44)** |
 
 ---
 

@@ -106,3 +106,13 @@ push_swap/tests/community/louisabricot/push_swap_run_args.log
 push_swap/tests/community/leofu/stdout
 push_swap/tests/community/leofu/stderr
 push_swap/tests/community/leofu/trace_basic/*/test_case_*.log
+
+# ---------------------------------------------------------------------------- #
+#  so_long — build artefacts and test by-products                               #
+# ---------------------------------------------------------------------------- #
+so_long/obj/
+so_long/so_long
+so_long/so_long_bonus
+so_long/.ci/
+so_long/tests/community/augustobecker/check
+so_long/tests/community/augustobecker/tests/check
