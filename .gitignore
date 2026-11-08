@@ -1,0 +1,65 @@
+# ============================================================================ #
+#  my_42_cursus — Root .gitignore (Enterprise C & 42 School Standards)         #
+# ============================================================================ #
+
+# Object files, dependency files & intermediate build directories
+*.o
+*.d
+*.lo
+*.obj
+obj/
+objs/
+build/
+
+# Static & shared libraries
+*.a
+*.so
+*.dylib
+
+# Build stamps (ft_printf mandatory/bonus switching)
+.mandatory
+.bonus
+
+# Project compiled executables
+minitalk/client
+minitalk/server
+minitalk/client_bonus
+minitalk/server_bonus
+piscine42/bsq/bsq
+piscine42/rush02/ex00/rush-02
+piscine42/c10/ex00/ft_display_file
+piscine42/c10/ex01/ft_cat
+piscine42/c10/ex02/ft_tail
+piscine42/c10/ex03/ft_hexdump
+piscine42/c11/ex05/do-op
+a.out
+
+# Test binaries & generated test artifacts
+libft/tests/bin_test_*
+ft_printf/tests/test_ft_printf
+ft_printf/tests/test_asan
+ft_printf/tests/cases.h
+ft_printf/printfTester/*_test
+ft_printf/printfTester/*_test.dSYM/
+
+# Debugging, profiling & sanitizers
+*.dSYM/
+*.gcov
+*.gcda
+*.gcno
+core
+vgcore.*
+
+# Python / Script caches
+__pycache__/
+*.py[cod]
+
+# Editors, IDEs & OS metadata
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.sudo_as_admin_successful

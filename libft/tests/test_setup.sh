@@ -2,7 +2,7 @@
 set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LIBFT_DIR="$(cd "$SCRIPT_DIR/../libft" && pwd)"
+LIBFT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -52,9 +52,9 @@ if [ "$MISSING" -eq 0 ]; then
 	pass "Presence des 43 fichiers ft_*.c, libft.h, Makefile et README.md a la racine"
 fi
 
-EXTRA_FILES=$(find "$LIBFT_DIR" -maxdepth 2 -type f \
-	! -name 'Makefile' ! -name 'libft.h' ! -name 'README.md' ! -name 'ft_*.c' \
-	! -path '*/.git/*')
+EXTRA_FILES=$(find "$LIBFT_DIR" -maxdepth 1 -type f \
+	! -name 'Makefile' ! -name 'libft.h' ! -name 'README.md' \
+	! -name '.gitignore' ! -name 'ft_*.c')
 ACTUAL_C_COUNT=$(find "$LIBFT_DIR" -maxdepth 1 -name 'ft_*.c' | wc -l | tr -d ' ')
 if [ -z "$EXTRA_FILES" ] && [ "$ACTUAL_C_COUNT" -eq 43 ]; then
 	pass "Aucun fichier parasite ou inutilise dans libft/ (exactement 43 fichiers .c)"
@@ -64,7 +64,7 @@ fi
 
 # 2. Official 42 Norminette check
 if command -v norminette >/dev/null 2>&1; then
-	NORM_OUT=$(norminette "$LIBFT_DIR" 2>&1)
+	NORM_OUT=$(norminette "$LIBFT_DIR/libft.h" "$LIBFT_DIR"/ft_*.c 2>&1)
 	NORM_EXIT=$?
 	if [ "$NORM_EXIT" -eq 0 ] && ! printf "%s\n" "$NORM_OUT" | grep -q "Error"; then
 		OK_FILES=$(printf "%s\n" "$NORM_OUT" | grep -c ": OK!")

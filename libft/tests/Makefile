@@ -1,4 +1,4 @@
-LIBFT_DIR	= ../libft
+LIBFT_DIR	= ..
 LIBFT_A		= $(LIBFT_DIR)/libft.a
 LIBFT_SRCS	= $(wildcard $(LIBFT_DIR)/ft_*.c)
 

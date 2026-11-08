@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rows.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Generation des lignes candidates : permutations de 1..n verifiant
    les vues gauche/droite de chaque ligne. */
 #include <stdlib.h>
@@ -33,41 +45,39 @@ static int	partial_left_ok(int *cur, int pos, int n, int want)
 	return (want <= vis + (n - 1 - pos));
 }
 
-static void	gen(t_ctx *g, int r, int *cur, int used, int pos, int *found)
+static void	gen(t_ctx *g, int *cur, int *st, int *found)
 {
 	int	v;
-	int	i;
+	int	nxt[3];
 
-	if (pos == g->n)
+	if (st[2] == g->n && visible_count(cur, g->n, 1) != g->clues[3 * g->n + *st])
+		return ;
+	if (st[2] == g->n && ++(*found))
 	{
-		if (visible_count(cur, g->n, 1) == g->clues[3 * g->n + r])
-		{
-			i = 0;
-			while (i < g->n)
-			{
-				g->cand[r][(*found) * g->n + i] = cur[i];
-				i++;
-			}
-			(*found)++;
-		}
+		v = -1;
+		while (++v < g->n)
+			g->cand[*st][(*found - 1) * g->n + v] = cur[v];
 		return ;
 	}
-	v = 1;
-	while (v <= g->n)
+	v = 0;
+	while (++v <= g->n)
 	{
-		if (!(used & (1 << v)))
+		if (!(st[1] & (1 << v)))
 		{
-			cur[pos] = v;
-			if (partial_left_ok(cur, pos, g->n, g->clues[2 * g->n + r]))
-				gen(g, r, cur, used | (1 << v), pos + 1, found);
+			cur[st[2]] = v;
+			nxt[0] = st[0];
+			nxt[1] = st[1] | (1 << v);
+			nxt[2] = st[2] + 1;
+			if (partial_left_ok(cur, st[2], g->n, g->clues[2 * g->n + st[0]]))
+				gen(g, cur, nxt, found);
 		}
-		v++;
 	}
 }
 
 int	build_rows(t_ctx *g)
 {
 	int	cur[9];
+	int	st[3];
 	int	r;
 
 	r = 0;
@@ -77,7 +87,10 @@ int	build_rows(t_ctx *g)
 		if (!g->cand[r])
 			return (0);
 		g->cnt[r] = 0;
-		gen(g, r, cur, 0, 0, &g->cnt[r]);
+		st[0] = r;
+		st[1] = 0;
+		st[2] = 0;
+		gen(g, cur, st, &g->cnt[r]);
 		r++;
 	}
 	return (1);

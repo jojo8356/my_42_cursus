@@ -1,0 +1,15 @@
+# Objects & build directory
+obj/
+*.o
+
+# Executables
+client
+server
+client_bonus
+server_bonus
+
+# Python & OS
+__pycache__/
+*.swp
+*~
+.DS_Store

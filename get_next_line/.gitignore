@@ -1,0 +1,24 @@
+# Object files & libraries
+*.o
+*.d
+*.a
+*.out
+*.esq
+
+# Test build artifacts
+tests/bin_*
+tests/fsoares/test*.out
+tests/fsoares/limits.txt
+tests/fsoares/errors.log
+tests/fsoares/error_color.log
+tests/gnl_station/out_*
+tests/gnl_station/sq_get_next_line*.c
+tests/gnl_station/get_next_line.h
+tests/gnl_station/log_norminette
+gnlTester/gnlTest*
+gnlTester/*.o
+
+# Sanitizers & debug symbols
+*.dSYM/
+core
+vgcore.*

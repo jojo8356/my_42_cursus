@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Convertit la chaine str (dans la base donnee) en int. Ignore les
    espaces et les signes. Renvoie 0 si la base est invalide. */
 static int	base_len(char *base)
@@ -43,7 +55,6 @@ int	ft_atoi_base(char *str, char *base)
 	int	len;
 	int	sign;
 	int	nb;
-	int	d;
 
 	len = base_len(base);
 	if (!len)
@@ -58,12 +69,10 @@ int	ft_atoi_base(char *str, char *base)
 		str++;
 	}
 	nb = 0;
-	d = base_index(*str, base);
-	while (d >= 0)
+	while (base_index(*str, base) >= 0)
 	{
-		nb = nb * len + d;
+		nb = nb * len + base_index(*str, base);
 		str++;
-		d = base_index(*str, base);
 	}
 	return (sign * nb);
 }

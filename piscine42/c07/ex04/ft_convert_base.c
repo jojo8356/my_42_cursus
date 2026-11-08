@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_convert_base.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Convertit le nombre nb_ecrit_dans_base_from en base_to et renvoie
    la nouvelle chaine malloc. Renvoie NULL si une base est invalide. */
 #include <stdlib.h>
@@ -42,7 +54,6 @@ static long	conv_value(char *str, char *base, int len)
 {
 	long	nb;
 	int		sign;
-	int		d;
 
 	while (*str == ' ' || (*str >= 9 && *str <= 13))
 		str++;
@@ -54,12 +65,10 @@ static long	conv_value(char *str, char *base, int len)
 		str++;
 	}
 	nb = 0;
-	d = base_index(*str, base);
-	while (d >= 0)
+	while (base_index(*str, base) >= 0)
 	{
-		nb = nb * len + d;
+		nb = nb * len + base_index(*str, base);
 		str++;
-		d = base_index(*str, base);
 	}
 	return (sign * nb);
 }
@@ -72,20 +81,14 @@ static char	*conv_out(long nb, char *base, int len)
 	int		j;
 	int		neg;
 
-	neg = 0;
+	neg = (nb < 0);
 	if (nb < 0)
-	{
-		neg = 1;
 		nb = -nb;
-	}
 	i = 0;
 	if (nb == 0)
 		buf[i++] = base[0];
-	while (nb > 0)
-	{
-		buf[i++] = base[nb % len];
+	while (nb > 0 && (buf[i++] = base[nb % len]))
 		nb /= len;
-	}
 	out = malloc(i + neg + 1);
 	if (!out)
 		return (0);

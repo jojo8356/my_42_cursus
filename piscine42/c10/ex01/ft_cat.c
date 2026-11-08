@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cat.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Comme cat sans option : lit les fichiers donnes (ou stdin si aucun),
    avec un tableau de taille fixe (~29 ko, aucun malloc). */
 #include <unistd.h>
@@ -5,8 +17,6 @@
 #include <errno.h>
 #include <string.h>
 #include <libgen.h>
-
-static char	g_buf[29696];
 
 static void	put_error(char *prog, char *file, char *reason)
 {
@@ -23,13 +33,14 @@ static void	put_error(char *prog, char *file, char *reason)
 
 static void	cat_fd(int fd)
 {
-	int	n;
+	char	buf[29696];
+	int		n;
 
-	n = read(fd, g_buf, sizeof(g_buf));
+	n = read(fd, buf, sizeof(buf));
 	while (n > 0)
 	{
-		write(1, g_buf, n);
-		n = read(fd, g_buf, sizeof(g_buf));
+		write(1, buf, n);
+		n = read(fd, buf, sizeof(buf));
 	}
 }
 
@@ -44,8 +55,8 @@ int	main(int argc, char **argv)
 	status = 0;
 	if (argc < 2)
 		return (cat_fd(0), 0);
-	i = 1;
-	while (i < argc)
+	i = 0;
+	while (++i < argc)
 	{
 		fd = open(argv[i], O_RDONLY);
 		if (fd < 0)
@@ -58,7 +69,6 @@ int	main(int argc, char **argv)
 			cat_fd(fd);
 			close(fd);
 		}
-		i++;
 	}
 	return (status);
 }

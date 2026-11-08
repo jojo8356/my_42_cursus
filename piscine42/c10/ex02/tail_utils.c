@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tail_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Outils de ft_tail : message d'erreur et lecture des n derniers
    octets d'un flux (tampon circulaire malloc). */
 #include <unistd.h>
@@ -53,12 +65,9 @@ void	tail_fd(int fd, long n)
 	r = read(fd, buf, sizeof(buf));
 	while (r > 0)
 	{
-		i = 0;
-		while (i < r)
-		{
+		i = -1;
+		while (++i < r)
 			ring[(total + i) % n] = buf[i];
-			i++;
-		}
 		total += r;
 		r = read(fd, buf, sizeof(buf));
 	}
