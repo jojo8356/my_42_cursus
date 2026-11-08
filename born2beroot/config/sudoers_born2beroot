@@ -1,0 +1,30 @@
+# =============================================================================
+#  /etc/sudoers.d/born2beroot — strict sudo configuration (subject v5.2)
+# =============================================================================
+#  Installed by scripts/setup/60-sudo.sh with mode 0440 owner root:root and
+#  validated by "visudo -cf" before being moved into place.  The same
+#  directives are also written into /etc/sudoers itself, inside a delimited
+#  block, because several graders only ever read that file.
+#
+#  Rationale, in the order of the subject's requirements:
+#    * three attempts maximum on a wrong password (passwd_tries)
+#    * a custom message instead of the default scolding (badpass_message)
+#    * every action logged, both what is typed and what is printed
+#    * the log directory is /var/log/sudo/
+#    * TTY mode on
+#    * a restricted PATH
+# =============================================================================
+
+Defaults	env_reset
+Defaults	mail_badpass
+Defaults	passwd_tries=3
+Defaults	badpass_message="Nice try. This incident has been logged, reported and judged."
+Defaults	log_input, log_output
+Defaults	iolog_dir="/var/log/sudo"
+Defaults	logfile="/var/log/sudo/sudo.log"
+Defaults	requiretty
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+Defaults	env_keep += "SSH_AUTH_SOCK"
+
+# Members of the sudo group may run any command, after authenticating.
+%sudo	ALL=(ALL:ALL) ALL

@@ -1,0 +1,37 @@
+# =============================================================================
+#  Authoritative reference for the partition layout used by this project.
+#  scripts/setup/10-partition.sh creates it, tests/test_partition.sh checks the
+#  live machine against it, and scripts/launch.sh mirrors it on the host.
+# =============================================================================
+#  Disk: /dev/sda, 20 GiB (VM_DISK_GB in config/vm.conf)
+#
+#  NAME                        MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+#  sda                           8:0    0    20G  0 disk
+#  |-sda1                        8:1    0     1G  0 part  /boot
+#  |-sda2                        8:2    0     1K  0 part  <- extended partition
+#  `-sda5                        8:5    0  18.9G  0 part
+#    `-sda5_crypt              254:0    0  18.9G  0 crypt <- LUKS2 container
+#      |-LVMGroup-root         254:1    0     6G  0 lvm   /
+#      |-LVMGroup-swap         254:2    0     2G  0 lvm   [SWAP]
+#      |-LVMGroup-home         254:3    0     4G  0 lvm   /home
+#      |-LVMGroup-var          254:4    0     2G  0 lvm   /var
+#      |-LVMGroup-srv          254:5    0     1G  0 lvm   /srv
+#      |-LVMGroup-tmp          254:6    0     1G  0 lvm   /tmp
+#      `-LVMGroup-var--log     254:7    0   2.5G  0 lvm   /var/log
+#
+#  Why each logical volume exists
+#  -----------------------------------------------------------------------------
+#  root      system itself; 6 GiB is comfortable for Debian + the bonus stack.
+#  swap      2 GiB, required by the subject's example and lets the kernel
+#            survive the WordPress install on a 2 GiB VM.
+#  home      user data; isolating it means a full home cannot fill "/".
+#  var       spool, database and web data (MariaDB lives here).
+#  srv       data served by the machine (kept separate for the bonus).
+#  tmp       mounted with nodev,nosuid,noexec so uploaded files cannot run.
+#  var-log   logs survive a full root and are easy to rotate/audit; this is
+#            also where /var/log/sudo lives.
+#
+#  The LUKS container guarantees "at least 2 encrypted partitions using LVM":
+#  every logical volume above is encrypted at rest, and more than two of them
+#  exist.
+# =============================================================================

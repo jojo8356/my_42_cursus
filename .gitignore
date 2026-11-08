@@ -63,3 +63,15 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .sudo_as_admin_successful
+
+# ---------------------------------------------------------------------------- #
+#  born2beroot — generated artefacts                                            #
+# ---------------------------------------------------------------------------- #
+# The emulator builds its base image from the running Debian userland on first
+# use (tests/vm.sh: prepare_base).  It is host-specific and regenerated
+# automatically, so it is never committed.
+born2beroot/tests/.vm-base/
+# Virtual disks, signature files and provisioning logs
+born2beroot/*.vdi
+born2beroot/*.qcow2
+born2beroot/signature.txt

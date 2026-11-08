@@ -2,7 +2,7 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School C Portfolio: Piscine 42 · Libft (v19.3) · get_next_line (v14.3) · ft_printf · Minitalk**
+**Complete 42 School Portfolio: Piscine 42 · Libft (v19.3) · get_next_line (v14.3) · ft_printf · Minitalk · Born2beRoot (v5.2)**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
@@ -44,6 +44,7 @@ Beyond passing 42 evaluations, each repository module is structured according to
 | **Rank 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Static storage duration, buffered POSIX `read(2)`, amortized $O(L)$ dynamic stash, multi-FD linked list *(Subject v14.3)* | ✅ 1 Static + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1,000 FDs, `malloc` mock) + GNL Station + ASan/UBSan |
 | **Rank 01** | [**`ft_printf/`**](ft_printf/README.md) | `libftprintf.a` | Variadic functions (`stdarg.h`), zero-heap stack rendering, partial `write(2)` resilience, format state machine | ✅ All (`-0.# +*`) | **26,921 differential cases** vs `glibc` + ASan/UBSan + Tripouille |
 | **Rank 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | Asynchronous UNIX IPC (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), bit-packing FSM, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 end-to-end tests** (~39 ms / 100 chars, 20k stress, PID guards) |
+| **Rank 02** | [**`born2beroot/`**](born2beroot/README.md) | Debian VM + `monitoring.sh` | LUKS2 + LVM partitioning, `pam_pwquality`/`login.defs` policy, `sudoers` hardening, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 static + 167 requirement checks + 5 community testers (80 checks) + `verify.sh` (64)** |
 
 ---
 
@@ -76,6 +77,11 @@ my_42_cursus/
 │   ├── tests/                          # 26,921-case differential generator & runner
 │   ├── printfTester/                   # Tripouille reference tester
 │   └── Makefile                        # Out-of-source obj/ build -> libftprintf.a
+├── born2beroot/                        # Rank 02 — Systems administration on Debian
+│   ├── docs/                           # Official v5.2 PDF + EN & FR Markdown subjects
+│   ├── config/                         # vm.conf, partitions.layout, sshd, sudoers, ufw, pwquality
+│   ├── scripts/                        # setup.sh orchestrator, 10 steps, monitoring.sh, verify.sh
+│   └── tests/                          # VM emulator, per-requirement cases, 5 community testers
 ├── minitalk/                           # Rank 02 — UNIX signal bit-stream IPC
 │   ├── include/                        # minitalk.h & minitalk_bonus.h
 │   ├── src/                            # Client, server, bit transfer & strict PID utils
@@ -179,6 +185,7 @@ Chaque projet est structuré proprement selon les standards de l'industrie adapt
 | **Rang 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Variables `static`, `read(2)` bufferisé, tampon dynamique $\Theta(L)$, liste chaînée multi-FD *(Sujet v14.3)* | ✅ 1 `static` + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1 000 FDs, pannes `malloc`) + GNL Station + ASan/UBSan |
 | **Rang 01** | [**`ft_printf/`**](ft_printf/README.md) | `libftprintf.a` | Fonctions variadiques (`stdarg.h`), rendu 100 % sur la pile (`0 malloc`), écriture robuste `write(2)`, automate de parsing | ✅ Complet (`-0.# +*`) | **26 921 tests différentiels** vs `glibc` + ASan/UBSan + Tripouille |
 | **Rang 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | IPC UNIX par signaux (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), encodage bit-à-bit avec ACK, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 tests bout-en-bout** (~39 ms / 100 chars, 20 000 chars, erreurs PID) |
+| **Rang 02** | [**`born2beroot/`**](born2beroot/README.fr.md) | VM Debian + `monitoring.sh` | Partitionnement LUKS2 + LVM, politique `pam_pwquality`/`login.defs`, durcissement `sudoers`, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 vérifications statiques + 167 exigences + 5 testeurs communautaires (80 contrôles) + `verify.sh` (64)** |
 
 ---
 
