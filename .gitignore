@@ -75,3 +75,20 @@ born2beroot/tests/.vm-base/
 born2beroot/*.vdi
 born2beroot/*.qcow2
 born2beroot/signature.txt
+
+# ---------------------------------------------------------------------------- #
+#  pipex — build artefacts and tester by-products                               #
+# ---------------------------------------------------------------------------- #
+pipex/obj/
+pipex/pipex
+pipex/tests/community/vfurmane/config.vars
+pipex/tests/community/vfurmane/outs/
+pipex/tests/community/michmos/outfiles/
+pipex/tests/community/michmos/pipex
+pipex/tests/community/michmos/last_err_log.txt
+pipex/tests/community/michmos/infiles/infile_without_permissions
+pipex/tests/community/yoo0lh/pipe/*
+pipex/tests/community/yoo0lh/test_std/*
+!pipex/tests/community/yoo0lh/pipe/.gitkeep
+!pipex/tests/community/yoo0lh/test_std/.gitkeep
+pipex/tests/community/vfurmane/wc -w
