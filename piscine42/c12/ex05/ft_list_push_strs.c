@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_list_push_strs.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Cree une liste depuis les size chaines de strs : chaque chaine est
    ajoutee au debut, donc strs[0] se retrouve en FIN de liste.
    Renvoie le premier element de la liste creee. */

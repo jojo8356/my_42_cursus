@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_hexdump.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Comme hexdump -C : dump hexa 16 octets/ligne avec colonne ASCII,
    puis la taille totale en hexadecimal sur la derniere ligne.
    Plusieurs fichiers sont concatenes, ou stdin sans fichier. */
@@ -38,29 +50,23 @@ static void	dump_line(unsigned char *p, int cnt, long offset)
 
 	put_hex(offset, 8);
 	write(1, "  ", 2);
-	i = 0;
-	while (i < 16)
+	i = -1;
+	while (++i < 16)
 	{
 		if (i < cnt)
-		{
 			put_hex(p[i], 2);
-			write(1, " ", 1);
-		}
 		else
-			write(1, "   ", 3);
-		if (i == 7)
-			write(1, " ", 1);
-		i++;
+			write(1, "  ", 2);
+		write(1, "  ", 1 + (i == 7));
 	}
 	write(1, " |", 2);
-	i = 0;
-	while (i < cnt)
+	i = -1;
+	while (++i < cnt)
 	{
 		if (p[i] >= 32 && p[i] <= 126)
 			write(1, &p[i], 1);
 		else
 			write(1, ".", 1);
-		i++;
 	}
 	write(1, "|\n", 2);
 }
@@ -77,7 +83,7 @@ static void	dump_fd(int fd, long *offset, unsigned char *line, int *cnt)
 		i = 0;
 		while (i < r)
 		{
-			line[*cnt] = buf[i];
+			line[*cnt] = buf[i++];
 			(*cnt)++;
 			(*offset)++;
 			if (*cnt == 16)
@@ -85,7 +91,6 @@ static void	dump_fd(int fd, long *offset, unsigned char *line, int *cnt)
 				dump_line(line, 16, *offset - 16);
 				*cnt = 0;
 			}
-			i++;
 		}
 		r = read(fd, buf, sizeof(buf));
 	}
@@ -94,40 +99,26 @@ static void	dump_fd(int fd, long *offset, unsigned char *line, int *cnt)
 int	main(int argc, char **argv)
 {
 	unsigned char	line[16];
-	char			*prog;
-	long			offset;
-	int				cnt;
-	int				i;
-	int				fd;
-	int				status;
+	long			off;
+	int				s[4];
 
-	prog = basename(argv[0]);
-	offset = 0;
-	cnt = 0;
-	status = 0;
-	i = 1;
-	if (i < argc && !strcmp(argv[i], "-C"))
-		i++;
-	if (i >= argc)
-		dump_fd(0, &offset, line, &cnt);
-	while (i < argc)
+	off = 0;
+	s[0] = 0;
+	s[1] = 0;
+	s[2] = (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'C' && !argv[1][2]);
+	if (s[2] + 1 >= argc)
+		dump_fd(0, &off, line, &s[0]);
+	while (++s[2] < argc)
 	{
-		fd = open(argv[i], O_RDONLY);
-		if (fd < 0)
-		{
-			put_error(prog, argv[i], strerror(errno));
-			status = 1;
-		}
-		else
-		{
-			dump_fd(fd, &offset, line, &cnt);
-			close(fd);
-		}
-		i++;
+		s[3] = open(argv[s[2]], O_RDONLY);
+		if (s[3] < 0 && ++s[1])
+			put_error(basename(argv[0]), argv[s[2]], strerror(errno));
+		if (s[3] >= 0)
+			dump_fd(s[3], &off, line, &s[0]);
+		if (s[3] >= 0)
+			close(s[3]);
 	}
-	if (cnt > 0)
-		dump_line(line, cnt, offset - cnt);
-	put_hex(offset, 8);
-	write(1, "\n", 1);
-	return (status);
+	if (s[0] > 0)
+		dump_line(line, s[0], off - s[0]);
+	return (put_hex(off, 8), write(1, "\n", 1), s[1] > 0);
 }

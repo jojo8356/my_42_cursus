@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_show_tab.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Affiche le tableau de t_stock_str cree par ft_strs_to_tab : pour
    chaque element, la chaine, sa taille, puis la copie. */
 #include <unistd.h>

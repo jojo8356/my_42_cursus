@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solve.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Backtracking sur les lignes candidates + forward checking. */
 #include "rush01.h"
 
@@ -55,11 +67,28 @@ static int	row_place_ok(t_ctx *g, int depth, int *row)
 	return (1);
 }
 
+static void	toggle_row(t_ctx *g, int depth, int *row, int place)
+{
+	int	i;
+
+	i = 0;
+	while (i < g->n)
+	{
+		if (place)
+		{
+			g->grid[depth * g->n + i] = row[i];
+			g->col_used[i] |= (1 << row[i]);
+		}
+		else
+			g->col_used[i] &= ~(1 << row[i]);
+		i++;
+	}
+}
+
 int	solve(t_ctx *g, int depth)
 {
 	int	k;
 	int	*row;
-	int	i;
 
 	if (depth == g->n)
 		return (1);
@@ -69,17 +98,10 @@ int	solve(t_ctx *g, int depth)
 		row = &g->cand[depth][k * g->n];
 		if (row_place_ok(g, depth, row))
 		{
-			i = -1;
-			while (++i < g->n)
-			{
-				g->grid[depth * g->n + i] = row[i];
-				g->col_used[i] |= (1 << row[i]);
-			}
+			toggle_row(g, depth, row, 1);
 			if (future_ok(g, depth) && solve(g, depth + 1))
 				return (1);
-			i = -1;
-			while (++i < g->n)
-				g->col_used[i] &= ~(1 << row[i]);
+			toggle_row(g, depth, row, 0);
 		}
 		k++;
 	}

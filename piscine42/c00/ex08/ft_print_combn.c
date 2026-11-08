@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_combn.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /* Affiche toutes les combinaisons de n chiffres distincts en ordre
    croissant, separees par ", ". n doit etre entre 1 et 9. */
 #include <unistd.h>

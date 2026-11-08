@@ -38,6 +38,9 @@ tcase "100000" "one hundred thousand" 100000
 tcase "2 milliards" "two billion" 2000000000
 tcase "au-dela uint" "four billion two hundred ninety four million nine hundred sixty seven thousand two hundred ninety six" 4294967296
 tcase "quintillion" "one quintillion" 1000000000000000000
+tcase "sextillion (10^21)" "one sextillion" 1000000000000000000000
+tcase "undecillion (10^36)" "one undecillion" 1000000000000000000000000000000000000
+tcase "42 undecillion + 7" "forty two undecillion seven" 42000000000000000000000000000000000007
 tcase "10.4 -> Error" "Error" 10.4
 tcase "negatif -> Error" "Error" -3
 tcase "lettre -> Error" "Error" abc
@@ -73,7 +76,7 @@ tcase "fr 2024" "deux mille vingt-quatre" numbers_fr.dict 2024
 tcase "fr 1M" "un million" numbers_fr.dict 1000000
 tcase "fr 2M" "deux millions" numbers_fr.dict 2000000
 
-# --- bonus : lecture stdin avec "-" ---
+# --- bonus : lecture stdin avec "-" et sans argument ---
 got="$(cd "$D" && printf '42\n0\nbad\n999\n' | ./rush-02 -)"
 want="forty two
 zero
@@ -83,7 +86,17 @@ if [ "$got" = "$want" ]; then
 	PASS=$((PASS + 1))
 else
 	FAIL=$((FAIL + 1))
-	echo "  FAIL stdin (obtenu: $got)"
+	echo "  FAIL stdin - (obtenu: $got)"
+fi
+
+got2="$(cd "$D" && printf '42\n1000000000000000000000000000000000000\n' | ./rush-02)"
+want2="forty two
+one undecillion"
+if [ "$got2" = "$want2" ]; then
+	PASS=$((PASS + 1))
+else
+	FAIL=$((FAIL + 1))
+	echo "  FAIL stdin sans arg (obtenu: $got2)"
 fi
 
 # --- fuites memoire ---

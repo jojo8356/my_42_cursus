@@ -1,0 +1,12 @@
+# Object files & static archive
+*.o
+*.a
+
+# Test binaries
+tests/bin_test_*
+tests/*.o
+
+# Editors & OS
+*.swp
+*~
+.DS_Store

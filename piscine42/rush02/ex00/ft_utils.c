@@ -1,9 +1,20 @@
-/* Petites utilitaires chaines (aucune libc autorisee). */
-#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
+#include <unistd.h>
 #include "rush02.h"
 
-int	ft_strlen(char *s)
+int	ft_strlen(const char *s)
 {
 	int	i;
 
@@ -13,22 +24,22 @@ int	ft_strlen(char *s)
 	return (i);
 }
 
-void	ft_putstr(char *s)
+void	ft_putstr(const char *s)
 {
 	write(1, s, ft_strlen(s));
 }
 
-int	ft_strcmp(char *a, char *b)
+int	ft_strcmp(const char *a, const char *b)
 {
 	int	i;
 
 	i = 0;
 	while (a[i] && a[i] == b[i])
 		i++;
-	return (a[i] - b[i]);
+	return ((unsigned char)a[i] - (unsigned char)b[i]);
 }
 
-char	*ft_strdup_n(char *s, int len)
+char	*ft_strdup_n(const char *s, int len)
 {
 	char	*dup;
 	int		i;
@@ -42,34 +53,26 @@ char	*ft_strdup_n(char *s, int len)
 		dup[i] = s[i];
 		i++;
 	}
-	dup[len] = 0;
+	dup[len] = '\0';
 	return (dup);
 }
 
-unsigned long long	ft_atoull(char *s, int *ok)
+char	*norm_digits(const char *s, int len)
 {
-	unsigned long long	n;
-	int					i;
+	int	i;
+	int	start;
 
-	n = 0;
+	if (len <= 0)
+		return (0);
 	i = 0;
-	*ok = 1;
-	if (!s[0])
+	while (i < len)
 	{
-		*ok = 0;
-		return (n);
-	}
-	while (s[i])
-	{
-		if (s[i] < '0' || s[i] > '9' || i >= 19)
-		{
-			*ok = 0;
-			return (n);
-		}
-		n = n * 10 + (s[i] - '0');
+		if (s[i] < '0' || s[i] > '9')
+			return (0);
 		i++;
 	}
-	if (n > 1000000000000000000ULL)
-		*ok = 0;
-	return (n);
+	start = 0;
+	while (start < len - 1 && s[start] == '0')
+		start++;
+	return (ft_strdup_n(s + start, len - start));
 }

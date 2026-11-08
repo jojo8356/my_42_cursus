@@ -1,0 +1,34 @@
+# =============================================================================
+#  /etc/ssh/sshd_config — Born2beRoot (subject v5.2)
+# =============================================================================
+#  Requirements satisfied here:
+#    * SSH listens on port 4242 only                    (chapter V)
+#    * root may NOT log in over SSH                     (chapter V)
+#    * password authentication stays available so the evaluator can log in
+#      with a freshly created account during the defence
+#  The file is installed by scripts/setup/30-ssh.sh, which also disables any
+#  "Include /etc/ssh/sshd_config.d/*.conf" drop-in that could override it.
+# =============================================================================
+
+Port 4242
+
+# Never allow the root account to connect, not even with a key.
+PermitRootLogin no
+
+# Password logins must stay possible: the peer evaluator creates a new user
+# and connects with it during the defence.
+PasswordAuthentication yes
+PermitEmptyPasswords no
+KbdInteractiveAuthentication no
+UsePAM yes
+
+# Only accept protocol 2 and keep the usual sane defaults.
+X11Forwarding no
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Restrict which accounts may connect: root is refused twice, once by
+# PermitRootLogin and once by the explicit deny list.
+AllowUsers *@*
+DenyUsers root

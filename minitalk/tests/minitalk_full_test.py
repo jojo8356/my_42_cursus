@@ -7,6 +7,7 @@ Lancement : python3 tests/minitalk_full_test.py   (depuis la racine du projet)
 """
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
@@ -104,7 +105,8 @@ for exe in ("client_bonus", "server_bonus"):
 
 r = run(["make", "clean"])
 check("make clean supprime les .o", r.returncode == 0
-      and not any(f.endswith(".o") for f in os.listdir(".")))
+      and not any(f.endswith(".o") for f in os.listdir("."))
+      and not os.path.exists("obj"))
 
 r = run(["make", "re"])
 check("make re", r.returncode == 0)
@@ -112,11 +114,14 @@ check("make re", r.returncode == 0)
 # ----------------------------------------------------------------------------
 section("2. NORMINETTE")
 # ----------------------------------------------------------------------------
-r = subprocess.run("norminette *.c *.h", shell=True, capture_output=True, text=True)
-out = r.stdout + r.stderr
-norm_errors = [l for l in out.splitlines() if "Error" in l]
-check("norminette OK (0 erreur)", r.returncode == 0 and not norm_errors,
-      "; ".join(norm_errors[:3]))
+if shutil.which("norminette"):
+    r = subprocess.run(["norminette", "src", "include"], capture_output=True, text=True)
+    out = r.stdout + r.stderr
+    norm_errors = [l for l in out.splitlines() if "Error" in l]
+    check("norminette OK (0 erreur)", r.returncode == 0 and not norm_errors,
+          "; ".join(norm_errors[:3]))
+else:
+    check("norminette (ignorée si absente du PATH)", True, "non installée")
 
 # ----------------------------------------------------------------------------
 section("3. DEMARRAGE DU SERVEUR")

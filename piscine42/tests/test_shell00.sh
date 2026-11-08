@@ -132,21 +132,27 @@ cd "$ROOT" || exit 1
 
 # --- ex09 : ft_magic ---
 MAGIC="$ROOT/shell00/ex09/ft_magic"
-{ printf '%041d' 0; printf '42XXXX'; } > "$TMP/on"
-{ printf '%040d' 0; printf '42XXXX'; } > "$TMP/off1"
-{ printf '%042d' 0; printf '42XXXX'; } > "$TMP/off2"
-R_ON="$(file -m "$MAGIC" -b "$TMP/on")"
-R1="$(file -m "$MAGIC" -b "$TMP/off1")"
-R2="$(file -m "$MAGIC" -b "$TMP/off2")"
-if [ "$R_ON" = "42 file" ]; then
-	ok "ex09 detecte 42 au 42e octet"
+if command -v file >/dev/null 2>&1; then
+	{ printf '%041d' 0; printf '42XXXX'; } > "$TMP/on"
+	{ printf '%040d' 0; printf '42XXXX'; } > "$TMP/off1"
+	{ printf '%042d' 0; printf '42XXXX'; } > "$TMP/off2"
+	R_ON="$(file -m "$MAGIC" -b "$TMP/on")"
+	R1="$(file -m "$MAGIC" -b "$TMP/off1")"
+	R2="$(file -m "$MAGIC" -b "$TMP/off2")"
+	if [ "$R_ON" = "42 file" ]; then
+		ok "ex09 detecte 42 au 42e octet"
+	else
+		ko "ex09 detecte 42 au 42e octet (obtenu: $R_ON)"
+	fi
+	if [ "$R_ON" != "$R1" ] && [ "$R_ON" != "$R2" ]; then
+		ok "ex09 pas de detection aux mauvais offsets"
+	else
+		ko "ex09 pas de detection aux mauvais offsets"
+	fi
 else
-	ko "ex09 detecte 42 au 42e octet (obtenu: $R_ON)"
-fi
-if [ "$R_ON" != "$R1" ] && [ "$R_ON" != "$R2" ]; then
-	ok "ex09 pas de detection aux mauvais offsets"
-else
-	ko "ex09 pas de detection aux mauvais offsets"
+	grep -qE '^41[[:space:]]+string[[:space:]]+42[[:space:]]+42 file$' "$MAGIC" \
+		&& ok "ex09 regle ft_magic conforme (file non installe)" \
+		|| ko "ex09 regle ft_magic invalide"
 fi
 
 echo "Shell00 : $PASS reussi(s), $FAIL echec(s)"

@@ -28,7 +28,7 @@ make -s asan
 make -s alloc_fail
 
 # Leave libft/ in clean built state and verify zero stray files in libft/
-make -s -C ../libft re >/dev/null
+make -s -C .. re >/dev/null
 
 printf "${BOLD}${GREEN}============================================================================${RESET}\n"
 printf "${BOLD}${GREEN}   SUCCES TOTAL (100%%) : LES 4 PHASES ET LES 43/43 FONCTIONS SONT VALIDEES  ${RESET}\n"

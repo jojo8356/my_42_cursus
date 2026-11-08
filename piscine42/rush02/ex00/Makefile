@@ -1,8 +1,20 @@
-NAME = rush-02
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-SRC = main.c dict.c convert.c ft_utils.c
-OBJ = $(SRC:.c=.o)
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/11/04 08:00:00 by jojo8356          #+#    #+#              #
+#    Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME	= rush-02
+CC		= cc
+CFLAGS	= -Wall -Wextra -Werror
+SRC		= main.c dict.c convert.c convert_group.c ft_utils.c
+OBJ		= $(SRC:.c=.o)
 
 all: $(NAME)
 

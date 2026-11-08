@@ -1,5 +1,15 @@
-/* Rush02 : conversion d'un nombre en lettres via dictionnaire.
-   Bonus : style ecrit (- , and), autre langue (dico FR), lecture stdin. */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rush02.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef RUSH02_H
 # define RUSH02_H
 
@@ -7,21 +17,34 @@
 
 typedef struct s_dict
 {
-	unsigned long long	key[MAX_ENTRIES];
-	char				*val[MAX_ENTRIES];
-	int					count;
-	int					lang;
+	char	*key[MAX_ENTRIES];
+	char	*val[MAX_ENTRIES];
+	int		count;
+	int		lang;
 }	t_dict;
 
-int					ft_strlen(char *s);
-void				ft_putstr(char *s);
-int					ft_strcmp(char *a, char *b);
-char				*ft_strdup_n(char *s, int len);
-unsigned long long	ft_atoull(char *s, int *ok);
+typedef struct s_buf
+{
+	t_dict	*d;
+	char	*out;
+	int		pos;
+	int		w;
+	int		first;
+}	t_buf;
 
-int					dict_load(char *path, t_dict *d);
-char				*dict_find(t_dict *d, unsigned long long k);
+int		ft_strlen(const char *s);
+void	ft_putstr(const char *s);
+int		ft_strcmp(const char *a, const char *b);
+char	*ft_strdup_n(const char *s, int len);
+char	*norm_digits(const char *s, int len);
 
-int					convert(t_dict *d, unsigned long long n, int w, char *out);
+int		dict_load(char *path, t_dict *d);
+void	dict_free(t_dict *d);
+char	*dict_find(t_dict *d, const char *key);
+
+void	buf_add(t_buf *b, const char *s);
+int		emit_word(t_buf *b, int m);
+int		emit_chunk3(t_buf *b, int val);
+int		convert_number(t_dict *d, const char *raw, int w, char *out);
 
 #endif

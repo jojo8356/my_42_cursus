@@ -1,145 +1,121 @@
-/* Composition du nombre en mots a partir des entrees du dictionnaire.
-   w = 1 : bonus style ecrit (tirets, virgules, and). */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   convert.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jojo8356 <jojo8356@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/08 19:00:00 by jojo8356          #+#    #+#             */
+/*   Updated: 2026/11/08 19:00:00 by jojo8356         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <stdlib.h>
 #include "rush02.h"
 
-static void	add(char *out, int *pos, char *s)
+static char	*make_scale_key(int zeros)
 {
-	int	i;
+	char	*key;
+	int		i;
 
-	i = 0;
-	while (s[i])
+	key = malloc(zeros + 2);
+	if (!key)
+		return (0);
+	key[0] = '1';
+	i = 1;
+	while (i <= zeros)
 	{
-		out[*pos] = s[i];
-		(*pos)++;
+		key[i] = '0';
 		i++;
 	}
-	out[*pos] = 0;
+	key[zeros + 1] = '\0';
+	return (key);
 }
 
-static int	word_of(t_dict *d, unsigned long long m, char *out, int *pos, int w)
+static int	slice_int(const char *s, int len)
 {
-	char	*z;
-	int		i;
-	int		sp;
+	int	val;
+	int	i;
 
-	z = dict_find(d, m);
-	if (!z && m > 20 && m % 10)
+	val = 0;
+	i = 0;
+	while (i < len)
 	{
-		if (!word_of(d, m - m % 10, out, pos, w))
-			return (0);
-		add(out, pos, (w && !d->lang) ? "-" : " ");
-		return (word_of(d, m % 10, out, pos, w));
+		val = val * 10 + (s[i] - '0');
+		i++;
 	}
-	if (!z)
-		return (0);
-	if (w && !d->lang)
-	{
-		sp = -1;
-		i = -1;
-		while (z[++i])
-			if (z[i] == ' ' && sp >= 0)
-				sp = -2;
-			else if (z[i] == ' ')
-				sp = i;
-			else if (!((z[i] >= 'a' && z[i] <= 'z')))
-				sp = -2;
-		if (sp > 0)
-		{
-			z[sp] = '-';
-			add(out, pos, z);
-			z[sp] = ' ';
-			return (1);
-		}
-	}
-	add(out, pos, z);
-	return (1);
+	return (val);
 }
 
-static int	chunk3(t_dict *d, unsigned long long m, char *out, int *pos, int w)
+static int	emit_scale_group(t_buf *b, int val, int zeros)
 {
-	unsigned long long	h;
-	unsigned long long	r;
-	char				*z;
-
-	h = m / 100;
-	r = m % 100;
-	if (h && !(d->lang && h == 1))
-	{
-		if (!word_of(d, h, out, pos, w))
-			return (0);
-		add(out, pos, " ");
-	}
-	if (h)
-	{
-		z = dict_find(d, 100);
-		if (!z)
-			return (0);
-		add(out, pos, z);
-		if (d->lang && h > 1 && !r)
-			add(out, pos, "s");
-		if (r)
-			add(out, pos, (w && !d->lang) ? " and " : " ");
-	}
-	if (r || !h)
-		return (word_of(d, r, out, pos, w));
-	return (1);
-}
-
-static int	add_group(t_dict *d, unsigned long long s, unsigned long long mult,
-		char *out, int *pos, int w)
-{
+	char	*skey;
 	char	*z;
 
-	z = dict_find(d, s);
+	if (!b->first && b->w && !b->d->lang)
+		buf_add(b, ", ");
+	else if (!b->first)
+		buf_add(b, " ");
+	b->first = 0;
+	if (zeros == 0)
+		return (emit_chunk3(b, val));
+	skey = make_scale_key(zeros);
+	if (!skey)
+		return (0);
+	z = dict_find(b->d, skey);
+	free(skey);
 	if (!z)
 		return (0);
-	if (!(d->lang && s == 1000 && mult == 1))
-	{
-		if (!chunk3(d, mult, out, pos, w))
-			return (0);
-		add(out, pos, " ");
-	}
-	add(out, pos, z);
-	if (d->lang && s >= 1000000 && mult > 1)
-		add(out, pos, "s");
+	if (!(b->d->lang && zeros == 3 && val == 1)
+		&& (!emit_chunk3(b, val) || (buf_add(b, " "), 0)))
+		return (0);
+	buf_add(b, z);
+	if (b->d->lang && zeros >= 6 && val > 1)
+		buf_add(b, "s");
 	return (1);
 }
 
-int	convert(t_dict *d, unsigned long long n, int w, char *out)
+static int	convert_groups(t_buf *b, const char *norm)
 {
-	unsigned long long	sc[6];
-	int					p[2];
-	int					i;
+	int	len;
+	int	idx;
+	int	glen;
+	int	val;
 
-	sc[0] = 1000000000000000000ULL;
-	sc[1] = 1000000000000000ULL;
-	sc[2] = 1000000000000ULL;
-	sc[3] = 1000000000ULL;
-	sc[4] = 1000000ULL;
-	sc[5] = 1000ULL;
-	p[0] = 0;
-	p[1] = 1;
-	out[0] = 0;
-	if (n == 0)
-		return (word_of(d, 0, out, &p[0], w));
-	i = -1;
-	while (++i < 6)
+	len = ft_strlen(norm);
+	idx = 0;
+	while (idx < len)
 	{
-		if (n / sc[i])
-		{
-			if (!p[1])
-				add(out, &p[0], (w && !d->lang) ? ", " : " ");
-			if (!add_group(d, sc[i], n / sc[i], out, &p[0], w))
-				return (0);
-			p[1] = 0;
-		}
-		n %= sc[i];
-	}
-	if (n)
-	{
-		if (!p[1])
-			add(out, &p[0], (w && !d->lang) ? ", " : " ");
-		return (chunk3(d, n, out, &p[0], w));
+		glen = (len - idx) % 3;
+		if (glen == 0)
+			glen = 3;
+		val = slice_int(norm + idx, glen);
+		if (val > 0 && !emit_scale_group(b, val, len - idx - glen))
+			return (0);
+		idx += glen;
 	}
 	return (1);
+}
+
+int	convert_number(t_dict *d, const char *raw, int w, char *out)
+{
+	char	*norm;
+	t_buf	b;
+	int		ok;
+
+	norm = norm_digits(raw, ft_strlen(raw));
+	if (!norm)
+		return (-1);
+	b.d = d;
+	b.out = out;
+	b.pos = 0;
+	b.w = w;
+	b.first = 1;
+	out[0] = '\0';
+	if (ft_strcmp(norm, "0") == 0)
+		ok = emit_word(&b, 0);
+	else
+		ok = convert_groups(&b, norm);
+	free(norm);
+	return (ok);
 }
