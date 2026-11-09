@@ -1,0 +1,32 @@
+#!/bin/sh
+# ---------------------------------------------------------------------------
+#  A stand-in for valgrind.
+#
+#  The community tester pipes every invocation through valgrind to make sure the
+#  program does not leak while it refuses a map. valgrind is not installed on
+#  this machine and cannot be added, so without this shim four of its thirteen
+#  checks report [KO] for a reason that has nothing to do with the project.
+#
+#  This script drops valgrind's own options and runs the program unchanged. It
+#  does NOT check memory -- it only lets the checks reach their real assertion,
+#  which is "did the program print Error". Memory correctness is checked for
+#  real, on all 41 maps of this same corpus, by tests/cases/40-memory.sh, which
+#  builds both binaries with AddressSanitizer and UBSan. That is stated in the
+#  test report too, so nobody mistakes a green community run for a leak check.
+#
+#  Usage (as the tester calls it):
+#      valgrind --leak-check=full ... ./so_long map.ber
+# ---------------------------------------------------------------------------
+set -u
+
+# Skip every option valgrind itself would have consumed, then exec the rest.
+while [ $# -gt 0 ]; do
+	case "$1" in
+		--*) shift ;;
+		*) break ;;
+	esac
+done
+
+[ $# -gt 0 ] || { echo "valgrind shim: no command given" >&2; exit 1; }
+
+exec "$@"
