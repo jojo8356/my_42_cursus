@@ -116,3 +116,19 @@ so_long/so_long_bonus
 so_long/.ci/
 so_long/tests/community/augustobecker/check
 so_long/tests/community/augustobecker/tests/check
+
+# ---------------------------------------------------------------------------- #
+#  mlx — cloned minilibx-linux (third-party, not part of the repo)             #
+# ---------------------------------------------------------------------------- #
+mlx/
+
+# ---------------------------------------------------------------------------- #
+#  fdf — build artefacts and test by-products                                  #
+# ---------------------------------------------------------------------------- #
+fdf/fdf
+fdf/tests/test_parse
+fdf/tests/test_math
+fdf/tests/test_draw
+fdf/tests/test_color
+fdf/tests/test_hooks
+fdf/tests/*.err
