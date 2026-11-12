@@ -1,0 +1,5 @@
+# exam_rank02 build artifacts
+*.o
+exam_rank02
+tests/test_level_*
+tests/*.err
