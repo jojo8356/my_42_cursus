@@ -1,0 +1,23 @@
+# Object files
+*.o
+*.obj
+
+# Executables
+fractol
+
+# Test binaries (but keep sources)
+tests/test_math
+tests/test_color
+tests/test_transform
+tests/test_args
+tests/test_render
+tests/test_thread
+tests/*.err
+
+# mlx build artifacts (if mlx is built inside)
+mlx/*.o
+mlx/*.a
+
+# Editor
+*.swp
+*~
