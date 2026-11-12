@@ -1,0 +1,9 @@
+# fdf build artifacts
+*.o
+fdf
+tests/test_parse
+tests/test_math
+tests/test_draw
+tests/test_color
+tests/test_hooks
+tests/*.err
