@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Ex01 : Moteur de template.{% endblock %}
+{% block style %}{{ block.super }}
+<style>body { color: red; }</style>
+{% endblock %}
+{% block content %}
+<h1>Ex01 : Moteur de template.</h1>
+<h2>Blocs</h2>
+<p>Les blocs (<code>{% raw %}{% block name %}{% endraw %}</code>) permettent de définir des zones de contenu
+réutilisables dans des templates parents.</p>
+<h2>Boucles for...in</h2>
+<p>Les boucles (<code>{% raw %}{% for item in items %}{% endraw %}</code>) permettent d'itérer sur des listes.</p>
+<h2>Structures de contrôle if</h2>
+<p>Les conditions (<code>{% raw %}{% if condition %}{% endraw %}</code>) permettent de conditionner l'affichage.</p>
+<h2>Affichage de variables de contexte</h2>
+<p>Les variables sont affichées avec <code>{% raw %}{{ variable }}{% endraw %}</code>.</p>
+{% endblock %}

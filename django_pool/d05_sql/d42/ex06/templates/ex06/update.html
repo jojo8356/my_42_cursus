@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex06 : Update</title>
+</head>
+<body>
+    <h1>Ex06 : Update</h1>
+    <form method="post">
+        <select name="title">
+            {% for title in titles %}
+            <option value="{{ title }}">{{ title }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="opening_crawl">
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex10 : Many to Many</title>
+    <style>
+        table { border-collapse: collapse; }
+        th, td { border: 1px solid #333; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Ex10 : Many to Many</h1>
+    <form method="post">
+        <label for="min_date">Movies minimum release date :</label>
+        <input type="date" id="min_date" name="min_date" required>
+        <br><br>
+        <label for="max_date">Movies maximum release date :</label>
+        <input type="date" id="max_date" name="max_date" required>
+        <br><br>
+        <label for="min_diameter">Planet diameter greater than :</label>
+        <input type="number" id="min_diameter" name="min_diameter" required>
+        <br><br>
+        <label for="gender">Character gender :</label>
+        <select id="gender" name="gender" required>
+            <option value="">--</option>
+            {% for g in genders %}
+            <option value="{{ g }}">{{ g }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Search</button>
+    </form>
+    <br>
+    {% if results %}
+    <table>
+        <tr>
+            <th>Movie</th>
+            <th>Character</th>
+            <th>Gender</th>
+            <th>Homeworld</th>
+            <th>Diameter</th>
+        </tr>
+        {% for r in results %}
+        <tr>
+            <td>{{ r.movie_title }}</td>
+            <td>{{ r.person_name }}</td>
+            <td>{{ r.gender }}</td>
+            <td>{{ r.homeworld }}</td>
+            <td>{{ r.diameter }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% elif request.method == 'POST' %}
+    <p>Nothing corresponding to your research</p>
+    {% endif %}
+</body>
+</html>

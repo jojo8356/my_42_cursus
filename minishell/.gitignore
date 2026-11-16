@@ -1,0 +1,23 @@
+# Minishell binaries and objects
+minishell
+*.o
+*.a
+
+# Test binaries (compiled executables)
+tests/test_basic
+tests/test_variables
+tests/test_quotes
+tests/test_pipes
+tests/test_redirects
+tests/test_logical
+tests/test_wildcards
+tests/test_heredoc
+tests/test_builtins
+
+# Temp files
+*.tmp
+/tmp/ms_*
+
+# Compiled output
+*.out
+*.log

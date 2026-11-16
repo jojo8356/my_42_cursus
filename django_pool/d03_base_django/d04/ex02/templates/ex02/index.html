@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Ex02 : Premier formulaire.{% endblock %}
+{% block content %}
+<h1>Ex02 : Premier formulaire.</h1>
+<h2>Formulaire</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+<h2>Historique des entrées</h2>
+{% if entries %}
+    <ul>
+        {% for entry in entries %}
+            <li>{{ entry }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucune entrée.</p>
+{% endif %}
+{% endblock %}

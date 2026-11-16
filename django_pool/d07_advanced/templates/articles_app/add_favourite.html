@@ -1,0 +1,10 @@
+{% extends "articles_app/base.html" %}
+{% block title %}Add Favourite{% endblock %}
+{% block content %}
+<h1>Add to favourites</h1>
+<form method="post" class="card card-body">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add to favourites</button>
+</form>
+{% endblock %}
