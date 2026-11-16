@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Account</h1>
+
+    <div id="login-form">
+        <h2>Login</h2>
+        <form id="login-ajax">
+            <div class="mb-3">
+                <label for="username" class="form-label">Login</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <div id="login-errors" class="mt-3"></div>
+    </div>
+
+    <div id="logged-in" style="display:none;">
+        <h2>Logged as <span id="username-display"></span></h2>
+        <button id="logout-btn" class="btn btn-danger">Logout</button>
+    </div>
+</div>
+
+<script>
+function refreshState() {
+    $.get('{% url "account" %}', function(response) {
+        // Détecter si connecté via un indicateur
+        $.get('{% url "account" %}', function(data) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(data, 'text/html');
+            if (doc.getElementById('logged-in') && doc.getElementById('logged-in').style.display !== 'none') {
+                // Connecté
+                $('#login-form').hide();
+                $('#logged-in').show();
+            } else {
+                $('#login-form').show();
+                $('#logged-in').hide();
+            }
+        });
+    });
+}
+
+// Vérifier l'état initial
+$(document).ready(function() {
+    $.get('{% url "account" %}', function(data) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(data, 'text/html');
+        var loggedIn = doc.getElementById('logged-in');
+        if (loggedIn) {
+            $('#username-display').text(doc.querySelector('#username-display').textContent);
+            $('#login-form').hide();
+            $('#logged-in').show();
+        }
+    });
+
+    // Formulaire login AJAX
+    $('#login-ajax').submit(function(e) {
+        e.preventDefault();
+        var data = $(this).serialize();
+        $.post('{% url "ajax_login" %}', data, function(resp) {
+            if (resp.success) {
+                $('#username-display').text(resp.username);
+                $('#login-form').hide();
+                $('#logged-in').show();
+                $('#login-errors').empty();
+            } else {
+                var errors = '';
+                $.each(resp.errors, function(key, val) {
+                    errors += val.join(' ') + '<br>';
+                });
+                $('#login-errors').html(errors);
+            }
+        }).fail(function() {
+            $('#login-errors').html('Erreur serveur');
+        });
+    });
+
+    // Bouton logout AJAX
+    $('#logout-btn').click(function(e) {
+        e.preventDefault();
+        $.post('{% url "ajax_logout" %}', function(resp) {
+            if (resp.success) {
+                $('#logged-in').hide();
+                $('#login-form').show();
+                $('#login-errors').empty();
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

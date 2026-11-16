@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex05 : Remove</title>
+</head>
+<body>
+    <h1>Ex05 : Remove</h1>
+    <form method="post">
+        <select name="title">
+            {% for title in titles %}
+            <option value="{{ title }}">{{ title }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="remove">remove</button>
+    </form>
+</body>
+</html>

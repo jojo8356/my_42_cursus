@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ex08 : Display</title>
+    <style>
+        table { border-collapse: collapse; }
+        th, td { border: 1px solid #333; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Ex08 : Display</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Homeworld</th>
+            <th>Climate</th>
+        </tr>
+        {% for person in people %}
+        <tr>
+            <td>{{ person.name }}</td>
+            <td>{{ person.homeworld }}</td>
+            <td>{{ person.climate }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

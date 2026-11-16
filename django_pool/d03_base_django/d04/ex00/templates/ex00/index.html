@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Ex00 : Markdown Cheatsheet.{% endblock %}
+{% block content %}
+<h1>Ex00 : Markdown Cheatsheet.</h1>
+<h2>Syntaxe Markdown</h2>
+<h3>Titres</h3>
+<pre># Titre niveau 1
+## Titre niveau 2
+### Titre niveau 3</pre>
+<h3>Texte</h3>
+<pre>**Texte en gras**
+*Texte en italique*
+`Code en ligne`</pre>
+<h3>Listes</h3>
+<pre>- Liste à puces
+- Autre élément
+
+1. Liste numérotée
+2. Autre élément</pre>
+<h3>Liens et images</h3>
+<pre>[Lien](https://example.com)
+![Image](https://example.com/image.png)</pre>
+<h3>Citations et blocs de code</h3>
+<pre>&gt; Citation
+
+```code```</pre>
+{% endblock %}

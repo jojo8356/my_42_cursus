@@ -1,0 +1,24 @@
+{% extends "articles_app/base.html" %}
+{% block title %}Publications{% endblock %}
+{% block content %}
+<h1>Publications</h1>
+<p><a href="{% url 'publish' %}">Publish a new article</a></p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Synopsis</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+        <tr>
+            <td><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a></td>
+            <td>{{ article.synopsis|truncatechars:20 }}</td>
+            <td>{{ article.created|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
