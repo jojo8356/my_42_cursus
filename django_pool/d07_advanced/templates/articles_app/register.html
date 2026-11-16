@@ -1,10 +1,11 @@
 {% extends "articles_app/base.html" %}
-{% block title %}Register{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Register" %}{% endblock %}
 {% block content %}
-<h1>Register</h1>
+<h1>{% trans "Register" %}</h1>
 <form method="post" class="card card-body">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="submit" class="btn btn-primary">{% trans "Register" %}</button>
 </form>
 {% endblock %}

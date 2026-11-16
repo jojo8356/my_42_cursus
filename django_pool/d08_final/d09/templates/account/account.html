@@ -10,7 +10,12 @@
 <div class="container mt-5">
     <h1>Account</h1>
 
-    <div id="login-form">
+    <div id="logged-in"{% if not user.is_authenticated %} style="display:none;"{% endif %}>
+        <h2>Logged as <span id="username-display">{{ user.username }}</span></h2>
+        <button id="logout-btn" class="btn btn-danger">Logout</button>
+    </div>
+
+    <div id="login-form"{% if user.is_authenticated %} style="display:none;"{% endif %}>
         <h2>Login</h2>
         <form id="login-ajax">
             <div class="mb-3">
@@ -25,45 +30,10 @@
         </form>
         <div id="login-errors" class="mt-3"></div>
     </div>
-
-    <div id="logged-in" style="display:none;">
-        <h2>Logged as <span id="username-display"></span></h2>
-        <button id="logout-btn" class="btn btn-danger">Logout</button>
-    </div>
 </div>
 
 <script>
-function refreshState() {
-    $.get('{% url "account" %}', function(response) {
-        // Détecter si connecté via un indicateur
-        $.get('{% url "account" %}', function(data) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(data, 'text/html');
-            if (doc.getElementById('logged-in') && doc.getElementById('logged-in').style.display !== 'none') {
-                // Connecté
-                $('#login-form').hide();
-                $('#logged-in').show();
-            } else {
-                $('#login-form').show();
-                $('#logged-in').hide();
-            }
-        });
-    });
-}
-
-// Vérifier l'état initial
 $(document).ready(function() {
-    $.get('{% url "account" %}', function(data) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(data, 'text/html');
-        var loggedIn = doc.getElementById('logged-in');
-        if (loggedIn) {
-            $('#username-display').text(doc.querySelector('#username-display').textContent);
-            $('#login-form').hide();
-            $('#logged-in').show();
-        }
-    });
-
     // Formulaire login AJAX
     $('#login-ajax').submit(function(e) {
         e.preventDefault();

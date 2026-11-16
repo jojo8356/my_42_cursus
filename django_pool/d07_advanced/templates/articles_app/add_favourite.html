@@ -1,10 +1,11 @@
 {% extends "articles_app/base.html" %}
-{% block title %}Add Favourite{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Add to favourite" %}{% endblock %}
 {% block content %}
-<h1>Add to favourites</h1>
+<h1>{% trans "Add to favourites" %}</h1>
 <form method="post" class="card card-body">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Add to favourites</button>
+    <button type="submit" class="btn btn-primary">{% trans "Add to favourite" %}</button>
 </form>
 {% endblock %}

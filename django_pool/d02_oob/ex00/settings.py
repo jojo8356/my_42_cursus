@@ -1,4 +1,4 @@
-name = "Jean"
-firstname = "Dupont"
+name = "Dupont"
+firstname = "Jean"
 age = "30"
-profession = "Développeur"
+profession = "Developpeur"

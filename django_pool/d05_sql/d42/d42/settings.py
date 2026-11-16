@@ -2,6 +2,7 @@
 Django settings for d42 project.
 """
 
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +28,7 @@ INSTALLED_APPS = [
     'ex07',
     'ex08',
     'ex09',
+    'ex10',
 ]
 
 MIDDLEWARE = [
@@ -61,10 +63,12 @@ WSGI_APPLICATION = 'd42.wsgi.application'
 
 # PostgreSQL pour la soutenance (à adapter selon l'environnement)
 # Pour les tests ici, SQLite est utilisé en fallback.
+_db_name = os.environ.get('DJANGO_DB_PATH', str(BASE_DIR / 'db.sqlite3'))
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get('DJANGO_DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': _db_name,
     }
 }
 

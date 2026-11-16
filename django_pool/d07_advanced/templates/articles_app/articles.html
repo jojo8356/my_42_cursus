@@ -1,15 +1,16 @@
 {% extends "articles_app/base.html" %}
-{% block title %}Articles{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Articles" %}{% endblock %}
 {% block content %}
-<h1>Articles</h1>
+<h1>{% trans "Articles" %}</h1>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Created</th>
-            <th>Synopsis</th>
-            <th>Since</th>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Author" %}</th>
+            <th>{% trans "Created" %}</th>
+            <th>{% trans "Synopsis" %}</th>
+            <th>{% trans "Since" %}</th>
         </tr>
     </thead>
     <tbody>
@@ -19,7 +20,7 @@
             <td>{{ article.author.username }}</td>
             <td>{{ article.created|date:"Y-m-d H:i" }}</td>
             <td>{{ article.synopsis|truncatechars:20 }}</td>
-            <td>{{ article.created|timesince }} ago</td>
+            <td>{{ article.created|timesince }} {% trans "ago" %}</td>
         </tr>
         {% endfor %}
     </tbody>

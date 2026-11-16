@@ -1,14 +1,15 @@
 {% extends "articles_app/base.html" %}
-{% block title %}Publications{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Publications" %}{% endblock %}
 {% block content %}
-<h1>Publications</h1>
-<p><a href="{% url 'publish' %}">Publish a new article</a></p>
+<h1>{% trans "Publications" %}</h1>
+<p><a href="{% url 'publish' %}">{% trans "Publish a new article" %}</a></p>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Synopsis</th>
-            <th>Created</th>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Synopsis" %}</th>
+            <th>{% trans "Created" %}</th>
         </tr>
     </thead>
     <tbody>

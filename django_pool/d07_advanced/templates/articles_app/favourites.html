@@ -1,7 +1,8 @@
 {% extends "articles_app/base.html" %}
-{% block title %}Favourites{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Favourites" %}{% endblock %}
 {% block content %}
-<h1>Favourites</h1>
+<h1>{% trans "Favourites" %}</h1>
 <ul class="list-group">
     {% for fav in favourites %}
     <li class="list-group-item">

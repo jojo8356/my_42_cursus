@@ -14,7 +14,7 @@
             <div class="navbar-nav">
                 {% if user.is_authenticated %}
                     <span class="navbar-text me-3">
-                        {% if user.reputation %}({{ user.reputation }}){% endif %} {{ user.username }}
+                        ({{ user.reputation }}) {{ user.username }}
                     </span>
                     <a class="nav-link" href="{% url 'logout' %}">Déconnexion</a>
                 {% else %}

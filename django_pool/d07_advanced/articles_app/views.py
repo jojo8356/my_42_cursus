@@ -58,6 +58,12 @@ class RegisterView(CreateView):
     template_name = 'articles_app/register.html'
     success_url = reverse_lazy('home')
 
+    def dispatch(self, request, *args, **kwargs):
+        # Un utilisateur connecte n'a pas acces au formulaire d'inscription.
+        if request.user.is_authenticated:
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.save()
         # Auto-login après inscription
@@ -106,6 +112,13 @@ class AddFavouriteView(LoginRequiredMixin, CreateView):
         # Préremplir le champ article avec l'article courant
         kwargs['initial'] = {'article': self.kwargs['pk']}
         return kwargs
+
+    def get_form(self, form_class=None):
+        # L'utilisateur est connu des la validation, afin que la contrainte
+        # d'unicite (user, article) soit bien verifiee par le formulaire.
+        form = super().get_form(form_class)
+        form.instance.user = self.request.user
+        return form
 
     def form_valid(self, form):
         form.instance.user = self.request.user

@@ -1,9 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Default{% endblock %}</title>
-    {% block style %}{% endblock %}
+    {% block style %}
+    <link rel="stylesheet" href="{% static 'ex01/style1.css' %}">
+    {% endblock %}
 </head>
 <body>
     {% include "nav.html" %}

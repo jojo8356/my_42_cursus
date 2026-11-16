@@ -1,27 +1,27 @@
 from django.shortcuts import render
 
-COLORS = ['noir', 'rouge', 'bleu', 'vert']
+COLORS = {
+    'noir': (0, 0, 0),
+    'rouge': (255, 0, 0),
+    'bleu': (0, 0, 255),
+    'vert': (0, 255, 0),
+}
+NB_SHADES = 50
 
-def generate_shade(base_color, index):
-    """Génère une nuance de couleur pour un dégradé de 50 niveaux."""
-    # Retourne des hex couleurs différentes
-    base_rgb = {
-        'noir': (0, 0, 0),
-        'rouge': (255, 0, 0),
-        'bleu': (0, 0, 255),
-        'vert': (0, 255, 0),
-    }
-    r, g, b = base_rgb[base_color]
-    # Interpolation vers le blanc
-    factor = index / 50.0
-    nr = int(r * (1 - factor))
-    ng = int(g * (1 - factor))
-    nb = int(b * (1 - factor))
-    return f'#{nr:02x}{ng:02x}{nb:02x}'
+
+def generate_shade(color_name, step):
+    """Genere la nuance `step` (0..49) de la couleur, en degradé vers le blanc."""
+    red, green, blue = COLORS[color_name]
+    factor = step / NB_SHADES
+    red = int(red + (255 - red) * factor)
+    green = int(green + (255 - green) * factor)
+    blue = int(blue + (255 - blue) * factor)
+    return '#{:02x}{:02x}{:02x}'.format(red, green, blue)
+
 
 def index(request):
-    shades = []
-    for color in COLORS:
-        shades.append((color, [generate_shade(color, i) for i in range(50)]))
-    context = {'shades': shades}
+    rows = []
+    for step in range(NB_SHADES):
+        rows.append({name: generate_shade(name, step) for name in COLORS})
+    context = {'colors': list(COLORS.keys()), 'rows': rows}
     return render(request, 'ex03/index.html', context)

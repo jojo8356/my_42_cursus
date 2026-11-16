@@ -1,150 +1,137 @@
 # Exercice 05 : Faites vos propres éléments!
 # Dossier : ex05/ - Fichiers : elem.py, elements.py
-
-
-class Elem:
-    def __init__(self, tag_name, attributes=None, content=None, tag_type="double"):
-        self.tag_name = tag_name
-        self.attributes = attributes if attributes else ""
-        self.content = content if content else ""
-        self.tag_type = tag_type
-
-    def __str__(self):
-        attr_str = ""
-        if self.attributes:
-            attr_str = f" {self.attributes}"
-        if self.tag_type == "double":
-            return f"<{self.tag_name}{attr_str}>{self.content}</{self.tag_name}>"
-        else:
-            return f"<{self.tag_name}{attr_str}/>"
-
-    def add_content(self, content):
-        if self.content:
-            self.content += content
-        else:
-            self.content = content
-
-    class InvalidElementException(Exception):
-        pass
+from elem import Elem, Text
 
 
 class Html(Elem):
-    def __init__(self, content=None):
-        super().__init__("html", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='html', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Head(Elem):
-    def __init__(self, content=None):
-        super().__init__("head", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='head', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Body(Elem):
-    def __init__(self, content=None):
-        super().__init__("body", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='body', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Title(Elem):
-    def __init__(self, content=None):
-        super().__init__("title", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='title', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Meta(Elem):
-    def __init__(self, content=None):
-        super().__init__("meta", tag_type="simple")
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='meta', attr=attr, content=content,
+                         tag_type='simple')
 
 
 class Img(Elem):
-    def __init__(self, content=None):
-        super().__init__("img", tag_type="simple")
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='img', attr=attr, content=content,
+                         tag_type='simple')
 
 
 class Table(Elem):
-    def __init__(self, content=None):
-        super().__init__("table", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='table', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Th(Elem):
-    def __init__(self, content=None):
-        super().__init__("th", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='th', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Tr(Elem):
-    def __init__(self, content=None):
-        super().__init__("tr", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='tr', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Td(Elem):
-    def __init__(self, content=None):
-        super().__init__("td", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='td', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Ul(Elem):
-    def __init__(self, content=None):
-        super().__init__("ul", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='ul', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Ol(Elem):
-    def __init__(self, content=None):
-        super().__init__("ol", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='ol', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Li(Elem):
-    def __init__(self, content=None):
-        super().__init__("li", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='li', attr=attr, content=content,
+                         tag_type='double')
 
 
 class H1(Elem):
-    def __init__(self, content=None):
-        super().__init__("h1", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='h1', attr=attr, content=content,
+                         tag_type='double')
 
 
 class H2(Elem):
-    def __init__(self, content=None):
-        super().__init__("h2", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='h2', attr=attr, content=content,
+                         tag_type='double')
 
 
 class P(Elem):
-    def __init__(self, content=None):
-        super().__init__("p", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='p', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Div(Elem):
-    def __init__(self, content=None):
-        super().__init__("div", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='div', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Span(Elem):
-    def __init__(self, content=None):
-        super().__init__("span", content=content)
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='span', attr=attr, content=content,
+                         tag_type='double')
 
 
 class Hr(Elem):
-    def __init__(self, content=None):
-        super().__init__("hr", tag_type="simple")
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='hr', attr=attr, content=content,
+                         tag_type='simple')
 
 
 class Br(Elem):
-    def __init__(self, content=None):
-        super().__init__("br", tag_type="simple")
+    def __init__(self, content=None, attr={}):
+        super().__init__(tag='br', attr=attr, content=content,
+                         tag_type='simple')
 
 
 def main():
-    page = Html([Head([Title("Test")]), Body([P("Hello world")])])
-    print(page)
-
-    # Reproduction de la structure demandée
-    html = Html([
+    print(Html([Head(), Body()]))
+    print(Html([
+        Head(Title(Text('"Hello ground!"'))),
         Body([
-            Div([
-                H1("Hello ground!"),
-                Br(),
-                P("Oh no, not again!"),
-                Br(),
-                Img()
-            ])
-        ])
-    ])
-    print(html)
+            H1(Text('"Oh no, not again!"')),
+            Img(attr={'src': 'http://i.imgur.com/pfp3T.jpg'}),
+        ]),
+    ]))
 
 
 if __name__ == '__main__':

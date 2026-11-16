@@ -23,7 +23,8 @@ def search(expressions):
 
     results = []
     for expr in expressions:
-        expr_clean = expr.strip().lower()
+        expr_display = expr.strip()
+        expr_clean = expr_display.lower()
         if not expr_clean:
             continue
         # Chercher si c'est un état
@@ -44,9 +45,9 @@ def search(expressions):
             if state:
                 results.append(f"{capital} is the capital of {state}")
             else:
-                results.append(f"{expr} is neither a capital city nor a state")
+                results.append(f"{expr_display} is neither a capital city nor a state")
         else:
-            results.append(f"{expr} is neither a capital city nor a state")
+            results.append(f"{expr_display} is neither a capital city nor a state")
     return results
 
 def main():

@@ -14,7 +14,7 @@
         <form method="post" action="{% url 'home' %}">
             {% csrf_token %}
             {{ form.content.as_widget }}
-            {% bootstrap_form_errors form.non_field_errors %}
+            {{ form.content.errors }}
             <button type="submit" class="btn btn-primary">Poster</button>
         </form>
     </div>
@@ -32,10 +32,10 @@
                 <span class="badge bg-danger">↓ {{ tip.downvote_count }}</span>
                 {% if user.is_authenticated %}
                     <a href="{% url 'vote' tip.id 'upvote' %}" class="btn btn-sm btn-outline-success">Upvote</a>
-                    {% if tip.author == user or user.has_perm('tips_app.can_downvote') %}
+                    {% if tip.author == user or may_downvote %}
                         <a href="{% url 'vote' tip.id 'downvote' %}" class="btn btn-sm btn-outline-danger">Downvote</a>
                     {% endif %}
-                    {% if tip.author == user or user.has_perm('tips_app.can_delete') %}
+                    {% if tip.author == user or may_delete %}
                         <a href="{% url 'delete_tip' tip.id %}" class="btn btn-sm btn-outline-danger">Supprimer</a>
                     {% endif %}
                 {% endif %}

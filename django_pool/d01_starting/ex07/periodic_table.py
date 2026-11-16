@@ -1,63 +1,116 @@
 # Exercice 07 : Tableau périodique des éléments
 # Dossier : ex07/ - Fichier : periodic_table.py
+import os
+import re
 import sys
 
+# Frontières des periodes (numero atomique)
+PERIODS = [(1, 2), (3, 10), (11, 18), (19, 36), (37, 54), (55, 86), (87, 118)]
+NB_COLUMNS = 18
+
+LINE_RE = re.compile(
+    r"^(?P<name>[^=]+?)\s*=\s*position:(?P<position>\d+),\s*"
+    r"number:(?P<number>\d+),\s*small:\s*(?P<small>[^,]+),\s*"
+    r"molar:\s*(?P<molar>[^,]+),\s*electron:\s*(?P<electron>.+)$"
+)
+
+
+def period_of(number):
+    for index, (start, end) in enumerate(PERIODS):
+        if start <= number <= end:
+            return index
+    return len(PERIODS) - 1
+
+
 def read_elements(filepath):
-    """Lit le fichier periodic_table.txt et retourne la liste des éléments."""
+    """Lit le fichier periodic_table.txt et retourne les elements parses."""
     elements = []
     with open(filepath, 'r') as f:
         for line in f:
-            parts = line.strip().split('\t')
-            if len(parts) >= 4:
-                elements.append({
-                    'number': parts[0],
-                    'name': parts[1],
-                    'symbol': parts[2],
-                    'mass': parts[3]
-                })
+            line = line.strip()
+            if not line:
+                continue
+            match = LINE_RE.match(line)
+            if not match:
+                continue
+            elements.append({
+                'name': match.group('name').strip(),
+                'position': int(match.group('position')),
+                'number': int(match.group('number')),
+                'small': match.group('small').strip(),
+                'molar': match.group('molar').strip(),
+                'electron': match.group('electron').strip(),
+            })
     return elements
 
+
+def build_grid(elements):
+    """Range les elements dans une grille periodes x colonnes."""
+    grid = [[None] * NB_COLUMNS for _ in PERIODS]
+    for element in elements:
+        row = period_of(element['number'])
+        column = element['position']
+        if 0 <= row < len(grid) and 0 <= column < NB_COLUMNS:
+            grid[row][column] = element
+    return grid
+
+
+def render_cell(element):
+    if element is None:
+        return '<td></td>'
+    return (
+        '<td style="border: 1px solid black; padding: 10px">'
+        f"<h4>{element['name']}</h4>"
+        '<ul>'
+        f"<li>No {element['number']}</li>"
+        f"<li>{element['small']}</li>"
+        f"<li>{element['molar']}</li>"
+        f"<li>{element['electron']} electron(s)</li>"
+        '</ul>'
+        '</td>'
+    )
+
+
 def generate_html(elements):
-    """Génère le HTML du tableau périodique."""
-    html = []
-    html.append('<!DOCTYPE html>')
-    html.append('<html lang="fr">')
-    html.append('<head>')
-    html.append('    <meta charset="UTF-8">')
-    html.append('    <title>Tableau périodique</title>')
-    html.append('    <style>')
-    html.append('        table { border-collapse: collapse; }')
-    html.append('        td { border: 1px solid #333; width: 60px; height: 60px; text-align: center; vertical-align: middle; }')
-    html.append('    </style>')
-    html.append('</head>')
-    html.append('<body>')
-    html.append('    <table>')
+    """Genere la page HTML du tableau periodique."""
+    grid = build_grid(elements)
+    rows = []
+    for row in grid:
+        cells = '\n'.join(render_cell(element) for element in row)
+        rows.append(f'<tr>\n{cells}\n</tr>')
 
-    for el in elements:
-        html.append(f'        <tr>')
-        html.append(f'            <td>')
-        html.append(f'                <h4>{el["name"]}</h4>')
-        html.append(f'                <ul>')
-        html.append(f'                    <li>Numéro atomique : {el["number"]}</li>')
-        html.append(f'                    <li>Symbole : {el["symbol"]}</li>')
-        html.append(f'                    <li>Masse atomique : {el["mass"]}</li>')
-        html.append(f'                </ul>')
-        html.append(f'            </td>')
-        html.append(f'        </tr>')
+    html = '\n'.join([
+        '<!DOCTYPE html>',
+        '<html lang="en">',
+        '<head>',
+        '    <meta charset="UTF-8">',
+        '    <title>Periodic table</title>',
+        '    <style>',
+        '        table { border-collapse: collapse; }',
+        '        td { vertical-align: top; }',
+        '    </style>',
+        '</head>',
+        '<body>',
+        '    <h1>Periodic table</h1>',
+        '    <table>',
+        *rows,
+        '    </table>',
+        '</body>',
+        '</html>',
+    ])
+    return html
 
-    html.append('    </table>')
-    html.append('</body>')
-    html.append('</html>')
-    return '\n'.join(html)
 
 def main():
-    if len(sys.argv) != 2:
+    filepath = sys.argv[1] if len(sys.argv) == 2 else 'periodic_table.txt'
+    if not os.path.exists(filepath):
+        print(f"Error: file '{filepath}' not found.")
         return
-    filepath = sys.argv[1]
     elements = read_elements(filepath)
     html = generate_html(elements)
     with open('periodic_table.html', 'w') as f:
         f.write(html)
+
 
 if __name__ == '__main__':
     main()

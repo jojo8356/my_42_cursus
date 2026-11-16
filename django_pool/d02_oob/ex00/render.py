@@ -1,62 +1,59 @@
-# Exercice 00 : render.py - Générateur de CV
+# Exercice 00 : À la conquête de la Silicon Valley!
 # Dossier : ex00/ - Fichiers : render.py, myCV.template, settings.py
-import sys
 import os
 import re
+import sys
 
-def read_template(template_path):
-    """Lit le contenu du fichier template."""
-    with open(template_path, 'r') as f:
-        return f.read()
 
 def read_settings(settings_path):
-    """Lit les valeurs du fichier settings.py."""
+    """Lit les couples clef = valeur du fichier settings.py."""
     settings = {}
     with open(settings_path, 'r') as f:
         for line in f:
             line = line.strip()
-            if '=' in line and not line.startswith('#'):
-                key, value = line.split('=', 1)
-                key = key.strip()
-                value = value.strip().strip('"').strip("'")
-                settings[key] = value
+            if not line or line.startswith('#') or '=' not in line:
+                continue
+            key, value = line.split('=', 1)
+            value = value.strip()
+            if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
+                value = value[1:-1]
+            settings[key.strip()] = value
     return settings
 
-def render(template_path, settings_path, output_path):
-    """Remplace les motifs (key) par les valeurs de settings."""
-    template = read_template(template_path)
+
+def render(template_path, settings_path):
+    """Remplace les motifs {clef} du template par les valeurs de settings."""
+    with open(template_path, 'r') as f:
+        content = f.read()
     settings = read_settings(settings_path)
 
-    for key, value in settings.items():
-        # Remplacer (key) par la valeur
-        pattern = f'({key})'
-        template = re.sub(pattern, value, template)
+    def substitute(match):
+        key = match.group(1)
+        return settings.get(key, match.group(0))
 
-    with open(output_path, 'w') as f:
-        f.write(template)
+    return re.sub(r'\{([A-Za-z_][A-Za-z0-9_]*)\}', substitute, content)
+
 
 def main():
     if len(sys.argv) != 2:
         print("Usage: python3 render.py <file.template>")
         return
-
     template_path = sys.argv[1]
-
     if not template_path.endswith('.template'):
-        print("Erreur: le fichier doit avoir l'extension .template")
+        print("Error: the file must have the .template extension.")
         return
-
     if not os.path.exists(template_path):
-        print("Erreur: le fichier n'existe pas")
+        print("Error: the file does not exist.")
         return
-
     settings_path = 'settings.py'
     if not os.path.exists(settings_path):
-        print("Erreur: le fichier settings.py n'existe pas")
+        print("Error: settings.py not found.")
         return
+    result = render(template_path, settings_path)
+    output_path = template_path[:-len('.template')] + '.html'
+    with open(output_path, 'w') as f:
+        f.write(result)
 
-    output_path = template_path.replace('.template', '.html')
-    render(template_path, settings_path, output_path)
 
 if __name__ == '__main__':
     main()
