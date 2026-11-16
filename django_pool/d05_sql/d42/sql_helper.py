@@ -5,6 +5,8 @@ Pour les tests ici, sqlite3 est utilisé en fallback.
 """
 import os
 
+DB_PATH_OVERRIDE = os.environ.get('DJANGO_DB_PATH')
+
 USE_POSTGRESQL = os.environ.get('USE_POSTGRESQL', 'false').lower() == 'true'
 
 if USE_POSTGRESQL:
@@ -52,7 +54,7 @@ if USE_POSTGRESQL:
 else:
     import sqlite3
 
-    DB_PATH = os.path.join(os.path.dirname(__file__), 'db.sqlite3')
+    DB_PATH = DB_PATH_OVERRIDE or os.path.join(os.path.dirname(__file__), 'db.sqlite3')
 
     def get_connection():
         conn = sqlite3.connect(DB_PATH)

@@ -1,17 +1,18 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Ex01 : Moteur de template.{% endblock %}
-{% block style %}{{ block.super }}
-<style>body { color: red; }</style>
+{% block style %}
+<link rel="stylesheet" href="{% static 'ex01/style2.css' %}">
 {% endblock %}
 {% block content %}
 <h1>Ex01 : Moteur de template.</h1>
 <h2>Blocs</h2>
-<p>Les blocs (<code>{% raw %}{% block name %}{% endraw %}</code>) permettent de définir des zones de contenu
+<p>Les blocs (<code>{% templatetag openblock %} block name {% templatetag closeblock %}</code>) permettent de définir des zones de contenu
 réutilisables dans des templates parents.</p>
 <h2>Boucles for...in</h2>
-<p>Les boucles (<code>{% raw %}{% for item in items %}{% endraw %}</code>) permettent d'itérer sur des listes.</p>
+<p>Les boucles (<code>{% templatetag openblock %} for item in items {% templatetag closeblock %}</code>) permettent d'itérer sur des listes.</p>
 <h2>Structures de contrôle if</h2>
-<p>Les conditions (<code>{% raw %}{% if condition %}{% endraw %}</code>) permettent de conditionner l'affichage.</p>
+<p>Les conditions (<code>{% templatetag openblock %} if condition {% templatetag closeblock %}</code>) permettent de conditionner l'affichage.</p>
 <h2>Affichage de variables de contexte</h2>
-<p>Les variables sont affichées avec <code>{% raw %}{{ variable }}{% endraw %}</code>.</p>
+<p>Les variables sont affichées avec <code>{% templatetag openvariable %} variable {% templatetag closevariable %}</code>.</p>
 {% endblock %}

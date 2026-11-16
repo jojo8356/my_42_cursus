@@ -1,6 +1,7 @@
 # Exercice 02 : 5 classes 1 cup
 # Dossier : ex02/ - Fichier : beverages.py
 
+
 class HotBeverage:
     price = 0.30
     name = "hot beverage"
@@ -9,7 +10,9 @@ class HotBeverage:
         return "Just some hot water in a cup."
 
     def __str__(self):
-        return f"name : {self.name}\nprice : {self.price}\ndescription : {self.description()}"
+        return (f"name : {self.name}\n"
+                f"price : {self.price:.2f}\n"
+                f"description : {self.description()}")
 
 
 class Coffee(HotBeverage):
@@ -45,9 +48,8 @@ class Cappuccino(HotBeverage):
 
 
 def main():
-    beverages = [HotBeverage(), Coffee(), Tea(), Chocolate(), Cappuccino()]
-    for b in beverages:
-        print(b)
+    for beverage in (HotBeverage(), Coffee(), Tea(), Chocolate(), Cappuccino()):
+        print(beverage)
         print()
 
 

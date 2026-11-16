@@ -1,13 +1,14 @@
 # Exercice 01 : Startup innovante cherche stagiaire
 # Dossier : ex01/ - Fichier : intern.py
 
-class Coffee:
-    def __str__(self):
-        return "This is the worst coffee you ever tasted."
 
 class Intern:
-    def __init__(self, name="My name? I'm nobody, an intern, I have no name."):
-        self.Name = name
+    class Coffee:
+        def __str__(self):
+            return "This is the worst coffee you ever tasted."
+
+    def __init__(self, Name="My name? I'm nobody, an intern, I have no name."):
+        self.Name = Name
 
     def __str__(self):
         return self.Name
@@ -16,7 +17,8 @@ class Intern:
         raise Exception("I'm just an intern, I can't do that...")
 
     def make_coffee(self):
-        return Coffee()
+        return Intern.Coffee()
+
 
 def main():
     intern1 = Intern()
@@ -25,13 +27,13 @@ def main():
     print(intern1)
     print(intern2)
 
-    coffee = intern2.make_coffee()
-    print(coffee)
+    print(intern2.make_coffee())
 
     try:
         intern1.work()
     except Exception as e:
-        print(f"Exception: {e}")
+        print(e)
+
 
 if __name__ == '__main__':
     main()

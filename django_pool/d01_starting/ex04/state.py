@@ -17,10 +17,13 @@ def find_state(capital):
         "CO": "Denver"
     }
 
-    # Inverser le dictionnaire pour recherche par valeur
+    # Inverser le dictionnaire pour recherche par valeur (capitale -> état)
     reverse = {v: k for k, v in capital_cities.items()}
-    if capital in reverse:
-        return reverse[capital]
+    code = reverse.get(capital)
+    if code is not None:
+        for state, state_code in states.items():
+            if state_code == code:
+                return state
     return "Unknown capital city"
 
 def main():

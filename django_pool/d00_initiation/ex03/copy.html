@@ -1,28 +1,43 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Page à reproduire</title>
+    <title>Skills &amp; Progress</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Bienvenue sur notre site</h1>
-            <p>Une page web à reproduire fidèlement.</p>
-        </header>
-        <main>
-            <section class="content">
-                <h2>Section principale</h2>
-                <p>Ceci est le contenu principal de la page.</p>
-                <div class="box">
-                    <p>Un bloc de contenu avec une bordure.</p>
-                </div>
-            </section>
-        </main>
-        <footer>
-            <p>Copyright 2024 - Reproduction fidèle</p>
-        </footer>
+    <header>
+        <h1>My Skills</h1>
+        <p>A quick overview of what I have been learning lately.</p>
+    </header>
+
+    <h2>Web technologies</h2>
+    <ul>
+        <li>
+            <p data-value="90">HTML5</p>
+            <progress class="html5" value="90" max="100">90%</progress>
+        </li>
+        <li>
+            <p data-value="80">CSS3</p>
+            <progress class="css3" value="80" max="100">80%</progress>
+        </li>
+        <li>
+            <p data-value="70">jQuery</p>
+            <progress class="jquery" value="70" max="100">70%</progress>
+        </li>
+        <li>
+            <p data-value="60">PHP</p>
+            <progress class="php" value="60" max="100">60%</progress>
+        </li>
+        <li>
+            <p data-value="50">Node.js</p>
+            <progress class="node-js" value="50" max="100">50%</progress>
+        </li>
+    </ul>
+
+    <h2>Fallback</h2>
+    <div class="progress-bar">
+        <span style="width: 75%">75%</span>
     </div>
 </body>
 </html>

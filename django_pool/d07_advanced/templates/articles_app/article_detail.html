@@ -1,13 +1,18 @@
 {% extends "articles_app/base.html" %}
+{% load i18n %}
 {% block title %}{{ article.title }}{% endblock %}
 {% block content %}
 <h1>{{ article.title }}</h1>
-<p><strong>Author:</strong> {{ article.author.username }}</p>
-<p><strong>Created:</strong> {{ article.created|date:"Y-m-d H:i" }}</p>
-<p><strong>Synopsis:</strong> {{ article.synopsis }}</p>
-<p><strong>Content:</strong></p>
+<p><strong>{% trans "Author" %}:</strong> {{ article.author.username }}</p>
+<p><strong>{% trans "Created" %}:</strong> {{ article.created|date:"Y-m-d H:i" }}</p>
+<p><strong>{% trans "Synopsis" %}:</strong> {{ article.synopsis }}</p>
+<p><strong>{% trans "Content" %}:</strong></p>
 <p>{{ article.content|linebreaks }}</p>
 {% if user.is_authenticated %}
-<p><a href="{% url 'add_favourite' article.pk %}">Add to favourite</a></p>
+<form method="post" action="{% url 'add_favourite' article.pk %}">
+    {% csrf_token %}
+    <input type="hidden" name="article" value="{{ article.pk }}">
+    <button type="submit" class="btn btn-primary">{% trans "Add to favourite" %}</button>
+</form>
 {% endif %}
 {% endblock %}

@@ -1,16 +1,21 @@
 #!/bin/bash
 # Exercice 01 : Pip
 # Dossier : ex01/ - Fichiers : my_script.sh, my_program.py
+# Installe la version de developpement de path.py dans local_lib puis
+# execute my_program.py.
 
-echo "Version de pip:"
+echo "pip version:"
 pip --version
 
-echo "Installation de path.py..."
-pip install --target=local_lib -e "git+https://github.com/jaraco/path.py.git#egg=path" 2> install.log
+# Si la librairie a deja ete installee, l'installation doit l'ecraser.
+rm -rf local_lib
 
-if [ -d "local_lib" ]; then
-    echo "Installation réussie"
+pip install --no-build-isolation --target local_lib \
+    "git+https://github.com/jaraco/path.py.git#egg=path" > install.log 2>&1
+
+if [ -d local_lib ]; then
     python3 my_program.py
 else
-    echo "Échec de l'installation"
+    echo "path.py installation failed, see install.log"
+    exit 1
 fi

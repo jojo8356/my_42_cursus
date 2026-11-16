@@ -1,0 +1,19 @@
+# Bases de données générées par les projets Django
+*.sqlite3
+*.sqlite3-journal
+
+# Environnements virtuels et librairies installées localement (d04)
+local_lib/
+django_venv/
+Django_venv/
+
+# Logs et fichiers statiques collectés
+*.log
+staticfiles/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Tests : sorties temporaires
+tests/.tmp/

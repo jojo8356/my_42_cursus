@@ -1,24 +1,34 @@
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+
 from channels.db import database_sync_to_async
-from .models import ChatRoom, ChatMessage
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+from .models import ChatMessage, ChatRoom
+
+# Registre des utilisateurs connectes, par room (cle : nom du groupe).
+CONNECTED_USERS = {}
+
+
+def users_of(group_name):
+    return sorted(CONNECTED_USERS.get(group_name, set()))
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     room_id = None
     room = None
+    room_group_name = None
 
     async def connect(self):
         self.room_id = int(self.scope['url_route']['kwargs']['room_id'])
         await self.get_room()
         self.room_group_name = f'chat_{self.room_id}'
 
-        # Groupe
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-        # Notifier que l'utilisateur a rejoint
         username = self.scope['user'].username
+        CONNECTED_USERS.setdefault(self.room_group_name, set()).add(username)
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -28,18 +38,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'join': True,
             }
         )
-
-        # Envoyer la liste des utilisateurs connectés
-        await self.send_user_list()
-
-        # Envoyer l'historique (3 derniers messages) pour ex02
+        await self.broadcast_user_list()
         await self.send_history()
 
     async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
-
-        # Notifier que l'utilisateur a quitté
+        if self.room_group_name is None:
+            return
         username = self.scope['user'].username if self.scope['user'].is_authenticated else 'Anonymous'
+
+        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        CONNECTED_USERS.get(self.room_group_name, set()).discard(username)
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
@@ -49,19 +58,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'leave': True,
             }
         )
-
-        # Envoyer la liste des utilisateurs connectés mise à jour
-        await self.send_user_list()
+        await self.broadcast_user_list()
 
     async def receive(self, text_data):
         data = json.loads(text_data)
-        message = data.get('message', '')
+        message = (data.get('message') or '').strip()
 
         if message:
             username = self.scope['user'].username
-            # Sauvegarder en base (historique)
             await self.save_message(username, message)
-            # Envoyer à tous
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -79,20 +84,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'leave': event.get('leave', False),
         }))
 
+    async def chat_user_list(self, event):
+        await self.send(text_data=json.dumps({
+            'type': 'user_list',
+            'users': event['users'],
+        }))
+
+    async def broadcast_user_list(self):
+        """Diffuse la liste des utilisateurs connectes a toute la room."""
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat.user_list',
+                'users': users_of(self.room_group_name),
+            }
+        )
+
     async def send_history(self):
-        """Envoie les 3 derniers messages (ex02)."""
+        """Envoie les 3 derniers messages de la room (ex02)."""
         messages = await self.get_history()
         await self.send(text_data=json.dumps({
             'type': 'history',
             'messages': messages,
-        }))
-
-    async def send_user_list(self):
-        """Envoie la liste des utilisateurs connectés (ex03)."""
-        users = await self.get_connected_users()
-        await self.send(text_data=json.dumps({
-            'type': 'user_list',
-            'users': users,
         }))
 
     @database_sync_to_async
@@ -104,22 +117,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
         ChatMessage.objects.create(
             room=self.room,
             username=username,
-            content=message
+            content=message,
         )
 
     @database_sync_to_async
     def get_history(self):
         messages = ChatMessage.objects.filter(room=self.room).order_by('-created')[:3]
-        return [{
-            'username': m.username,
-            'content': m.content,
-            'created': m.created.isoformat(),
-        } for m in reversed(messages)]
-
-    @database_sync_to_async
-    def get_connected_users(self):
-        # Récupérer les utilisateurs connectés depuis les channels
-        # Simplifié : retourne les usernames des channels actifs
-        # Pour une implémentation complète, on maintendrait un registre
-        # Ici, on retourne une liste basique
-        return [self.scope['user'].username] if self.scope['user'].is_authenticated else []
+        return [
+            {
+                'username': m.username,
+                'content': m.content,
+                'created': m.created.isoformat(),
+            }
+            for m in reversed(messages)
+        ]

@@ -1,6 +1,20 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.core.management import call_command
 from .models import Planets, People
+import os
+
+
+def populate(request):
+    """Charge les fixtures JSON fournies dans l'app ex09."""
+    fixture = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           'ex09_initial_data.json')
+    try:
+        call_command('loaddata', fixture, verbosity=0)
+        return HttpResponse("OK")
+    except Exception as e:
+        return HttpResponse(f"Error: {e}", status=500)
+
 
 def display(request):
     try:

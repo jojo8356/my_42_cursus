@@ -2,11 +2,11 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>(name) - CV</title>
+    <title>CV - {name} {firstname}</title>
 </head>
 <body>
-    <h1>(firstname) (lastname)</h1>
-    <p>Âge : (age)</p>
-    <p>Profession : (profession)</p>
+    <h1>{name} {firstname}</h1>
+    <p>Age : {age}</p>
+    <p>Profession : {profession}</p>
 </body>
 </html>

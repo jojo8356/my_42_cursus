@@ -1,8 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.core.management import call_command
+from django.db.models import Q
 from .models import Planets, People, Movies
+import os
 
-GENDERS = ['male', 'female', 'n/a', 'hermaphrodite']
 
 def index(request):
     genders = People.objects.values_list('gender', flat=True).distinct()
@@ -20,7 +22,6 @@ def index(request):
         except ValueError:
             min_diameter = 0
 
-        from django.db.models import Q
         people_qs = People.objects.filter(gender=gender).filter(
             movies__release_date__gte=min_date,
             movies__release_date__lte=max_date,
@@ -41,3 +42,14 @@ def index(request):
         'genders': genders,
         'results': results,
     })
+
+
+def populate(request):
+    """Charge les fixtures JSON fournies dans l'app ex10."""
+    fixture = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           'ex10_initial_data.json')
+    try:
+        call_command('loaddata', fixture, verbosity=0)
+        return HttpResponse("OK")
+    except Exception as e:
+        return HttpResponse(f"Error: {e}", status=500)

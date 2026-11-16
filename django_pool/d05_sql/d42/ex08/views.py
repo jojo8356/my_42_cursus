@@ -6,6 +6,9 @@ from sql_helper import get_connection, create_table, execute_sql, fetch_all
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+PLANETS_FIELDS = ['name', 'climate', 'diameter', 'orbital_period',
+                 'population', 'rotation_period', 'surface_water', 'terrain']
+
 PLANETS_SQL = """
 CREATE TABLE IF NOT EXISTS ex08_planets (
     id SERIAL PRIMARY KEY,
@@ -50,16 +53,15 @@ def populate(request):
     # Copier planets.csv
     planets_csv = os.path.join(BASE_DIR, 'planets.csv')
     try:
-        with open(planets_csv, 'r') as f:
-            reader = csv.DictReader(f)
+        with open(planets_csv, 'r', newline='') as f:
+            reader = csv.reader(f, delimiter='\t')
             for row in reader:
                 try:
+                    values = [None if v == 'NULL' else v for v in row]
                     execute_sql(
                         conn,
                         "INSERT OR REPLACE INTO ex08_planets (name, climate, diameter, orbital_period, population, rotation_period, surface_water, terrain) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                        (row.get('name'), row.get('climate'), row.get('diameter'),
-                         row.get('orbital_period'), row.get('population'),
-                         row.get('rotation_period'), row.get('surface_water'), row.get('terrain'))
+                        tuple(values)
                     )
                 except Exception as e:
                     results.append(f"planets: {e}")
@@ -70,16 +72,15 @@ def populate(request):
     # Copier people.csv
     people_csv = os.path.join(BASE_DIR, 'people.csv')
     try:
-        with open(people_csv, 'r') as f:
-            reader = csv.DictReader(f)
+        with open(people_csv, 'r', newline='') as f:
+            reader = csv.reader(f, delimiter='\t')
             for row in reader:
                 try:
+                    values = [None if v == 'NULL' else v for v in row]
                     execute_sql(
                         conn,
                         "INSERT OR REPLACE INTO ex08_people (name, birth_year, gender, eye_color, hair_color, height, mass, homeworld) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                        (row.get('name'), row.get('birth_year'), row.get('gender'),
-                         row.get('eye_color'), row.get('hair_color'), row.get('height'),
-                         row.get('mass'), row.get('homeworld'))
+                        tuple(values)
                     )
                 except Exception as e:
                     results.append(f"people: {e}")
@@ -95,11 +96,11 @@ def display(request):
         rows = fetch_all(
             conn,
             """
-            SELECT people.name, people.homeworld, planets.climate
+            SELECT ex08_people.name, ex08_people.homeworld, ex08_planets.climate
             FROM ex08_people
-            JOIN ex08_planets ON people.homeworld = planets.name
-            WHERE planets.climate LIKE '%windy%'
-            ORDER BY people.name
+            JOIN ex08_planets ON ex08_people.homeworld = ex08_planets.name
+            WHERE ex08_planets.climate LIKE '%windy%'
+            ORDER BY ex08_people.name
             """
         )
     except Exception:

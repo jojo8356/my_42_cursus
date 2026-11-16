@@ -80,7 +80,7 @@ def follow_road(query):
     while True:
         title, next_link = get_article_info(soup)
         if not title:
-            return visited, "It's a dead end!"
+            return visited, "It's a dead end !"
 
         visited.append(title)
 
@@ -89,10 +89,10 @@ def follow_road(query):
             count = len(visited) - 1  # Ne pas compter Philosophie ?
             # En fait, l'énoncé veut le compte total des articles visités
             count = len(visited)
-            return visited, f"{count} roads from {query} to philosophy!"
+            return visited, f"{count} roads from {query} to philosophy !"
 
         if next_link is None:
-            return visited, "It's a dead end!"
+            return visited, "It's a dead end !"
 
         # Si le lien est déjà visité
         next_url = f"https://en.wikipedia.org{next_link}"
@@ -102,7 +102,7 @@ def follow_road(query):
 
         next_title, _ = get_article_info(next_soup)
         if next_title and next_title in visited:
-            return visited, "It leads to an infinite loop!"
+            return visited, "It leads to an infinite loop !"
 
         soup = next_soup
 
