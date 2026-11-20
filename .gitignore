@@ -132,3 +132,10 @@ fdf/tests/test_draw
 fdf/tests/test_color
 fdf/tests/test_hooks
 fdf/tests/*.err
+
+# ---------------------------------------------------------------------------- #
+#  philosophers — build artefacts                                               #
+# ---------------------------------------------------------------------------- #
+philosophers/philo/philo
+philosophers/philo_bonus/philo_bonus
+philosophers/tests/__pycache__/
