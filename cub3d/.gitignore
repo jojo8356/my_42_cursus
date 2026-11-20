@@ -1,0 +1,13 @@
+# Objets & binaires
+*.o
+cub3D
+cub3D_bonus
+tests/test_parser
+tests/test_raycasting
+tests/test_player
+tests/test_textures
+tests/test_doors
+tests/test_sprites
+tests/test_integration
+tests/test_robustness
+*.err

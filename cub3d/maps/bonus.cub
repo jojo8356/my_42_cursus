@@ -1,0 +1,21 @@
+NO textures/north.xpm
+SO textures/south.xpm
+WE textures/west.xpm
+EA textures/east.xpm
+DO textures/door.xpm
+SP textures/sprite.xpm
+A1 textures/anim1.xpm
+A2 textures/anim2.xpm
+
+F 100,120,80
+C 30,30,60
+
+111111111111
+1N0000001001
+11011111D001
+100000000001
+101111P11101
+100000A00001
+101111111101
+100000000001
+111111111111
