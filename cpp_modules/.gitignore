@@ -1,0 +1,45 @@
+# Binaires et objets compilés
+*.o
+*.a
+
+# Binaires des exercices ( Makefile clean/fclean les génère )
+megaphone
+phonebook
+tests
+zombie
+horde
+brain
+humans
+sed
+harl
+harlFilter
+fixed
+bsp
+claptrap
+diamondtrap
+animal
+materia
+bureaucrat
+form
+forms
+intern
+convert
+serializer
+identify
+whatever
+iter
+easyfind
+span
+mutantstack
+btc
+RPN
+PmergeMe
+
+# Fichiers générés à l'exécution
+*.replace
+home_shrubbery
+*_shrubbery
+
+# Binaires de test sanitizers
+test_asan
+test_tsan
