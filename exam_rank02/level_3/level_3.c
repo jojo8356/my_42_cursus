@@ -73,8 +73,6 @@ char *epur_str(char *str)
             i++;
         if (str[i])
         {
-            str[j] = str[i];
-            j++;
             while (str[i] && str[i] != ' ')
             {
                 str[j] = str[i];
@@ -358,13 +356,28 @@ int paramsum(char *str)
         while (str[i] && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'))
             i++;
         n = 0;
-        while (str[i] >= '0' && str[i] <= '9')
+        /* a leading '-' makes the number negative: skip it, do not count */
+        if (str[i] == '-')
         {
-            n = n * 10 + (str[i] - '0');
             i++;
+            while (str[i] >= '0' && str[i] <= '9')
+            {
+                n = n * 10 + (str[i] - '0');
+                i++;
+            }
         }
-        if (n > 0)
-            sum += n;
+        else
+        {
+            if (str[i] == '+')
+                i++;
+            while (str[i] >= '0' && str[i] <= '9')
+            {
+                n = n * 10 + (str[i] - '0');
+                i++;
+            }
+            if (n > 0)
+                sum += n;
+        }
     }
     return (sum);
 }

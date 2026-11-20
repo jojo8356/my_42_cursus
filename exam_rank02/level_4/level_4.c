@@ -128,22 +128,26 @@ char *ft_itoa(int n)
         len++;
         tmp /= 10;
     }
+    if (sign == -1)
+        len++;
     result = (char *)malloc(sizeof(char) * (len + 1));
     if (!result)
         return (NULL);
-    i = len;
-    result[i] = 0;
-    i--;
-    if (sign == -1)
-        result[i--] = '-';
+    i = len - 1;
+    result[i + 1] = 0;
     if (n == 0)
         result[i--] = '0';
-    tmp = n < 0 ? -n : n;
-    while (tmp > 0)
+    else
     {
-        result[i--] = '0' + (tmp % 10);
-        tmp /= 10;
+        tmp = n < 0 ? -n : n;
+        while (tmp > 0)
+        {
+            result[i--] = '0' + (tmp % 10);
+            tmp /= 10;
+        }
     }
+    if (sign == -1)
+        result[0] = '-';
     return (result);
 }
 
@@ -266,10 +270,10 @@ char *rev_wstr(char *str)
     i = 0;
     while (str[i])
     {
-        while (str[i] && str[i] != ' ')
+        while (str[i] == ' ')
             i++;
         word_start = &str[i];
-        while (str[i] == ' ')
+        while (str[i] && str[i] != ' ')
             i++;
         word_end = &str[i];
         while (word_end > word_start)
