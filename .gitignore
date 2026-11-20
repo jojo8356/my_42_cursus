@@ -139,3 +139,16 @@ fdf/tests/*.err
 philosophers/philo/philo
 philosophers/philo_bonus/philo_bonus
 philosophers/tests/__pycache__/
+
+# ---------------------------------------------------------------------------- #
+#  exam_rank_03 — build artefacts                                               #
+# ---------------------------------------------------------------------------- #
+exam_rank_03/filter/filter
+exam_rank_03/ft_scanf/test_ft_scanf
+exam_rank_03/get_next_line/test_gnl
+exam_rank_03/n_queens/n_queens
+exam_rank_03/permutations/permutations
+exam_rank_03/powerset/powerset
+exam_rank_03/rip/rip
+exam_rank_03/tsp/tsp
+exam_rank_03/tests/__pycache__/
