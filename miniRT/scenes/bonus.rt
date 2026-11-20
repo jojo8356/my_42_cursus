@@ -1,0 +1,22 @@
+# miniRT — scène bonus (toutes les primitives + textures + motifs + optiques)
+A 0.25 255,255,255
+C 0,2,-8 0,0,1 70
+L 12,15,12 1.0 255,255,255
+
+# sphère miroir
+sp 0,1,0 1.5 255,80,80 re:0.5 sp:0.6 sh:64
+
+# plan texturé
+pl 0,0,0 0,1,0 200,200,200 texture:checker
+
+# cylindre à motif rayé
+cy 3,1,0 0,1,0 1 2.5 80,255,80 pattern:stripe pc1:255,0,0 pc2:0,0,255
+
+# cône
+co -3,1,0 0,1,0 1 2.5 80,80,255
+
+# cube réfléchissant
+cu 0,1,4 0,1,0 1.5 255,255,0 re:0.3
+
+# sphère de verre (transparence + réfraction)
+sp 0,2,3 1.2 200,220,255 tr:0.9 ri:1.5

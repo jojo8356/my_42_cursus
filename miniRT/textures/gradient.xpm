@@ -1,0 +1,12 @@
+/* XPM */
+static char *gradient_xpm[] = {
+"4 4 4 1",
+"A c #ff5555",
+"B c #55ff55",
+"C c #5555ff",
+"D c #ffffff",
+"ABCD",
+"BCDA",
+"CDAB",
+"DABC"
+};
