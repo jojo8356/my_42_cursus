@@ -1,0 +1,26 @@
+# miniRT — artefacts de build
+*.o
+*.a
+miniRT
+cub3D
+minrt_test
+
+# binaires de test
+tests/test_vector
+tests/test_matrix
+tests/test_objects
+tests/test_intersect
+tests/test_lighting
+tests/test_camera
+tests/test_parser
+tests/test_render
+tests/test_integration
+tests/*.err
+tests/*.log
+
+# libft build
+libft/*.o
+libft/libft.a
+
+# logs shim
+/tmp/minrt_*.log
