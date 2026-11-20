@@ -2,7 +2,7 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School Portfolio: Piscine 42 · Libft (v19.3) · get_next_line (v14.3) · ft_printf · Minitalk · Born2beRoot (v5.2) · Pipex (v2)**
+**Complete 42 School Portfolio: Piscine 42 · Libft (v19.3) · get_next_line (v14.3) · ft_printf · Minitalk · Born2beRoot (v5.2) · Pipex (v2) · CPP Modules 00–09**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
@@ -47,6 +47,7 @@ Beyond passing 42 evaluations, each repository module is structured according to
 | **Rank 02** | [**`born2beroot/`**](born2beroot/README.md) | Debian VM + `monitoring.sh` | LUKS2 + LVM partitioning, `pam_pwquality`/`login.defs` policy, `sudoers` hardening, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 static + 167 requirement checks + 5 community testers (80 checks) + `verify.sh` (64)** |
 | **Rank 02** | [**`pipex/`**](pipex/README.md) | `pipex` binary | UNIX pipes: `fork` + `dup2` + `execve`, N-pipe chains, here_doc, PATH resolution, fd hygiene (no deadlock, no leak) | ✅ N pipes + here_doc | **131 checks** (differential vs bash, ASan/UBSan, robustness) + **3 community testers (71)** |
 | **Rank 02** | [**`so_long/`**](so_long/README.md) | `so_long` & `so_long_bonus` binaries | miniLibX windowing, XPM textures, event hooks, map parsing & validation, tile rendering, game loop | ✅ Enemies · animation · on-screen counter | **106 checks** (10 map rules, gameplay, bonuses, ASan/UBSan over 41 maps, Norm) + **community tester (44)** |
+| **Rank 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercises (`cpp_00`–`cpp_09`) | OOP: classes, inheritance, exceptions, templates, orthodox canonical form; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, functional, edge cases, 3000-element stress, ASan/TSan) |
 
 ---
 
@@ -109,6 +110,12 @@ my_42_cursus/
     ├── bsq/                            # Capstone dynamic-programming square solver
     ├── subjects/pdf/                   # 34 archived subject PDFs
     └── tests/                          # Non-intrusive C & POSIX sh test drivers
+└── cpp_modules/                        # Rank 03 — C++ Modules 00-09 (OOP & STL)
+    ├── subjects/                      # Official subject texts (CPP_Module_00.txt … 09)
+    ├── cpp_00/ .. cpp_09/             # 37 exercises (ex00..exN per module)
+    │   ├── Makefile                    # all/clean/fclean/re targets
+    │   └── *.hpp / *.cpp / main.cpp    # Orthodox canonical form, C++98 strict
+    └── tests/                          # 93-check Python suite (functional, stress, ASan/TSan)
 ```
 
 ---
@@ -134,6 +141,9 @@ make -C ft_printf bonus
 # 3. Build Minitalk client & server (+ bonus binaries)
 make -C minitalk
 make -C minitalk bonus
+
+# 4. Build CPP Modules (each exercise in cpp_modules/cpp_XX/exYY)
+make -C cpp_modules/cpp_09/ex02
 ```
 
 ---
@@ -157,6 +167,9 @@ python3 minitalk/tests/minitalk_full_test.py
 
 # Piscine 42: run all module & capstone drivers (or pass specific targets e.g. bsq rush02)
 ./piscine42/run_all_tests.sh
+
+# CPP Modules 00-09: 93 checks (build, functional, edge cases, 3000-element stress, ASan/TSan)
+python3 cpp_modules/tests/test_cpp_modules.py
 ```
 
 ---
@@ -202,6 +215,7 @@ Chaque projet est structuré proprement selon les standards de l'industrie adapt
 | **Rang 02** | [**`born2beroot/`**](born2beroot/README.fr.md) | VM Debian + `monitoring.sh` | Partitionnement LUKS2 + LVM, politique `pam_pwquality`/`login.defs`, durcissement `sudoers`, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 vérifications statiques + 167 exigences + 5 testeurs communautaires (80 contrôles) + `verify.sh` (64)** |
 | **Rang 02** | [**`pipex/`**](pipex/README.md) | binaire `pipex` | Pipes UNIX : `fork` + `dup2` + `execve`, chaînes de N pipes, here_doc, résolution du `PATH`, hygiène des descripteurs (ni deadlock ni fuite) | ✅ N pipes + here_doc | **131 contrôles** (différentiels vs bash, ASan/UBSan, robustesse) + **3 testeurs tiers (71)** |
 | **Rang 02** | [**`so_long/`**](so_long/README.fr.md) | binaires `so_long` & `so_long_bonus` | Fenêtrage miniLibX, textures XPM, hooks d’événements, parsing et validation de carte, rendu par tuiles, boucle de jeu | ✅ Ennemis · animation · compteur à l’écran | **106 contrôles** (10 règles de carte, gameplay, bonus, ASan/UBSan sur 41 cartes, Norme) + **testeur tiers (44)** |
+| **Rang 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercices (`cpp_00`–`cpp_09`) | POO : classes, héritage, exceptions, templates, forme canonique ; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, fonctionnels, cas limites, stress 3000, ASan/TSan) |
 
 ---
 
@@ -212,6 +226,7 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`get_next_line/`** conserve les **6 fichiers de rendu imposés à la racine** (`get_next_line.{c,h}`, `get_next_line_utils.c` et leurs variantes `_bonus.{c,h}`) — le sujet v14.3 n'attend **aucun `Makefile`** — tout en déportant le sujet dans `docs/`, les testeurs dans `tests/` et `gnlTester/`, et l'orchestrateur dans `run_tests.sh`.
 - **`libft/`** conserve volontairement `Makefile`, `libft.h`, `README.md` et les 43 `ft_*.c` à sa racine conformément à l'exigence stricte du **Chapitre IV.1 du sujet Libft 2026 v19.3**, tout en isolant le sujet dans `docs/` et les tests dans `tests/`.
 - **`piscine42/`** préserve des dossiers `exXX/` strictement purs (prêts pour la Moulinette) et déporte l'intégralité des bancs d'essai dans `piscine42/tests/`.
+- **`cpp_modules/`** contient les 10 modules **CPP 00–09** : chaque exercice (`cpp_XX/exYY/`) est autonome avec son `Makefile` et ses fichiers `*.hpp`/`*.cpp` en **C++98 strict** (`-Wall -Wextra -Werror`), forme canonique obligatoire de `cpp_02` à `cpp_09`, STL réservée aux modules 08–09. Les énoncés officiels sont dans `subjects/` et la suite de tests Python dans `tests/`.
 
 Pour aller plus loin sur l'organisation professionnelle d'un projet C en entreprise et à 42, consultez [**`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`**](docs/C_PROJECT_ARCHITECTURE_GUIDE.md).
 
@@ -233,6 +248,9 @@ make -C ft_printf bonus
 # Compiler Minitalk (client/server + versions bonus)
 make -C minitalk
 make -C minitalk bonus
+
+# Compiler CPP Modules (chaque exercice dans cpp_modules/cpp_XX/exYY)
+make -C cpp_modules/cpp_09/ex02
 ```
 
 ---
@@ -254,6 +272,9 @@ python3 minitalk/tests/minitalk_full_test.py
 
 # Piscine 42 : exécuter tous les drivers (ou cibler ex. ./piscine42/run_all_tests.sh bsq rush02)
 ./piscine42/run_all_tests.sh
+
+# CPP Modules 00-09 : 93 checks (build, fonctionnels, cas limites, stress 3000, ASan/TSan)
+python3 cpp_modules/tests/test_cpp_modules.py
 ```
 
 ---
