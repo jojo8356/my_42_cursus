@@ -131,26 +131,17 @@ void ft_swap(int *a, int *b)
 void repeat_alpha(char *str)
 {
     int i;
-    int count;
+    int j;
 
     i = 0;
     while (str[i])
     {
-        count = 0;
-        while (str[i] >= 'a' && str[i] <= 'z')
+        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z'))
         {
-            write(1, &str[i], 1);
-            count++;
-            i++;
+            for (j = 0; j < i + 1; j++)
+                write(1, &str[i], 1);
         }
-        while (str[i] >= 'A' && str[i] <= 'Z')
-        {
-            write(1, &str[i], 1);
-            count++;
-            i++;
-        }
-        if (count == 0)
-            i++;
+        i++;
     }
 }
 

@@ -2,7 +2,7 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School Portfolio: Piscine 42 · Libft (v19.3) · get_next_line (v14.3) · ft_printf · Minitalk · Born2beRoot (v5.2) · Pipex (v2) · FdF · Fract'ol · CPP Modules 00–09**
+**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · Exam Rank 02 · Exam Rank 03**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
@@ -37,19 +37,49 @@ Beyond passing 42 evaluations, each repository module is structured according to
 
 ### Projects Matrix
 
+The portfolio is organized along the 42 curriculum's **4 circles** — from the
+foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
+(Circle 4) — plus standalone **Exam Rank** practice repositories.
+
+#### 🔵 Circle 1 — Foundations
+
 | Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Selection** | [**`piscine42/`**](piscine42/README.md) | 16 Modules + 3 Rushes + `bsq` | Shell, pointers, recursion, backtracking, dynamic programming, linked lists, binary trees | ✅ | 20 automated test drivers (`run_all_tests.sh`) |
 | **Rank 00** | [**`libft/`**](libft/README.md) | `libft.a` *(43 functions)* | Memory management, `libc` internals, string allocators, `t_list` singly linked lists *(Subject v19.3)* | Integrated *(v19.3)* | **11,407 assertions** + `malloc` fault injection + ASan/UBSan |
-| **Rank 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Static storage duration, buffered POSIX `read(2)`, amortized $O(L)$ dynamic stash, multi-FD linked list *(Subject v14.3)* | ✅ 1 Static + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1,000 FDs, `malloc` mock) + GNL Station + ASan/UBSan |
 | **Rank 01** | [**`ft_printf/`**](ft_printf/README.md) | `libftprintf.a` | Variadic functions (`stdarg.h`), zero-heap stack rendering, partial `write(2)` resilience, format state machine | ✅ All (`-0.# +*`) | **26,921 differential cases** vs `glibc` + ASan/UBSan + Tripouille |
-| **Rank 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | Asynchronous UNIX IPC (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), bit-packing FSM, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 end-to-end tests** (~39 ms / 100 chars, 20k stress, PID guards) |
+| **Rank 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Static storage duration, buffered POSIX `read(2)`, amortized $O(L)$ dynamic stash, multi-FD linked list *(Subject v14.3)* | ✅ 1 Static + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1,000 FDs, `malloc` mock) + GNL Station + ASan/UBSan |
 | **Rank 02** | [**`born2beroot/`**](born2beroot/README.md) | Debian VM + `monitoring.sh` | LUKS2 + LVM partitioning, `pam_pwquality`/`login.defs` policy, `sudoers` hardening, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 static + 167 requirement checks + 5 community testers (80 checks) + `verify.sh` (64)** |
+
+#### 🟢 Circle 2 — Core Systems
+
+| Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Rank 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | Asynchronous UNIX IPC (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), bit-packing FSM, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 end-to-end tests** (~39 ms / 100 chars, 20k stress, PID guards) |
 | **Rank 02** | [**`pipex/`**](pipex/README.md) | `pipex` binary | UNIX pipes: `fork` + `dup2` + `execve`, N-pipe chains, here_doc, PATH resolution, fd hygiene (no deadlock, no leak) | ✅ N pipes + here_doc | **131 checks** (differential vs bash, ASan/UBSan, robustness) + **3 community testers (71)** |
 | **Rank 02** | [**`so_long/`**](so_long/README.md) | `so_long` & `so_long_bonus` binaries | miniLibX windowing, XPM textures, event hooks, map parsing & validation, tile rendering, game loop | ✅ Enemies · animation · on-screen counter | **106 checks** (10 map rules, gameplay, bonuses, ASan/UBSan over 41 maps, Norm) + **community tester (44)** |
+| **Rank 02** | [**`push_swap/`**](push_swap/README.fr.md) | `push_swap` binary | Sort two integer stacks in minimal moves: sorter + pusher, SA/SB/PA/PB operations, cost-optimized decision engine | ✅ | **388 verifications** (cases, 20-benchmark, differential) |
 | **Rank 02** | [**`fract-ol/`**](fract-ol/README.md) | `fract-ol` binary | miniLibX 2D fractal renderer (Mandelbrot, Julia), escape-time rendering, mouse zoom, color palettes | ✅ Burning Ship · Tricorn · Phoenix · Multibrot · multithreading | **1,077 tests** (6 suites, no X11 required) |
 | **Rank 02** | [**`fdf/`**](fdf/README.md) | `fdf` binary | miniLibX wireframe 3D terrain renderer, `.fdf` height-map parsing, isometric projection, color gradient | ✅ 3D rotation · 5 color modes · rainbow HSL→RGB | **248 tests** (5 suites: parse, math, draw, color, hooks) |
+
+#### 🟡 Circle 3 — Advanced Concurrency
+
+| Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Rank 03** | [**`minishell/`**](minishell/README.md) | `minishell` binary | Mini shell: lexer/parser, env & variable expansion, pipes, redirections, logical operators (`&&`/`||`), wildcards | ✅ Bonus features | **60 tests** (7 C suites: basic, variables, quotes, pipes, redirects, logical, wildcards) |
+| **Rank 03** | [**`philosophers/`**](philosophers/README.md) | `philo` & `philo_bonus` binaries | Dining philosophers: threads + mutex (mandatory), processes + named semaphores (bonus), race-free timing & messaging | ✅ Named semaphores | **87/87 tests** (Python suite, mandatory + bonus) |
+
+#### 🔴 Circle 4 — C++
+
+| Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
+| :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rank 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercises (`cpp_00`–`cpp_09`) | OOP: classes, inheritance, exceptions, templates, orthodox canonical form; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, functional, edge cases, 3000-element stress, ASan/TSan) |
+
+#### 📚 Exam Rank Practice
+
+| Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Rank 02** | [**`exam_rank02/`**](exam_rank02/README.md) | `exam_rank02` binary | Exam Rank 02 practice — 4 levels: strings, advanced manipulation, algorithms, memory & linked lists | ✅ | **111 tests** (4 C suites, level 1–4) |
+| **Rank 03** | [**`exam_rank_03/`**](exam_rank_03/README.md) | 8 programs | Exam Rank 03 practice — level 1 (filter, ft_scanf, get_next_line) & level 2 (n_queens, permutations, powerset, rip, tsp) | ✅ | **90/90 tests** |
 
 ---
 
@@ -122,6 +152,32 @@ my_42_cursus/
 │   ├── src/                           # Mandelbrot/Julia + bonus fractals, multithread
 │   ├── tests/                         # 6 suites / 1,077 tests (headless)
 │   └── Makefile
+├── push_swap/                         # Rank 02 — sort two integer stacks in minimal moves
+│   ├── push_swap.c                    # sorter + pusher
+│   ├── push_swap_utils.c              # operations SA/SB/PA/PB
+│   ├── tests/                         # 388 verifications (cases, benchmark, differential)
+│   └── Makefile
+├── minishell/                         # Rank 03 — minimal shell in C
+│   ├── include/                       # minishell.h (types, prototypes)
+│   ├── src/                           # lexer, parser, env, builtins, execution
+│   ├── bonus/                         # bonus feature files
+│   ├── libft/                         # vendored libft
+│   ├── tests/                         # 7 C suites / 60 tests (run_tests.sh)
+│   └── Makefile
+├── philosophers/                      # Rank 03 — dining philosophers
+│   ├── philo/                         # mandatory: threads + mutex
+│   ├── philo_bonus/                   # bonus: processes + named semaphores
+│   ├── tests/                         # Python suite (87/87)
+│   └── Makefile
+├── exam_rank02/                       # Exam Rank 02 practice — 4 levels
+│   ├── include/exam_rank02.h          # prototypes level 1–4 (+ list_t)
+│   ├── level_1/ .. level_4/           # level implementations
+│   ├── libft/                         # local libft
+│   └── tests/                         # 4 C suites / 111 tests
+├── exam_rank_03/                      # Exam Rank 03 practice — level 1 & 2
+│   ├── filter/ ft_scanf/ get_next_line/      # level 1 programs
+│   ├── n_queens/ permutations/ powerset/ rip/ tsp/   # level 2 programs
+│   └── tests/                         # Python suite (90/90)
 └── cpp_modules/                        # Rank 03 — C++ Modules 00-09 (OOP & STL)
     ├── subjects/                      # Official subject texts (CPP_Module_00.txt … 09)
     ├── cpp_00/ .. cpp_09/             # 37 exercises (ex00..exN per module)
@@ -154,11 +210,19 @@ make -C ft_printf bonus
 make -C minitalk
 make -C minitalk bonus
 
-# 4. Build FdF (wireframe 3D terrain) and Fract'ol (2D fractals)
+# 4. Build FdF (wireframe 3D terrain), Fract'ol (2D fractals) and push_swap
 make -C fdf
 make -C fract-ol
+make -C push_swap
 
-# 5. Build CPP Modules (each exercise in cpp_modules/cpp_XX/exYY)
+# 5. Build Minishell and Philosophers (Rank 03)
+make -C minishell
+make -C philosophers
+
+# 6. Build Exam Rank 02 (4-level practice binary)
+make -C exam_rank02
+
+# 7. Build CPP Modules (each exercise in cpp_modules/cpp_XX/exYY)
 make -C cpp_modules/cpp_09/ex02
 ```
 
@@ -189,6 +253,18 @@ make -C fdf/tests
 
 # Fract'ol: 6 suites / 1,077 tests (headless, no X11 required)
 make -C fract-ol/tests
+
+# Push_swap: 388 verifications (cases, 20-benchmark, differential)
+bash push_swap/tests/run_tests.sh
+
+# Minishell: 7 C suites / 60 tests (basic, variables, quotes, pipes, redirects, logical, wildcards)
+bash minishell/tests/run_tests.sh
+
+# Philosophers: 87/87 tests (Python, mandatory + bonus)
+python3 philosophers/tests/test_philo.py
+
+# Exam Rank 02: 4 C suites / 111 tests (level 1-4)
+make -C exam_rank02 test
 
 # CPP Modules 00-09: 93 checks (build, functional, edge cases, 3000-element stress, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
@@ -227,19 +303,49 @@ Chaque projet est structuré proprement selon les standards de l'industrie adapt
 
 ### Catalogue des projets
 
+Le portfolio est organisé selon les **4 cercles** du cursus 42 — des
+fondations (cercle 1) jusqu'à la concurrence avancée (cercle 3) et le
+track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
+
+#### 🔵 Cercle 1 — Fondements
+
 | Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
 | :--- | :--- | :--- | :--- | :---: | :--- |
-| **Sélection** | [**`piscine42/`**](piscine42/README.md) | 16 modules + 3 Rushs + `bsq` | Shell UNIX, pointeurs, récursivité, backtracking, programmation dynamique, listes & arbres binaires | ✅ | 20 drivers de tests (`run_all_tests.sh`) |
 | **Rang 00** | [**`libft/`**](libft/README.md) | `libft.a` *(43 fonctions)* | Gestion mémoire bas niveau, réimplémentation `libc`, allocateurs de chaînes, listes chaînées `t_list` *(Sujet 2026 v19.3)* | Intégrés *(v19.3)* | **11 407 assertions** + injection d'échecs `malloc` + ASan/UBSan |
-| **Rang 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Variables `static`, `read(2)` bufferisé, tampon dynamique $\Theta(L)$, liste chaînée multi-FD *(Sujet v14.3)* | ✅ 1 `static` + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1 000 FDs, pannes `malloc`) + GNL Station + ASan/UBSan |
 | **Rang 01** | [**`ft_printf/`**](ft_printf/README.md) | `libftprintf.a` | Fonctions variadiques (`stdarg.h`), rendu 100 % sur la pile (`0 malloc`), écriture robuste `write(2)`, automate de parsing | ✅ Complet (`-0.# +*`) | **26 921 tests différentiels** vs `glibc` + ASan/UBSan + Tripouille |
-| **Rang 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | IPC UNIX par signaux (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), encodage bit-à-bit avec ACK, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 tests bout-en-bout** (~39 ms / 100 chars, 20 000 chars, erreurs PID) |
+| **Rang 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Variables `static`, `read(2)` bufferisé, tampon dynamique $\Theta(L)$, liste chaînée multi-FD *(Sujet v14.3)* | ✅ 1 `static` + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1 000 FDs, pannes `malloc`) + GNL Station + ASan/UBSan |
 | **Rang 02** | [**`born2beroot/`**](born2beroot/README.fr.md) | VM Debian + `monitoring.sh` | Partitionnement LUKS2 + LVM, politique `pam_pwquality`/`login.defs`, durcissement `sudoers`, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 vérifications statiques + 167 exigences + 5 testeurs communautaires (80 contrôles) + `verify.sh` (64)** |
+
+#### 🟢 Cercle 2 — Systèmes de base
+
+| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Rang 02** | [**`minitalk/`**](minitalk/README.md) | `client` & `server` | IPC UNIX par signaux (`SIGUSR1`/`SIGUSR2`), `sigaction` (`SA_SIGINFO`), encodage bit-à-bit avec ACK, `volatile sig_atomic_t` | ✅ ACK + UTF-8 | **49 tests bout-en-bout** (~39 ms / 100 chars, 20 000 chars, erreurs PID) |
 | **Rang 02** | [**`pipex/`**](pipex/README.md) | binaire `pipex` | Pipes UNIX : `fork` + `dup2` + `execve`, chaînes de N pipes, here_doc, résolution du `PATH`, hygiène des descripteurs (ni deadlock ni fuite) | ✅ N pipes + here_doc | **131 contrôles** (différentiels vs bash, ASan/UBSan, robustesse) + **3 testeurs tiers (71)** |
 | **Rang 02** | [**`so_long/`**](so_long/README.fr.md) | binaires `so_long` & `so_long_bonus` | Fenêtrage miniLibX, textures XPM, hooks d’événements, parsing et validation de carte, rendu par tuiles, boucle de jeu | ✅ Ennemis · animation · compteur à l’écran | **106 contrôles** (10 règles de carte, gameplay, bonus, ASan/UBSan sur 41 cartes, Norme) + **testeur tiers (44)** |
+| **Rang 02** | [**`push_swap/`**](push_swap/README.fr.md) | binaire `push_swap` | Trier deux piles d'entiers en un minimum de mouvements : sorter + pousseur, opérations SA/SB/PA/PB, moteur de décision optimisé | ✅ | **388 vérifications** (cas, benchmark 20, différentiel) |
 | **Rang 02** | [**`fract-ol/`**](fract-ol/README.md) | binaire `fract-ol` | Rendu de fractales 2D miniLibX (Mandelbrot, Julia), calcul d'échappement, zoom à la souris, palettes de couleurs | ✅ Burning Ship · Tricorn · Phoenix · Multibrot · multithreading | **1 077 tests** (6 suites, sans X11 requis) |
 | **Rang 02** | [**`fdf/`**](fdf/README.md) | binaire `fdf` | Rendu de terrain 3D en wireframe miniLibX, parsing de height-maps `.fdf`, projection isométrique, gradient de couleur | ✅ Rotation 3D · 5 modes de couleur · rainbow HSL→RGB | **248 tests** (5 suites : parse, math, draw, color, hooks) |
+
+#### 🟡 Cercle 3 — Concurrence avancée
+
+| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Rang 03** | [**`minishell/`**](minishell/README.md) | binaire `minishell` | Mini shell : lexeur/parsing, expansion d'environnement et variables, pipes, redirections, opérateurs logiques (`&&`/`||`), wildcards | ✅ Fonctionnalités bonus | **60 tests** (7 suites C : basic, variables, quotes, pipes, redirects, logiques, wildcards) |
+| **Rang 03** | [**`philosophers/`**](philosophers/README.md) | binaires `philo` & `philo_bonus` | Philosophes dînant : threads + mutex (obligatoire), processus + sémaphores nommés (bonus), timing et messagerie sans courses | ✅ Sémaphores nommés | **87/87 tests** (suite Python, obligatoire + bonus) |
+
+#### 🔴 Cercle 4 — C++
+
+| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
+| :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rang 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercices (`cpp_00`–`cpp_09`) | POO : classes, héritage, exceptions, templates, forme canonique ; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, fonctionnels, cas limites, stress 3000, ASan/TSan) |
+
+#### 📚 Exam Rank — Recueils d'examen
+
+| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Rang 02** | [**`exam_rank02/`**](exam_rank02/README.md) | binaire `exam_rank02` | Pratique Exam Rank 02 — 4 niveaux : chaînes, manipulation avancée, algorithmes, mémoire & listes chaînées | ✅ | **111 tests** (4 suites C, niveaux 1–4) |
+| **Rang 03** | [**`exam_rank_03/`**](exam_rank_03/README.md) | 8 programmes | Pratique Exam Rank 03 — niveau 1 (filter, ft_scanf, get_next_line) et niveau 2 (n_queens, permutations, powerset, rip, tsp) | ✅ | **90/90 tests** |
 
 ---
 
@@ -252,6 +358,11 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`piscine42/`** préserve des dossiers `exXX/` strictement purs (prêts pour la Moulinette) et déporte l'intégralité des bancs d'essai dans `piscine42/tests/`.
 - **`fdf/`** est le rendu de terrain 3D en wireframe miniLibX : parsing de height-maps `.fdf`, projection isométrique, 5 modes de couleur, rotation 3D. Validé par **5 suites / 248 tests**.
 - **`fract-ol/`** est le rendu de fractales 2D miniLibX : Mandelbrot, Julia + bonus (Burning Ship, Tricorn, Phoenix, Multibrot), rendu multithread. Validé par **6 suites / 1 077 tests** (sans X11).
+- **`push_swap/`** trie deux piles d'entiers en un minimum de mouvements : `push_swap.c` (sorteur + pousseur), `push_swap_utils.c` (opérations SA/SB/PA/PB), validé par **388 vérifications** (cas, benchmark, différentiel).
+- **`minishell/`** est un mini shell C : lexeur/parser, expansion d'environnement et variables, pipes, redirections, opérateurs logiques (`&&`/`||`) et wildcards. Validé par **7 suites C / 60 tests** (`tests/run_tests.sh`).
+- **`philosophers/`** implémente le problème des philosophes dînants : `philo/` (threads + mutex, obligatoire) et `philo_bonus/` (processus + sémaphores nommés, bonus). Validé par une **suite Python 87/87**.
+- **`exam_rank02/`** est le recueil d'examen Rank 02 : 4 niveaux (chaînes, manipulation avancée, algorithmes, mémoire & listes) regroupés par dossier `level_1/`…`level_4/`, prototypes dans `include/exam_rank02.h`. Validé par **4 suites C / 111 tests** (`make test`).
+- **`exam_rank_03/`** est le recueil d'examen Rank 03 : niveau 1 (`filter`, `ft_scanf`, `get_next_line`) et niveau 2 (`n_queens`, `permutations`, `powerset`, `rip`, `tsp`), chacun autonome. Validé par une **suite Python 90/90**.
 - **`cpp_modules/`** contient les 10 modules **CPP 00–09** : chaque exercice (`cpp_XX/exYY/`) est autonome avec son `Makefile` et ses fichiers `*.hpp`/`*.cpp` en **C++98 strict** (`-Wall -Wextra -Werror`), forme canonique obligatoire de `cpp_02` à `cpp_09`, STL réservée aux modules 08–09. Les énoncés officiels sont dans `subjects/` et la suite de tests Python dans `tests/`.
 
 Pour aller plus loin sur l'organisation professionnelle d'un projet C en entreprise et à 42, consultez [**`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`**](docs/C_PROJECT_ARCHITECTURE_GUIDE.md).
@@ -275,9 +386,17 @@ make -C ft_printf bonus
 make -C minitalk
 make -C minitalk bonus
 
-# Compiler FdF (terrain 3D wireframe) et Fract'ol (fractales 2D)
+# Compiler FdF (terrain 3D wireframe), Fract'ol (fractales 2D) et push_swap
 make -C fdf
 make -C fract-ol
+make -C push_swap
+
+# Compiler Minishell et Philosophers (Rang 03)
+make -C minishell
+make -C philosophers
+
+# Compiler Exam Rank 02 (binaire 4 niveaux)
+make -C exam_rank02
 
 # Compiler CPP Modules (chaque exercice dans cpp_modules/cpp_XX/exYY)
 make -C cpp_modules/cpp_09/ex02
@@ -308,6 +427,18 @@ make -C fdf/tests
 
 # Fract'ol : 6 suites / 1 077 tests (sans X11 requis)
 make -C fract-ol/tests
+
+# Push_swap : 388 vérifications (cas, benchmark, différentiel)
+bash push_swap/tests/run_tests.sh
+
+# Minishell : 7 suites C / 60 tests (basic, variables, quotes, pipes, redirects, logiques, wildcards)
+bash minishell/tests/run_tests.sh
+
+# Philosophers : 87/87 tests (Python, obligatoire + bonus)
+python3 philosophers/tests/test_philo.py
+
+# Exam Rank 02 : 4 suites C / 111 tests (niveaux 1–4)
+make -C exam_rank02 test
 
 # CPP Modules 00-09 : 93 checks (build, fonctionnels, cas limites, stress 3000, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
