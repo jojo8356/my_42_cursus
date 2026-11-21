@@ -1,0 +1,10 @@
+# NetPratice build artifacts
+netpratice
+tests/test_ip
+tests/test_mask
+tests/test_routing
+tests/test_json
+tests/test_solution
+tests/test_validate
+tests/test_solver
+tests/test_levels
