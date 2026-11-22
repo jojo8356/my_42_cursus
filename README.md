@@ -2,13 +2,13 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · Exam Rank 02 · Exam Rank 03**
+**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · Cub3D · NetPratice · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · MiniRT · Django Piscine**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
 [![Compiler Flags](https://img.shields.io/badge/Flags--Wall_-Wextra_-Werror-success?style=flat-square)](#quality-assurance--engineering-standards)
 [![Memory Safety](https://img.shields.io/badge/Memory-0_Leaks_(ASan_%C2%B7_UBSan_%C2%B7_Valgrind)-brightgreen?style=flat-square)](#verification--test-suites)
-[![Automated Assertions](https://img.shields.io/badge/Tests-38%2C400%2B_Passing-blue?style=flat-square)](#verification--test-suites)
+[![Automated Assertions](https://img.shields.io/badge/Tests-53%2C000%2B_Passing-blue?style=flat-square)](#verification--test-suites)
 
 **[ 🇬🇧 English ](#-english-version) · [ 🇫🇷 Version Française ](#-version-française) · [ 📐 C Architecture Guide ](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)**
 
@@ -22,7 +22,7 @@
 
 **`my_42_cursus`** is a curated systems-programming monorepo containing my projects from **École 42** — from the intensive 4-week **C Piscine** through the **Common Core** curriculum. Every project is written from scratch in pure C under strict constraints: **no standard high-level shortcuts**, **strict `-Wall -Wextra -Werror` compilation**, **42 Norm v4.1 compliance**, **deterministic error handling**, and **zero memory leaks**.
 
-Beyond passing 42 evaluations, each repository module is structured according to professional C engineering conventions (see [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) and backed by automated differential, unit, fault-injection, and sanitizer test suites totaling **over 38,400 automated test cases**.
+Beyond passing 42 evaluations, each repository module is structured according to professional C engineering conventions (see [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) and backed by automated differential, unit, fault-injection, and sanitizer test suites totaling **over 53,000 automated test cases**.
 
 ### Table of Contents
 
@@ -60,6 +60,8 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | **Rank 02** | [**`push_swap/`**](push_swap/README.fr.md) | `push_swap` binary | Sort two integer stacks in minimal moves: sorter + pusher, SA/SB/PA/PB operations, cost-optimized decision engine | ✅ | **388 verifications** (cases, 20-benchmark, differential) |
 | **Rank 02** | [**`fract-ol/`**](fract-ol/README.md) | `fract-ol` binary | miniLibX 2D fractal renderer (Mandelbrot, Julia), escape-time rendering, mouse zoom, color palettes | ✅ Burning Ship · Tricorn · Phoenix · Multibrot · multithreading | **1,077 tests** (6 suites, no X11 required) |
 | **Rank 02** | [**`fdf/`**](fdf/README.md) | `fdf` binary | miniLibX wireframe 3D terrain renderer, `.fdf` height-map parsing, isometric projection, color gradient | ✅ 3D rotation · 5 color modes · rainbow HSL→RGB | **248 tests** (5 suites: parse, math, draw, color, hooks) |
+| **Rank 04** | [**`cub3d/`**](cub3d/README.md) | `cub3d` binary | Raycasting (Wolfenstein 3D): DDA line casting, texture mapping, doors, sprites, minimap, miniLibX | ✅ Full bonus (doors, sprites, minimap) | **186 tests** (8 suites: parser, player, raycasting, doors, sprites, integration, robustness) |
+| **Rank 04** | [**`netpratice/`**](netpratice/) | 10 solution JSONs | IPv4 addressing, subnet masks & routing engine over 10 levels: CIDR/mask math, longest-prefix routing, solver & validator | ✅ Full solver + fd-safe pipelines | **206 tests** (8 suites: ip, mask, routing, json, solution, validate, solver, levels) |
 
 #### 🟡 Circle 3 — Advanced Concurrency
 
@@ -80,6 +82,14 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rank 02** | [**`exam_rank02/`**](exam_rank02/README.md) | `exam_rank02` binary | Exam Rank 02 practice — 4 levels: strings, advanced manipulation, algorithms, memory & linked lists | ✅ | **111 tests** (4 C suites, level 1–4) |
 | **Rank 03** | [**`exam_rank_03/`**](exam_rank_03/README.md) | 8 programs | Exam Rank 03 practice — level 1 (filter, ft_scanf, get_next_line) & level 2 (n_queens, permutations, powerset, rip, tsp) | ✅ | **90/90 tests** |
+| **Rank 04** | [**`exam_rank_04/`**](exam_rank_04/README.md) | `microshell` binary | Exam Rank 04 — microshell: shell command execution, `|`/`;` pipelines, `cd` builtin, fd-safe concurrency | ✅ `&&`/`||` short-circuit | **33 tests** (11 unit parseur + 22 integration) |
+| **Rank 05** | [**`miniRT/`**](miniRT/README.md) | `miniRT` binary | Exam Rank 05 — CPU ray tracer: `.rt` scene parsing, intersections, lighting, shadows, reflections, cameras | ✅ Full features | **14,660 tests** (9 suites: matrix, parser, objects, intersect, lighting, camera, integration) |
+
+#### 🐍 Python Piscine
+
+| Stage | Project | Deliverable | Key Concepts | Bonus | Automated Verification |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Piscine** | [**`django_pool/`**](django_pool/README.md) | Django project (d00–d08) | Python/Django piscine: ORM, models, views, forms, sessions, SQL, admin — 9 days (d00_initiation … d08_final) | ✅ | Harness of automated checks (runs with `python3 django_pool/tests/run_all.py`; requires Django installed) |
 
 ---
 
@@ -178,6 +188,25 @@ my_42_cursus/
 │   ├── filter/ ft_scanf/ get_next_line/      # level 1 programs
 │   ├── n_queens/ permutations/ powerset/ rip/ tsp/   # level 2 programs
 │   └── tests/                         # Python suite (90/90)
+├── exam_rank_04/                      # Exam Rank 04 — microshell
+│   ├── microshell.h                   # t_sep / t_cmd / t_group(s) types, API
+│   ├── parser.c / microshell.c        # parsing + pipeline/group execution
+│   ├── subjects/                      # Official subject (EN & FR)
+│   └── tests/                         # 11 unit + 22 integration tests
+├── cub3d/                             # Rank 04 — Wolfenstein 3D raycasting (miniLibX)
+│   ├── include/ src/                  # raycaster, textures, doors, sprites, minimap
+│   └── tests/                         # 8 suites / 186 tests
+├── netpratice/                        # Rank 04 — IPv4 addressing, masks & routing (10 levels)
+│   ├── src/                           # IP/mask/routing engine + JSON solution writer
+│   ├── levels/                        # level1.json … level10.json deliverables
+│   └── tests/                         # 8 suites / 206 tests
+├── miniRT/                            # Exam Rank 05 — CPU ray tracer
+│   ├── include/ src/                  # .rt parser, intersections, lighting, camera
+│   ├── scenes/                        # sample scenes
+│   └── tests/                         # 9 suites / 14,660 tests
+├── django_pool/                       # Piscine Python — Django (d00-d08)
+│   ├── d00_initiation/ .. d08_final/  # one project per day
+│   └── tests/                         # automated check harness (requires Django)
 └── cpp_modules/                        # Rank 03 — C++ Modules 00-09 (OOP & STL)
     ├── subjects/                      # Official subject texts (CPP_Module_00.txt … 09)
     ├── cpp_00/ .. cpp_09/             # 37 exercises (ex00..exN per module)
@@ -222,7 +251,17 @@ make -C philosophers
 # 6. Build Exam Rank 02 (4-level practice binary)
 make -C exam_rank02
 
-# 7. Build CPP Modules (each exercise in cpp_modules/cpp_XX/exYY)
+# 7. Build Exam Rank 04 — microshell
+make -C exam_rank_04
+
+# 8. Build Cub3d (Wolfenstein 3D raycasting, Rank 04) & MiniRT (ray tracer, Rank 05)
+make -C cub3d
+make -C miniRT
+
+# 9. Build NetPratice (IPv4/routing engine, Rank 04)
+make -C netpratice
+
+# 10. Build CPP Modules (each exercise in cpp_modules/cpp_XX/exYY)
 make -C cpp_modules/cpp_09/ex02
 ```
 
@@ -266,6 +305,24 @@ python3 philosophers/tests/test_philo.py
 # Exam Rank 02: 4 C suites / 111 tests (level 1-4)
 make -C exam_rank02 test
 
+# Exam Rank 03: Python suite (90/90)
+python3 exam_rank_03/tests/test_exam_rank_03.py
+
+# Exam Rank 04 — microshell: 11 unit + 22 integration tests
+make -C exam_rank_04 test
+
+# Cub3d: 8 suites / 186 tests (parser, player, raycasting, doors, sprites, integration, robustness)
+bash cub3d/tests/run_tests.sh
+
+# NetPratice: 8 suites / 206 tests (IP, mask, routing, JSON, solution, validate, solver, levels)
+make -C netpratice test
+
+# MiniRT: 9 suites / 14,660 tests (matrix, parser, objects, intersect, lighting, camera, integration)
+bash miniRT/tests/run_tests.sh
+
+# Django Piscine: automated check harness (requires Django installed)
+python3 django_pool/tests/run_all.py
+
 # CPP Modules 00-09: 93 checks (build, functional, edge cases, 3000-element stress, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
 ```
@@ -288,7 +345,7 @@ python3 cpp_modules/tests/test_cpp_modules.py
 
 **`my_42_cursus`** est le monorepo regroupant l'ensemble de mes projets de programmation système en **C** réalisés à l'**École 42** — depuis la **Piscine C** jusqu'aux projets du **Tronc Commun (*Common Core*)**. Chaque projet est développé intégralement à partir de zéro en C pur selon des contraintes d'ingénierie strictes : compilation sous **`-Wall -Wextra -Werror`**, respect intégral de la **Norme 42 v4.1**, gestion défensive des erreurs et **zéro fuite mémoire**.
 
-Chaque projet est structuré proprement selon les standards de l'industrie adaptés aux règles de la Moulinette 42 (voir le guide complet [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) et validé par plus de **38 400 tests automatisés** (tests unitaires, différentiels face à la `glibc`, injection de pannes `malloc`, AddressSanitizer, UBSan et Valgrind).
+Chaque projet est structuré proprement selon les standards de l'industrie adaptés aux règles de la Moulinette 42 (voir le guide complet [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) et validé par plus de **53 000 tests automatisés** (tests unitaires, différentiels face à la `glibc`, injection de pannes `malloc`, AddressSanitizer, UBSan et Valgrind).
 
 ### Sommaire
 
@@ -326,6 +383,8 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | **Rang 02** | [**`push_swap/`**](push_swap/README.fr.md) | binaire `push_swap` | Trier deux piles d'entiers en un minimum de mouvements : sorter + pousseur, opérations SA/SB/PA/PB, moteur de décision optimisé | ✅ | **388 vérifications** (cas, benchmark 20, différentiel) |
 | **Rang 02** | [**`fract-ol/`**](fract-ol/README.md) | binaire `fract-ol` | Rendu de fractales 2D miniLibX (Mandelbrot, Julia), calcul d'échappement, zoom à la souris, palettes de couleurs | ✅ Burning Ship · Tricorn · Phoenix · Multibrot · multithreading | **1 077 tests** (6 suites, sans X11 requis) |
 | **Rang 02** | [**`fdf/`**](fdf/README.md) | binaire `fdf` | Rendu de terrain 3D en wireframe miniLibX, parsing de height-maps `.fdf`, projection isométrique, gradient de couleur | ✅ Rotation 3D · 5 modes de couleur · rainbow HSL→RGB | **248 tests** (5 suites : parse, math, draw, color, hooks) |
+| **Rang 04** | [**`cub3d/`**](cub3d/README.md) | binaire `cub3d` | Raycasting (Wolfenstein 3D) : lancer de rayons DDA, cartographie de textures, portes, sprites, minimap, miniLibX | ✅ Bonus complet (portes, sprites, minimap) | **186 tests** (8 suites : parser, player, raycasting, portes, sprites, intégration, robustesse) |
+| **Rang 04** | [**`netpratice/`**](netpratice/) | 10 JSON de solution | Adressage IPv4, masques de sous-réseau et routage sur 10 niveaux : calculs CIDR/masque, routage plus long préfixe, solveur & validateur | ✅ Solveur complet + pipelines sans fuite de FD | **206 tests** (8 suites : ip, mask, routing, json, solution, validate, solver, levels) |
 
 #### 🟡 Cercle 3 — Concurrence avancée
 
@@ -346,6 +405,14 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rang 02** | [**`exam_rank02/`**](exam_rank02/README.md) | binaire `exam_rank02` | Pratique Exam Rank 02 — 4 niveaux : chaînes, manipulation avancée, algorithmes, mémoire & listes chaînées | ✅ | **111 tests** (4 suites C, niveaux 1–4) |
 | **Rang 03** | [**`exam_rank_03/`**](exam_rank_03/README.md) | 8 programmes | Pratique Exam Rank 03 — niveau 1 (filter, ft_scanf, get_next_line) et niveau 2 (n_queens, permutations, powerset, rip, tsp) | ✅ | **90/90 tests** |
+| **Rang 04** | [**`exam_rank_04/`**](exam_rank_04/README.md) | binaire `microshell` | Exam Rank 04 — microshell : exécution de commandes shell, pipelines `|`/`;`, builtin `cd`, concurrence sans fuite de descripteurs | ✅ `&&`/`||` short-circuit | **33 tests** (11 unitaires parseur + 22 intégration) |
+| **Rang 05** | [**`miniRT/`**](miniRT/README.md) | binaire `miniRT` | Exam Rank 05 — traceur de rayons CPU : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras | ✅ Fonctionnalités complètes | **14 660 tests** (9 suites : matrix, parser, objects, intersect, lighting, camera, intégration) |
+
+#### 🐍 Piscine Python
+
+| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Piscine** | [**`django_pool/`**](django_pool/README.md) | projet Django (d00–d08) | Piscine Python/Django : ORM, modèles, vues, forms, sessions, SQL, admin — 9 jours (d00_initiation … d08_final) | ✅ | Harnais de vérifications automatisées (`python3 django_pool/tests/run_all.py` ; nécessite Django installé) |
 
 ---
 
@@ -363,6 +430,11 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`philosophers/`** implémente le problème des philosophes dînants : `philo/` (threads + mutex, obligatoire) et `philo_bonus/` (processus + sémaphores nommés, bonus). Validé par une **suite Python 87/87**.
 - **`exam_rank02/`** est le recueil d'examen Rank 02 : 4 niveaux (chaînes, manipulation avancée, algorithmes, mémoire & listes) regroupés par dossier `level_1/`…`level_4/`, prototypes dans `include/exam_rank02.h`. Validé par **4 suites C / 111 tests** (`make test`).
 - **`exam_rank_03/`** est le recueil d'examen Rank 03 : niveau 1 (`filter`, `ft_scanf`, `get_next_line`) et niveau 2 (`n_queens`, `permutations`, `powerset`, `rip`, `tsp`), chacun autonome. Validé par une **suite Python 90/90**.
+- **`cub3d/`** est le raycasting (Wolfenstein 3D) : lancer de rayons DDA, cartographie de textures, portes, sprites, minimap, miniLibX — **Rang 04 avec bonus complet**. Validé par **8 suites / 186 tests**.
+- **`netpratice/`** est le moteur d'adressage IPv4, de masques de sous-réseau et de routage sur 10 niveaux : calculs CIDR/masque, routage par plus long préfixe, solveur et validateur, livrant 10 JSON de solution. Validé par **8 suites / 206 tests**.
+- **`exam_rank_04/`** est l'examen **Rank 04 — microshell** : exécution de commandes shell, pipelines `|`/`;`, builtin `cd`, concurrence sans fuite de descripteurs (un pipe ouvert à la fois, validé avec `ulimit -n 30`), bonus `&&`/`||` short-circuit. Utilise **uniquement les 16 fonctions autorisées**. Validé par **11 tests unitaires + 22 intégration**.
+- **`miniRT/`** est le traceur de rayons CPU (Exam Rank 05) : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras. Validé par **9 suites / 14 660 tests**.
+- **`django_pool/`** est la piscine Python/Django (d00_initiation … d08_final) : ORM, modèles, vues, forms, sessions, SQL, admin. Harnais de tests automatisés dans `tests/` (nécessite Django installé).
 - **`cpp_modules/`** contient les 10 modules **CPP 00–09** : chaque exercice (`cpp_XX/exYY/`) est autonome avec son `Makefile` et ses fichiers `*.hpp`/`*.cpp` en **C++98 strict** (`-Wall -Wextra -Werror`), forme canonique obligatoire de `cpp_02` à `cpp_09`, STL réservée aux modules 08–09. Les énoncés officiels sont dans `subjects/` et la suite de tests Python dans `tests/`.
 
 Pour aller plus loin sur l'organisation professionnelle d'un projet C en entreprise et à 42, consultez [**`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`**](docs/C_PROJECT_ARCHITECTURE_GUIDE.md).
@@ -397,6 +469,16 @@ make -C philosophers
 
 # Compiler Exam Rank 02 (binaire 4 niveaux)
 make -C exam_rank02
+
+# Compiler Exam Rank 04 — microshell
+make -C exam_rank_04
+
+# Compiler Cub3d (raycasting Wolfenstein 3D, Rang 04) et MiniRT (traceur de rayons, Rang 05)
+make -C cub3d
+make -C miniRT
+
+# Compiler NetPratice (moteur IPv4/routage, Rang 04)
+make -C netpratice
 
 # Compiler CPP Modules (chaque exercice dans cpp_modules/cpp_XX/exYY)
 make -C cpp_modules/cpp_09/ex02
@@ -439,6 +521,24 @@ python3 philosophers/tests/test_philo.py
 
 # Exam Rank 02 : 4 suites C / 111 tests (niveaux 1–4)
 make -C exam_rank02 test
+
+# Exam Rank 03 : suite Python (90/90)
+python3 exam_rank_03/tests/test_exam_rank_03.py
+
+# Exam Rank 04 — microshell : 11 tests unitaires + 22 intégration
+make -C exam_rank_04 test
+
+# Cub3d : 8 suites / 186 tests (parser, player, raycasting, portes, sprites, intégration, robustesse)
+bash cub3d/tests/run_tests.sh
+
+# NetPratice : 8 suites / 206 tests (IP, masque, routage, JSON, solution, validate, solver, levels)
+make -C netpratice test
+
+# MiniRT : 9 suites / 14 660 tests (matrix, parser, objects, intersect, lighting, camera, intégration)
+bash miniRT/tests/run_tests.sh
+
+# Piscine Django : harnais de vérifications automatisées (nécessite Django installé)
+python3 django_pool/tests/run_all.py
 
 # CPP Modules 00-09 : 93 checks (build, fonctionnels, cas limites, stress 3000, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
