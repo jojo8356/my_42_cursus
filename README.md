@@ -2,7 +2,7 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · Cub3D · NetPratice · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · MiniRT · Django Piscine**
+**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · Cub3D · NetPratice · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · MiniRT**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
@@ -84,12 +84,6 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | **Rank 03** | [**`exam_rank_03/`**](exam_rank_03/README.md) | 8 programs | Exam Rank 03 practice — level 1 (filter, ft_scanf, get_next_line) & level 2 (n_queens, permutations, powerset, rip, tsp) | ✅ | **90/90 tests** |
 | **Rank 04** | [**`exam_rank_04/`**](exam_rank_04/README.md) | `microshell` binary | Exam Rank 04 — microshell: shell command execution, `|`/`;` pipelines, `cd` builtin, fd-safe concurrency | ✅ `&&`/`||` short-circuit | **33 tests** (11 unit parseur + 22 integration) |
 | **Rank 05** | [**`miniRT/`**](miniRT/README.md) | `miniRT` binary | Exam Rank 05 — CPU ray tracer: `.rt` scene parsing, intersections, lighting, shadows, reflections, cameras | ✅ Full features | **14,660 tests** (9 suites: matrix, parser, objects, intersect, lighting, camera, integration) |
-
-#### 🐍 Python Piscine
-
-| Stage | Project | Deliverable | Key Concepts | Bonus | Automated Verification |
-| :--- | :--- | :--- | :--- | :---: | :--- |
-| **Piscine** | [**`django_pool/`**](django_pool/README.md) | Django project (d00–d08) | Python/Django piscine: ORM, models, views, forms, sessions, SQL, admin — 9 days (d00_initiation … d08_final) | ✅ | Harness of automated checks (runs with `python3 django_pool/tests/run_all.py`; requires Django installed) |
 
 ---
 
@@ -204,9 +198,6 @@ my_42_cursus/
 │   ├── include/ src/                  # .rt parser, intersections, lighting, camera
 │   ├── scenes/                        # sample scenes
 │   └── tests/                         # 9 suites / 14,660 tests
-├── django_pool/                       # Piscine Python — Django (d00-d08)
-│   ├── d00_initiation/ .. d08_final/  # one project per day
-│   └── tests/                         # automated check harness (requires Django)
 └── cpp_modules/                        # Rank 03 — C++ Modules 00-09 (OOP & STL)
     ├── subjects/                      # Official subject texts (CPP_Module_00.txt … 09)
     ├── cpp_00/ .. cpp_09/             # 37 exercises (ex00..exN per module)
@@ -320,9 +311,6 @@ make -C netpratice test
 # MiniRT: 9 suites / 14,660 tests (matrix, parser, objects, intersect, lighting, camera, integration)
 bash miniRT/tests/run_tests.sh
 
-# Django Piscine: automated check harness (requires Django installed)
-python3 django_pool/tests/run_all.py
-
 # CPP Modules 00-09: 93 checks (build, functional, edge cases, 3000-element stress, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
 ```
@@ -408,12 +396,6 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | **Rang 04** | [**`exam_rank_04/`**](exam_rank_04/README.md) | binaire `microshell` | Exam Rank 04 — microshell : exécution de commandes shell, pipelines `|`/`;`, builtin `cd`, concurrence sans fuite de descripteurs | ✅ `&&`/`||` short-circuit | **33 tests** (11 unitaires parseur + 22 intégration) |
 | **Rang 05** | [**`miniRT/`**](miniRT/README.md) | binaire `miniRT` | Exam Rank 05 — traceur de rayons CPU : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras | ✅ Fonctionnalités complètes | **14 660 tests** (9 suites : matrix, parser, objects, intersect, lighting, camera, intégration) |
 
-#### 🐍 Piscine Python
-
-| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
-| :--- | :--- | :--- | :--- | :---: | :--- |
-| **Piscine** | [**`django_pool/`**](django_pool/README.md) | projet Django (d00–d08) | Piscine Python/Django : ORM, modèles, vues, forms, sessions, SQL, admin — 9 jours (d00_initiation … d08_final) | ✅ | Harnais de vérifications automatisées (`python3 django_pool/tests/run_all.py` ; nécessite Django installé) |
-
 ---
 
 ### Architecture du dépôt
@@ -434,7 +416,6 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`netpratice/`** est le moteur d'adressage IPv4, de masques de sous-réseau et de routage sur 10 niveaux : calculs CIDR/masque, routage par plus long préfixe, solveur et validateur, livrant 10 JSON de solution. Validé par **8 suites / 206 tests**.
 - **`exam_rank_04/`** est l'examen **Rank 04 — microshell** : exécution de commandes shell, pipelines `|`/`;`, builtin `cd`, concurrence sans fuite de descripteurs (un pipe ouvert à la fois, validé avec `ulimit -n 30`), bonus `&&`/`||` short-circuit. Utilise **uniquement les 16 fonctions autorisées**. Validé par **11 tests unitaires + 22 intégration**.
 - **`miniRT/`** est le traceur de rayons CPU (Exam Rank 05) : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras. Validé par **9 suites / 14 660 tests**.
-- **`django_pool/`** est la piscine Python/Django (d00_initiation … d08_final) : ORM, modèles, vues, forms, sessions, SQL, admin. Harnais de tests automatisés dans `tests/` (nécessite Django installé).
 - **`cpp_modules/`** contient les 10 modules **CPP 00–09** : chaque exercice (`cpp_XX/exYY/`) est autonome avec son `Makefile` et ses fichiers `*.hpp`/`*.cpp` en **C++98 strict** (`-Wall -Wextra -Werror`), forme canonique obligatoire de `cpp_02` à `cpp_09`, STL réservée aux modules 08–09. Les énoncés officiels sont dans `subjects/` et la suite de tests Python dans `tests/`.
 
 Pour aller plus loin sur l'organisation professionnelle d'un projet C en entreprise et à 42, consultez [**`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`**](docs/C_PROJECT_ARCHITECTURE_GUIDE.md).
@@ -536,9 +517,6 @@ make -C netpratice test
 
 # MiniRT : 9 suites / 14 660 tests (matrix, parser, objects, intersect, lighting, camera, intégration)
 bash miniRT/tests/run_tests.sh
-
-# Piscine Django : harnais de vérifications automatisées (nécessite Django installé)
-python3 django_pool/tests/run_all.py
 
 # CPP Modules 00-09 : 93 checks (build, fonctionnels, cas limites, stress 3000, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
