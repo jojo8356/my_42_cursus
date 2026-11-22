@@ -1,0 +1,2001 @@
+
+
+--------------------------------
+------	TESTING QUEUE 1 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              1
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              58966
+---------------------
+line 64: pop:                               58966 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 2
+line 94: push:                              58966 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 2 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              1
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              58966
+---------------------
+line 64: pop:                               58966 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 2
+line 94: push:                              58966 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 3 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              1
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              58966
+---------------------
+line 64: pop:                               58966 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 2
+line 94: push:                              58966 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 4 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              2
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              2147483647
+---------------------
+line 64: pop:                               58966 | 2147483647 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 3
+line 94: push:                              58966 | 2147483647 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 5 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              3
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              256
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 4
+line 94: push:                              58966 | 2147483647 | 256 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 6 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              4
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              -2147483648
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 5
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 7 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              5
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              0
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 6
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 8 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              6
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              -1
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 7
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 9 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              7
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              2
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 8
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 10 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              8
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              3
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 9
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 11 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              9
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              4
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 10
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 12 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              5
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 13 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              5
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 14 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             58966
+---------------------
+line 53: back:                              5
+---------------------
+line 64: pop:                               58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              58966 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 58966 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 15 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              8
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             2147483647
+---------------------
+line 53: back:                              4
+---------------------
+line 64: pop:                               2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 9
+line 94: push:                              2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 2147483647 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 16 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              0
+---------------------
+line 24: empty:                             1
+---------------------
+line 42: front:                             
+---------------------
+line 53: back:                              
+---------------------
+line 64: pop:                               
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 1
+line 94: push:                              0 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 17 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             -1
+---------------------
+line 53: back:                              -1
+---------------------
+line 64: pop:                               -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | -1 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 18 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              0
+---------------------
+line 24: empty:                             1
+---------------------
+line 42: front:                             
+---------------------
+line 53: back:                              
+---------------------
+line 64: pop:                               
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 1
+line 94: push:                              0 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 19 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              12
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             6
+---------------------
+line 53: back:                              6
+---------------------
+line 64: pop:                               6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 13
+line 94: push:                              6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 20 ------
+--------------------------------
+		QUEUE TYPE: int
+
+---------------------
+line 33: size:                              12
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             9
+---------------------
+line 53: back:                              56465
+---------------------
+line 64: pop:                               9 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 56465 | 56465 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 13
+line 94: push:                              9 | 2147483647 | 256 | -2147483648 | 0 | -1 | 2 | 3 | 4 | 5 | 56465 | 56465 | 9 | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 1 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              1
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              hello coco
+---------------------
+line 64: pop:                               hello coco | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 2
+line 94: push:                              hello coco | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 2 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              1
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              hello coco
+---------------------
+line 64: pop:                               hello coco | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 2
+line 94: push:                              hello coco | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 3 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              1
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              hello coco
+---------------------
+line 64: pop:                               hello coco | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 2
+line 94: push:                              hello coco | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 4 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              2
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              j'arrive
+---------------------
+line 64: pop:                               hello coco | j'arrive | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 3
+line 94: push:                              hello coco | j'arrive | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 5 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              3
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              oui-oui
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 4
+line 94: push:                              hello coco | j'arrive | oui-oui | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 6 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              4
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              kafeolait
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 5
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 7 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              5
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              jul d'ananas
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 6
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 8 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              6
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              jul d'ananas
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 7
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 9 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              7
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              42
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 8
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 10 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              8
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              jura
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 9
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 11 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              9
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              saperlipopette
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 10
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 12 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              anticonstitutionnellement
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 13 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              anticonstitutionnellement
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 14 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             hello coco
+---------------------
+line 53: back:                              anticonstitutionnellement
+---------------------
+line 64: pop:                               hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              hello coco | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | hello coco | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 15 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              8
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             j'arrive
+---------------------
+line 53: back:                              saperlipopette
+---------------------
+line 64: pop:                               j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 9
+line 94: push:                              j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | j'arrive | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 16 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              0
+---------------------
+line 24: empty:                             1
+---------------------
+line 42: front:                             
+---------------------
+line 53: back:                              
+---------------------
+line 64: pop:                               
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 1
+line 94: push:                               | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 17 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              10
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             jul d'ananas
+---------------------
+line 53: back:                              jul d'ananas
+---------------------
+line 64: pop:                               jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 11
+line 94: push:                              jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | jul d'ananas | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 18 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              0
+---------------------
+line 24: empty:                             1
+---------------------
+line 42: front:                             
+---------------------
+line 53: back:                              
+---------------------
+line 64: pop:                               
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 1
+line 94: push:                               | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 19 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              12
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             Pneumonoultramicroscopicsilicovolcanoconiosis
+---------------------
+line 53: back:                              Pneumonoultramicroscopicsilicovolcanoconiosis
+---------------------
+line 64: pop:                               Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 13
+line 94: push:                              Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | Pneumonoultramicroscopicsilicovolcanoconiosis | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
+
+--------------------------------
+------	TESTING QUEUE 20 ------
+--------------------------------
+		QUEUE TYPE: std::string
+
+---------------------
+line 33: size:                              12
+---------------------
+line 24: empty:                             0
+---------------------
+line 42: front:                             boulette de viande hache
+---------------------
+line 53: back:                              confifi
+---------------------
+line 64: pop:                               boulette de viande hache | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | confifi | confifi | 
+---------------------
+line 82: push:                              
+line 92: push:                              size queue 13
+line 94: push:                              boulette de viande hache | j'arrive | oui-oui | kafeolait | jul d'ananas | jul d'ananas | 42 | jura | saperlipopette | anticonstitutionnellement | confifi | confifi | boulette de viande hache | 
+---------------------
+line 111: operator==/!=: tmp == cont:       1
+line 112: operator==/!=: tmp != cont:       0
+line 119: operator==/!=: tmp == cont:       0
+line 120: operator==/!=: tmp != cont:       1
+line 125: operator==/!=: tmp == cont:       0
+line 126: operator==/!=: tmp != cont:       1
+line 130: operator==/!=: tmp == cont:       1
+line 131: operator==/!=: tmp != cont:       0
+---------------------
+line 146: operator</>/<=/>=: tmp < cont:    0
+line 147: operator</>/<=/>=: tmp > cont:    0
+line 148: operator</>/<=/>=: tmp <= cont:   1
+line 149: operator</>/<=/>=: tmp >= cont:   1
+line 155: operator</>/<=/>=: tmp < cont:    1
+line 156: operator</>/<=/>=: tmp > cont:    0
+line 157: operator</>/<=/>=: tmp <= cont:   1
+line 158: operator</>/<=/>=: tmp >= cont:   0
+line 165: operator</>/<=/>=: tmp < cont:    0
+line 166: operator</>/<=/>=: tmp > cont:    1
+line 167: operator</>/<=/>=: tmp <= cont:   0
+line 168: operator</>/<=/>=: tmp >= cont:   1
+line 172: operator</>/<=/>=: tmp < cont:    0
+line 173: operator</>/<=/>=: tmp > cont:    1
+line 174: operator</>/<=/>=: tmp <= cont:   0
+line 175: operator</>/<=/>=: tmp >= cont:   1
+line 179: operator</>/<=/>=: tmp < cont:    0
+line 180: operator</>/<=/>=: tmp > cont:    0
+line 181: operator</>/<=/>=: tmp <= cont:   1
+line 182: operator</>/<=/>=: tmp >= cont:   1
