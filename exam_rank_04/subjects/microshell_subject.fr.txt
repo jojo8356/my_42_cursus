@@ -1,0 +1,31 @@
+Assignment name  : microshell
+Expected files   : *.c *.h
+Fonctions autorisées: malloc, free, write, close, fork, waitpid, signal, kill, exit, chdir, execve, dup, dup2, pipe, strcmp, strncmp
+--------------------------------------------------------------------------------------
+
+Écrire un programme qui se comporte comme l'exécution d'une commande de shell
+- La ligne de commande à exécuter sera les arguments de ce programme
+- Le chemin de l'exécutable sera absolu ou relatif mais votre programme ne doit pas construire un chemin (à partir de la variable PATH par exemple)
+- Vous devez implémenter "|" et ";" comme dans bash
+    - on ne tendra jamais un "|" immédiatement suivi ou précéddé de rien ou de "|" ou ";"
+- Votre programme doit implémenter la commande interne cd uniquement avec un chemin en argument (pas de '-' ni sans paramètre)
+    - si cd a un mauvais nombre d'arguments votre programme doit écrire dans STDERR "error: cd: bad arguments" suivi d'un '\n'
+    - si cd a échoué votre programme doit écrire dans STDERR "error: cd: cannot change directory to path_to_change" suivi d'un '\n' avec path_to_change remplacé par l'argument de cd
+    - une commande cd ne sera jamais immédiatement suivie ou précédée par un "|"
+- Vous ne devez pas gérer les caractères génériques (*, ~ etc...)
+- Vous ne devez pas gérer les variables d'environnement ($BLA ...)
+- Si un système d'appel, sauf execve et chdir, retourne une erreur votre programme doit immédiatement écrire "error: fatal" dans STDERR suivi d'un '\n' et le programme doit quitter
+- Si execve a échoué vous devez écrire "error: cannot execute executable_that_failed" dans STDERR suivi d'un '\n' avec executable_that_failed remplacé par le chemin de l'exécutable qui a échoué (cela doit être le premier argument de execve)
+- Votre programme doit pouvoir gérer plus de centaines de "|" même si on limite le nombre de « fichiers ouverts » à moins de 30.
+
+par exemple cela doit fonctionner :
+$>./microshell /bin/ls "|" /usr/bin/grep microshell ";" /bin/echo i love my microshell
+microshell
+i love my microshell
+$>
+
+Indices :
+N'oubliez pas de passer la variable d'environnement à execve
+
+Indices :
+Ne fuitez pas les descripteurs de fichiers !
