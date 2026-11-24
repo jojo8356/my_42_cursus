@@ -188,7 +188,7 @@ public:
     // ------------------------------------------------------- Capacity
     size_type size(void) const { return _size; }
     bool      empty(void) const { return _size == 0; }
-    size_type max_size(void) const { return _alloc.max_size(); }
+    size_type max_size(void) const { return node_allocator_type().max_size(); }
 
     // ------------------------------------------------------- Element access
     reference       front(void) { return _sentinel->next->data; }
@@ -327,28 +327,37 @@ public:
     {
         if (_size < 2)
             return;
-        // Copy the values out, do a stable insertion sort on them, then
-        // write them back. Modifying the list in place while iterating is
-        // unsafe (reinsertion invalidates the iteration), so we sort a
-        // temporary buffer and assign.
-        ft::vector<value_type> tmp;
-        for (iterator it = begin(); it != end(); ++it)
-            tmp.push_back(*it);
-        // stable insertion sort on tmp
-        for (size_type i = 1; i < tmp.size(); ++i)
+        // Tri par relink des nœuds (pas de destruction, comme libstdc++).
+        // On collecte les nœuds, on les trie stable par data, puis on relike
+        // circulairement autour du sentinel.
+        ft::vector<node*> nodes;
+        nodes.reserve(_size);
+        node* p = _sentinel->next;
+        while (p != _sentinel)
         {
-            value_type key = tmp[i];
+            nodes.push_back(p);
+            p = p->next;
+        }
+        // insertion stable sur les nœuds, par pred(data)
+        for (size_type i = 1; i < nodes.size(); ++i)
+        {
+            node* key = nodes[i];
             size_type j = i;
-            while (j > 0 && pred(key, tmp[j - 1]))
+            while (j > 0 && pred(key->data, nodes[j - 1]->data))
             {
-                tmp[j] = tmp[j - 1];
+                nodes[j] = nodes[j - 1];
                 --j;
             }
-            tmp[j] = key;
+            nodes[j] = key;
         }
-        clear();
-        for (size_type i = 0; i < tmp.size(); ++i)
-            push_back(tmp[i]);
+        // relink circulaire
+        for (size_type i = 0; i < nodes.size(); ++i)
+        {
+            nodes[i]->next = (i + 1 < nodes.size()) ? nodes[i + 1] : _sentinel;
+            nodes[i]->prev = (i > 0) ? nodes[i - 1] : _sentinel;
+        }
+        _sentinel->next = nodes[0];
+        _sentinel->prev = nodes[nodes.size() - 1];
     }
 
     void reverse(void)
@@ -410,7 +419,8 @@ public:
     }
 
     template <class InputIterator>
-    void assign(InputIterator first, InputIterator last)
+    void assign(InputIterator first, InputIterator last,
+                typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
     {
         clear();
         for (; first != last; ++first)
@@ -450,24 +460,20 @@ public:
         iterator j = x.begin();
         while (i != end() && j != x.end())
         {
-            if (!(*j < *i))
-                ++i;
-            else
+            if (*j < *i)
             {
+                // Move j's node (not a copy) so iterators to it stay valid.
                 iterator next = j;
                 ++next;
-                i = insert(i, *j);
+                splice(i, x, j);
                 j = next;
+            }
+            else
+            {
                 ++i;
             }
         }
-        while (j != x.end())
-        {
-            i = insert(i, *j);
-            ++j;
-            ++i;
-        }
-        x.clear();
+        splice(end(), x);
     }
 
     template <class Predicate>
@@ -479,24 +485,19 @@ public:
         iterator j = x.begin();
         while (i != end() && j != x.end())
         {
-            if (!pred(*j, *i))
-                ++i;
-            else
+            if (pred(*j, *i))
             {
                 iterator next = j;
                 ++next;
-                i = insert(i, *j);
+                splice(i, x, j);
                 j = next;
+            }
+            else
+            {
                 ++i;
             }
         }
-        while (j != x.end())
-        {
-            i = insert(i, *j);
-            ++j;
-            ++i;
-        }
-        x.clear();
+        splice(end(), x);
     }
 
     void splice(iterator pos, list& x)
@@ -539,14 +540,24 @@ public:
 
     void splice(iterator pos, list& x, iterator first, iterator last)
     {
-        if (this == &x || first == last)
+        if (first == last)
             return;
         size_type count = ft::distance(first, last);
         node_ptr f = first.getNode();
         node_ptr l = last.getNode(); // one past the last moved node
-        node_ptr f_prev = f->prev;
         node_ptr l_prev = l->prev;  // last node to move
         node_ptr p = pos.getNode();
+
+        // Self-splice: moving a range before a position inside that same
+        // range is a no-op.
+        if (this == &x)
+        {
+            for (node_ptr n = f; n != l; n = n->next)
+                if (n == p)
+                    return;
+        }
+
+        node_ptr f_prev = f->prev;
 
         // detach [f, l) from x
         f_prev->next = l;

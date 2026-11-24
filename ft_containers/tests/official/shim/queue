@@ -1,0 +1,4 @@
+#include "queue.hpp"
+namespace std {
+using ft::queue;
+}

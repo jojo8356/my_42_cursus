@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME		=	containers_test
-CC			=	clang++
+CC			=	g++
 FLAGS		=	 -Wall -Wextra -Werror -std=c++98
 
 SRCS		=	select_your_tests/_select_your_containers.cpp includes_and_utils/utils.cpp \

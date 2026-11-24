@@ -3,7 +3,7 @@
 #include "templates/reversible_container.tpp"
 #include "templates/random_access_iterator.tpp"
 #include "utils/basic_type.hpp"
-#include "queue.hpp"
+#include "priority_queue.hpp"
 #include <set>
 #include <vector>
 

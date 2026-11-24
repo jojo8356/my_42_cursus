@@ -7,11 +7,13 @@
 
 # include <memory>
 # include <stdexcept>
+# include <sstream>
 # include "type_traits.hpp"
 # include "exception.hpp"
 # include "iterator.hpp"
 # include "utility.hpp"
 # include "algorithm.hpp"
+# include "vector.hpp"
 
 namespace ft
 {
@@ -32,25 +34,28 @@ public:
         typedef ft::size_t                                size_type;
         typedef ft::random_access_iterator_tag            iterator_category;
 
-        dequeIterator(void) : _buf(0), _end(0), _ptr(0) {}
-        dequeIterator(const dequeIterator& x) : _buf(x._buf), _end(x._end), _ptr(x._ptr) {}
+        dequeIterator(void) : _buf(0), _end(0), _ptr(0), _idx(0) {}
+        dequeIterator(const dequeIterator& x) : _buf(x._buf), _end(x._end), _ptr(x._ptr), _idx(x._idx) {}
         ~dequeIterator(void) {}
 
         template <bool B>
         dequeIterator(const dequeIterator<B>& x,
                       typename ft::enable_if<!B>::type* = 0)
-            : _buf(x.getBuf()), _end(x.getEnd()), _ptr(x.getPtr())
+            : _buf(x.getBuf()), _end(x.getEnd()), _ptr(x.getPtr()), _idx(x.getIdx())
         {
         }
 
         dequeIterator& operator=(const dequeIterator& x)
         {
-            _buf = x._buf; _end = x._end; _ptr = x._ptr;
+            _buf = x._buf; _end = x._end; _ptr = x._ptr; _idx = x._idx;
             return *this;
         }
 
         dequeIterator& operator+=(difference_type n)
         {
+            if (_end == _buf)
+                return *this;
+            _idx += n;
             _ptr += n;
             while (_ptr >= _end) _ptr -= (_end - _buf);
             while (_ptr < _buf)  _ptr += (_end - _buf);
@@ -58,11 +63,21 @@ public:
         }
         dequeIterator& operator-=(difference_type n) { return *this += (-n); }
 
-        template <bool B> bool operator==(const dequeIterator<B>& x) const { return _ptr == x.getPtr(); }
-        template <bool B> bool operator!=(const dequeIterator<B>& x) const { return _ptr != x.getPtr(); }
+        template <bool B> bool operator==(const dequeIterator<B>& x) const
+        {
+            // Compare the logical index (and buffer), not the raw pointer:
+            // when the deque is full, end() wraps to the same raw address as
+            // begin(), so a raw-pointer comparison would wrongly report
+            // begin() == end().
+            return _buf == x.getBuf() && _idx == x.getIdx();
+        }
+        template <bool B> bool operator!=(const dequeIterator<B>& x) const
+        {
+            return !(*this == x);
+        }
 
-        dequeIterator& operator++(void) { ++_ptr; if (_ptr == _end) _ptr = _buf; return *this; }
-        dequeIterator& operator--(void) { if (_ptr == _buf) _ptr = _end; --_ptr; return *this; }
+        dequeIterator& operator++(void) { ++_idx; ++_ptr; if (_ptr == _end) _ptr = _buf; return *this; }
+        dequeIterator& operator--(void) { if (_ptr == _buf) _ptr = _end; --_ptr; --_idx; return *this; }
         dequeIterator  operator++(int) { dequeIterator<IsConst> x(*this); ++*this; return x; }
         dequeIterator  operator--(int) { dequeIterator<IsConst> x(*this); --*this; return x; }
 
@@ -71,27 +86,22 @@ public:
 
         difference_type operator-(const dequeIterator& x) const
         {
-            difference_type cap = _end - _buf;
-            difference_type a = _ptr - _buf;
-            difference_type b = x._ptr - x._buf;
-            difference_type d = a - b;
-            if (d > cap / 2) d -= cap;
-            else if (d < -cap / 2) d += cap;
-            return d;
+            return _idx - x._idx;
         }
 
-        template <bool B> bool operator<(const dequeIterator<B>& x) const { return (*this - x.getPtr()) < 0; }
+        template <bool B> bool operator<(const dequeIterator<B>& x) const { return _idx < x.getIdx(); }
         template <bool B> bool operator>(const dequeIterator<B>& x) const { return x < *this; }
         template <bool B> bool operator<=(const dequeIterator<B>& x) const { return !(x < *this); }
         template <bool B> bool operator>=(const dequeIterator<B>& x) const { return !(*this < x); }
 
-        reference operator[](size_type n) const { return (*(_ptr + (difference_type)n)); }
+        reference operator[](size_type n) const { return (*(*this + (difference_type)n)); }
         reference operator*(void) const { return *_ptr; }
         pointer   operator->(void) const { return _ptr; }
 
         pointer  getPtr(void) const { return _ptr; }
         pointer  getBuf(void) const { return _buf; }
         pointer  getEnd(void) const { return _end; }
+        difference_type getIdx(void) const { return _idx; }
 
         friend dequeIterator operator+(difference_type n, const dequeIterator& x) { return x + n; }
 
@@ -99,11 +109,13 @@ public:
         typename ft::conditional<IsConst, const T*, T*>::type _buf;
         typename ft::conditional<IsConst, const T*, T*>::type _end;
         typename ft::conditional<IsConst, const T*, T*>::type _ptr;
+        difference_type _idx;
 
         dequeIterator(typename ft::conditional<IsConst, const T*, T*>::type buf,
                       typename ft::conditional<IsConst, const T*, T*>::type end,
-                      typename ft::conditional<IsConst, const T*, T*>::type ptr)
-            : _buf(buf), _end(end), _ptr(ptr) {}
+                      typename ft::conditional<IsConst, const T*, T*>::type ptr,
+                      difference_type idx)
+            : _buf(buf), _end(end), _ptr(ptr), _idx(idx) {}
 
         friend class deque;
         friend class reverse_iterator<dequeIterator>;
@@ -178,23 +190,23 @@ public:
     // ------------------------------------------------------- Iterators
     iterator begin(void)
     {
-        return _size == 0 ? iterator() : iterator(_buf, _buf + _cap, _buf + _head);
+        return _size == 0 ? iterator() : iterator(_buf, _buf + _cap, _buf + _head, 0);
     }
     const_iterator begin(void) const
     {
-        return _size == 0 ? const_iterator() : const_iterator(_buf, _buf + _cap, _buf + _head);
+        return _size == 0 ? const_iterator() : const_iterator(_buf, _buf + _cap, _buf + _head, 0);
     }
     iterator end(void)
     {
         if (_size == 0)
             return iterator();
-        return iterator(_buf, _buf + _cap, _buf + (_head + _size) % _cap);
+        return iterator(_buf, _buf + _cap, _buf + (_head + _size) % _cap, _size);
     }
     const_iterator end(void) const
     {
         if (_size == 0)
             return const_iterator();
-        return const_iterator(_buf, _buf + _cap, _buf + (_head + _size) % _cap);
+        return const_iterator(_buf, _buf + _cap, _buf + (_head + _size) % _cap, _size);
     }
 
     reverse_iterator rbegin(void) { return reverse_iterator(end()); }
@@ -214,13 +226,23 @@ public:
     reference       at(size_type n)
     {
         if (n >= _size)
-            throw ft::out_of_range("deque::at");
+        {
+            std::ostringstream oss;
+            oss << "deque::_M_range_check: __n (which is " << n
+                << ")>= this->size() (which is " << _size << ")";
+            throw std::out_of_range(oss.str());
+        }
         return _at(n);
     }
     const_reference at(size_type n) const
     {
         if (n >= _size)
-            throw ft::out_of_range("deque::at");
+        {
+            std::ostringstream oss;
+            oss << "deque::_M_range_check: __n (which is " << n
+                << ")>= this->size() (which is " << _size << ")";
+            throw std::out_of_range(oss.str());
+        }
         return _at(n);
     }
 
@@ -232,7 +254,7 @@ public:
     // ------------------------------------------------------- Modifiers
     void push_back(const value_type& val)
     {
-        if (_size == _cap)
+        if (_size + 1 >= _cap)
             _grow();
         _alloc.construct(_buf + (_head + _size) % _cap, val);
         ++_size;
@@ -240,7 +262,7 @@ public:
 
     void push_front(const value_type& val)
     {
-        if (_size == _cap)
+        if (_size + 1 >= _cap)
             _grow();
         if (_head == 0)
         {
@@ -280,40 +302,101 @@ public:
             push_front(val);
             return begin();
         }
-        // shift [idx, size) right by one
-        for (size_type i = _size; i > idx; --i)
-            _construct_at(i, _at(i - 1));
-        _construct_at(idx, val);
+        if (_size + 1 >= _cap)
+            _grow();
+        value_type tmp_val(val);
+        _shift_right(idx, 1, integral_constant<is_trivially_copyable<T>::value>());
+        _alloc.construct(&_at(idx), tmp_val);
         ++_size;
         return begin() + idx;
     }
 
     void insert(iterator pos, size_type n, const value_type& val)
     {
+        if (n == 0)
+            return;
+        size_type idx = pos - begin();
+        if (idx == 0)
+        {
+            for (size_type i = 0; i < n; ++i)
+                push_front(val);
+            return;
+        }
+        if (idx == _size)
+        {
+            for (size_type i = 0; i < n; ++i)
+                push_back(val);
+            return;
+        }
+        if (_size + n > _cap)
+        {
+            size_type new_cap = (_cap == 0) ? 1 : _cap;
+            while (new_cap < _size + n)
+                new_cap *= 2;
+            while (_cap < new_cap)
+                _grow();
+        }
+        value_type tmp_val(val);
+        _shift_right(idx, n, integral_constant<is_trivially_copyable<T>::value>());
         for (size_type i = 0; i < n; ++i)
-            insert(pos, val);
+            _alloc.construct(&_at(idx + i), tmp_val);
+        _size += n;
     }
 
     template <class InputIterator>
-    iterator insert(iterator pos, InputIterator first, InputIterator last,
+    void insert(iterator pos, InputIterator first, InputIterator last,
                     typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
     {
+        return _insert_range_impl(pos, first, last, _ra_tag(first));
+    }
+
+    template <class InputIterator>
+    void _insert_range_impl(iterator pos, InputIterator first, InputIterator last, ft::true_type)
+    {
         size_type idx = pos - begin();
-        while (first != last)
+        size_type n = last - first;
+        if (n == 0)
+            return;
+        if (idx == _size)
         {
-            insert(begin() + idx, *first);
-            ++first;
-            ++idx;
+            for (size_type i = 0; i < n; ++i)
+            {
+                push_back(*first);
+                ++first;
+            }
+            return;
         }
-        return begin() + (idx - (first != last ? 1 : 0));
+        if (_size + n > _cap)
+        {
+            size_type new_cap = (_cap == 0) ? 1 : _cap;
+            while (new_cap < _size + n)
+                new_cap *= 2;
+            while (_cap < new_cap)
+                _grow();
+        }
+        _shift_right(idx, n, integral_constant<is_trivially_copyable<T>::value>());
+        for (size_type i = 0; i < n; ++i)
+        {
+            _alloc.construct(&_at(idx + i), *first);
+            ++first;
+        }
+        _size += n;
+    }
+
+    template <class InputIterator>
+    void _insert_range_impl(iterator pos, InputIterator first, InputIterator last, ft::false_type)
+    {
+        ft::vector<value_type> tmp;
+        for (; first != last; ++first)
+            tmp.push_back(*first);
+        insert(pos, tmp.begin(), tmp.end());
     }
 
     iterator erase(iterator pos)
     {
         size_type idx = pos - begin();
-        for (size_type i = idx; i + 1 < _size; ++i)
-            _construct_at(i, _at(i + 1));
-        _alloc.destroy(_buf + (_head + _size - 1) % _cap);
+        _alloc.destroy(&_at(idx));
+        _shift_left(idx, 1, integral_constant<is_trivially_copyable<T>::value>());
         --_size;
         return begin() + idx;
     }
@@ -323,10 +406,9 @@ public:
         size_type f = first - begin();
         size_type l = last - begin();
         size_type count = l - f;
-        for (size_type i = 0; f + i + count < _size; ++i)
-            _construct_at(f + i, _at(f + i + count));
-        for (size_type i = _size - count; i < _size; ++i)
-            _alloc.destroy(_buf + (_head + i) % _cap);
+        if (count == 0)
+            return begin() + f;
+        _shift_left(f, count, integral_constant<is_trivially_copyable<T>::value>());
         _size -= count;
         return begin() + f;
     }
@@ -399,17 +481,73 @@ private:
     {
         size_type new_cap = (_cap == 0) ? 2 : _cap * 2 + 2;
         pointer new_buf = _alloc.allocate(new_cap);
-        // copy elements to the middle
-        for (size_type i = 0; i < _size; ++i)
-            _alloc.construct(new_buf + new_cap / 2 + i, _at(i));
-        for (size_type i = 0; i < _size; ++i)
-            _alloc.destroy(_buf + (_head + i) % _cap);
+        _relocate(new_buf, new_cap / 2, integral_constant<is_trivially_copyable<T>::value>());
         if (_buf)
             _alloc.deallocate(_buf, _cap);
         _buf = new_buf;
         _end = new_buf + new_cap;
         _head = new_cap / 2;
         _cap = new_cap;
+    }
+
+    // Relocate [0, _size) into new_buf at offset new_head.
+    void _relocate(pointer new_buf, size_type new_head, true_type)
+    {
+        for (size_type i = 0; i < _size; ++i)
+            new_buf[new_head + i] = _at(i);
+    }
+    void _relocate(pointer new_buf, size_type new_head, false_type)
+    {
+        for (size_type i = 0; i < _size; ++i)
+        {
+            _alloc.construct(new_buf + new_head + i, _at(i));
+            _alloc.destroy(_buf + (_head + i) % _cap);
+        }
+    }
+
+    // Shift [idx, _size) right by n (destinations may be raw memory).
+    void _shift_right(size_type idx, size_type n, true_type)
+    {
+        for (size_type i = _size; i > idx; --i)
+            _at(i + n - 1) = _at(i - 1);
+    }
+    void _shift_right(size_type idx, size_type n, false_type)
+    {
+        for (size_type i = _size; i > idx; --i)
+        {
+            _alloc.construct(&_at(i + n - 1), _at(i - 1));
+            _alloc.destroy(&_at(i - 1));
+        }
+    }
+
+    // Shift [idx+count, _size) left by count into [idx, _size-count).
+    void _shift_left(size_type idx, size_type count, true_type)
+    {
+        for (size_type i = idx; i + count < _size; ++i)
+            _at(i) = _at(i + count);
+    }
+    void _shift_left(size_type idx, size_type count, false_type)
+    {
+        for (size_type i = idx; i + count < _size; ++i)
+        {
+            _alloc.construct(&_at(i), _at(i + count));
+            _alloc.destroy(&_at(i + count));
+        }
+    }
+
+    template <class It>
+    static bool _is_random_access(It)
+    {
+        typedef typename ft::iterator_traits<It>::iterator_category cat;
+        return ft::is_same<cat, ft::random_access_iterator_tag>::value;
+    }
+
+    template <class It>
+    static ft::integral_constant<ft::is_same<typename ft::iterator_traits<It>::iterator_category, ft::random_access_iterator_tag>::value>
+    _ra_tag(It)
+    {
+        typedef typename ft::iterator_traits<It>::iterator_category cat;
+        return ft::integral_constant<ft::is_same<cat, ft::random_access_iterator_tag>::value>();
     }
 
     allocator_type _alloc;

@@ -137,30 +137,27 @@ public:
         return *this;
     }
 
-    bool operator==(const reverse_iterator& x) const { return _it == x._it; }
-    bool operator!=(const reverse_iterator& x) const { return _it != x._it; }
-    bool operator<(const reverse_iterator& x) const { return x._it < _it; }
-    bool operator>(const reverse_iterator& x) const { return _it < x._it; }
-    bool operator<=(const reverse_iterator& x) const { return !(x._it < _it); }
-    bool operator>=(const reverse_iterator& x) const { return !(_it < x._it); }
+    template <class U> bool operator==(const reverse_iterator<U>& x) const { return _it == x.base(); }
+    template <class U> bool operator!=(const reverse_iterator<U>& x) const { return _it != x.base(); }
+    template <class U> bool operator<(const reverse_iterator<U>& x) const { return x.base() < _it; }
+    template <class U> bool operator>(const reverse_iterator<U>& x) const { return _it < x.base(); }
+    template <class U> bool operator<=(const reverse_iterator<U>& x) const { return !(_it < x.base()); }
+    template <class U> bool operator>=(const reverse_iterator<U>& x) const { return !(x.base() < _it); }
 
 private:
     Iterator _it;
 };
 
-// Non-member relational operators for reverse_iterator
-template <class Iterator>
-bool operator==(const reverse_iterator<Iterator>& lhs,
-                const reverse_iterator<Iterator>& rhs)
-{
-    return lhs.base() == rhs.base();
-}
+// Les opérateurs de comparaison (==, !=, <, >, <=, >=) sont définis en members
+// templates pour supporter la comparaison entre reverse_iterator et
+// const_reverse_iterator sans conversion.
 
+// free operator+ (difference_type, reverse_iterator)
 template <class Iterator>
-bool operator!=(const reverse_iterator<Iterator>& lhs,
-                const reverse_iterator<Iterator>& rhs)
+reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n,
+                                     const reverse_iterator<Iterator>& x)
 {
-    return lhs.base() != rhs.base();
+    return x + n;
 }
 
 } // namespace ft

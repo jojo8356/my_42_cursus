@@ -1,0 +1,4 @@
+#include "list.hpp"
+namespace std {
+using ft::list;
+}

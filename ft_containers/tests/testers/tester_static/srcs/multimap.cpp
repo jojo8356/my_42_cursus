@@ -4,7 +4,7 @@
 #include "templates/bidirectional_iterator.tpp"
 #include "utils/basic_type.hpp"
 #include <map>
-#include "map.hpp"
+#include "multimap.hpp"
 
 void test_multimap()
 {

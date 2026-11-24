@@ -1,0 +1,4 @@
+#include "set.hpp"
+namespace std {
+using ft::set;
+}
