@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Personnel — Inception</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px; padding: 48px;
+            max-width: 640px; text-align: center;
+        }
+        h1 { font-size: 2.4rem; margin-bottom: 16px; }
+        p { font-size: 1.1rem; line-height: 1.6; opacity: 0.9; }
+        .tag {
+            display: inline-block; margin-top: 24px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 18px; border-radius: 999px;
+            font-size: 0.9rem; letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Bienvenue</h1>
+        <p>
+            Ceci est le site web personnel, un service bonus du projet
+            <strong>Inception</strong>. Il est servi par NGINX dans un
+            container dédié sur le réseau Docker.
+        </p>
+        <span class="tag">Inception · Bonus</span>
+    </div>
+</body>
+</html>

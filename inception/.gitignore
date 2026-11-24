@@ -1,0 +1,13 @@
+# Real credentials must never be committed
+secrets/*.txt
+
+# Local runtime data (created by docker volume driver_opts bind mounts)
+data/
+
+# Python / test artifacts
+__pycache__/
+*.pyc
+
+# OS / editor noise
+.DS_Store
+*.swp
