@@ -2,13 +2,13 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · Cub3D · NetPratice · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · MiniRT**
+**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · FT_Containers · Cub3D · NetPratice · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · MiniRT**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
 [![Compiler Flags](https://img.shields.io/badge/Flags--Wall_-Wextra_-Werror-success?style=flat-square)](#quality-assurance--engineering-standards)
 [![Memory Safety](https://img.shields.io/badge/Memory-0_Leaks_(ASan_%C2%B7_UBSan_%C2%B7_Valgrind)-brightgreen?style=flat-square)](#verification--test-suites)
-[![Automated Assertions](https://img.shields.io/badge/Tests-53%2C000%2B_Passing-blue?style=flat-square)](#verification--test-suites)
+[![Automated Assertions](https://img.shields.io/badge/Tests-57%2C000%2B_Passing-blue?style=flat-square)](#verification--test-suites)
 
 **[ 🇬🇧 English ](#-english-version) · [ 🇫🇷 Version Française ](#-version-française) · [ 📐 C Architecture Guide ](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)**
 
@@ -22,7 +22,7 @@
 
 **`my_42_cursus`** is a curated systems-programming monorepo containing my projects from **École 42** — from the intensive 4-week **C Piscine** through the **Common Core** curriculum. Every project is written from scratch in pure C under strict constraints: **no standard high-level shortcuts**, **strict `-Wall -Wextra -Werror` compilation**, **42 Norm v4.1 compliance**, **deterministic error handling**, and **zero memory leaks**.
 
-Beyond passing 42 evaluations, each repository module is structured according to professional C engineering conventions (see [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) and backed by automated differential, unit, fault-injection, and sanitizer test suites totaling **over 53,000 automated test cases**.
+Beyond passing 42 evaluations, each repository module is structured according to professional C engineering conventions (see [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) and backed by automated differential, unit, fault-injection, and sanitizer test suites totaling **over 57,000 automated test cases**.
 
 ### Table of Contents
 
@@ -75,6 +75,7 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rank 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercises (`cpp_00`–`cpp_09`) | OOP: classes, inheritance, exceptions, templates, orthodox canonical form; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, functional, edge cases, 3000-element stress, ASan/TSan) |
+| **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | STL containers recoded from scratch in C++98, namespace `ft`, `std::allocator`: `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), red-black trees, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ All bonus containers | **3,408 ASan/UBSan assertions** + **5 testers** (llefranc, monkey, mazoise, mli, static) + **official libstdc++ GCC 4.9.4 testsuite** (0 applicable bugs) |
 
 #### 📚 Exam Rank Practice
 
@@ -198,12 +199,24 @@ my_42_cursus/
 │   ├── include/ src/                  # .rt parser, intersections, lighting, camera
 │   ├── scenes/                        # sample scenes
 │   └── tests/                         # 9 suites / 14,660 tests
-└── cpp_modules/                        # Rank 03 — C++ Modules 00-09 (OOP & STL)
-    ├── subjects/                      # Official subject texts (CPP_Module_00.txt … 09)
-    ├── cpp_00/ .. cpp_09/             # 37 exercises (ex00..exN per module)
-    │   ├── Makefile                    # all/clean/fclean/re targets
-    │   └── *.hpp / *.cpp / main.cpp    # Orthodox canonical form, C++98 strict
-    └── tests/                          # 93-check Python suite (functional, stress, ASan/TSan)
+├── cpp_modules/                        # Rank 03 — C++ Modules 00-09 (OOP & STL)
+│   ├── subjects/                      # Official subject texts (CPP_Module_00.txt … 09)
+│   ├── cpp_00/ .. cpp_09/             # 37 exercises (ex00..exN per module)
+│   │   ├── Makefile                    # all/clean/fclean/re targets
+│   │   └── *.hpp / *.cpp / main.cpp    # Orthodox canonical form, C++98 strict
+│   └── tests/                          # 93-check Python suite (functional, stress, ASan/TSan)
+└── ft_containers/                      # C++98 — STL containers recoded in namespace ft
+    ├── Makefile                        # Orchestrates: internal suite + 5 student testers
+    ├── subjects/                       # Official subject (ft_containers_subject.md)
+    ├── includes/                       # vector.hpp, map.hpp, stack.hpp, set.hpp, deque.hpp,
+    │                                   # queue.hpp, multimap.hpp, multiset.hpp, list.hpp,
+    │                                   # priority_queue.hpp, rb_tree.hpp, iterator.hpp, ...
+    ├── tests/
+    │   ├── test_containers.cpp         # Internal ASan/UBSan suite (3,408 assertions)
+    │   ├── compile_check.cpp           # Header-only compile smoke test
+    │   ├── official/                   # Official libstdc++ GCC 4.9.4 testsuite (shim + run.sh)
+    │   └── testers/                    # llefranc, monkey, mazoise, mli, static testers
+    └── (no binaries tracked)           # header-only library, builds via Makefile
 ```
 
 ---
@@ -254,6 +267,9 @@ make -C netpratice
 
 # 10. Build CPP Modules (each exercise in cpp_modules/cpp_XX/exYY)
 make -C cpp_modules/cpp_09/ex02
+
+# 11. Build FT_Containers (header-only STL containers, C++98) + run internal suite + 5 testers
+make -C ft_containers re
 ```
 
 ---
@@ -313,6 +329,10 @@ bash miniRT/tests/run_tests.sh
 
 # CPP Modules 00-09: 93 checks (build, functional, edge cases, 3000-element stress, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
+
+# FT_Containers: internal ASan/UBSan suite (3,408) + 5 testers (llefranc, monkey, mazoise, mli, static)
+#   + official libstdc++ GCC 4.9.4 testsuite (PASS 172, FAIL 18 *_neg, 0 applicable bugs)
+make -C ft_containers re
 ```
 
 ---
@@ -333,7 +353,7 @@ python3 cpp_modules/tests/test_cpp_modules.py
 
 **`my_42_cursus`** est le monorepo regroupant l'ensemble de mes projets de programmation système en **C** réalisés à l'**École 42** — depuis la **Piscine C** jusqu'aux projets du **Tronc Commun (*Common Core*)**. Chaque projet est développé intégralement à partir de zéro en C pur selon des contraintes d'ingénierie strictes : compilation sous **`-Wall -Wextra -Werror`**, respect intégral de la **Norme 42 v4.1**, gestion défensive des erreurs et **zéro fuite mémoire**.
 
-Chaque projet est structuré proprement selon les standards de l'industrie adaptés aux règles de la Moulinette 42 (voir le guide complet [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) et validé par plus de **53 000 tests automatisés** (tests unitaires, différentiels face à la `glibc`, injection de pannes `malloc`, AddressSanitizer, UBSan et Valgrind).
+Chaque projet est structuré proprement selon les standards de l'industrie adaptés aux règles de la Moulinette 42 (voir le guide complet [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) et validé par plus de **57 000 tests automatisés** (tests unitaires, différentiels face à la `glibc`, injection de pannes `malloc`, AddressSanitizer, UBSan et Valgrind).
 
 ### Sommaire
 
@@ -386,6 +406,7 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rang 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercices (`cpp_00`–`cpp_09`) | POO : classes, héritage, exceptions, templates, forme canonique ; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, fonctionnels, cas limites, stress 3000, ASan/TSan) |
+| **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | Conteneurs STL recodés de zéro en C++98, namespace `ft`, `std::allocator` : `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), arbres rouge-noir, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ Tous les conteneurs bonus | **3 408 assertions ASan/UBSan** + **5 testeurs** (llefranc, monkey, mazoise, mli, static) + **testsuite OFFICIELLE libstdc++ GCC 4.9.4** (0 bug applicable) |
 
 #### 📚 Exam Rank — Recueils d'examen
 
@@ -417,6 +438,7 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`exam_rank_04/`** est l'examen **Rank 04 — microshell** : exécution de commandes shell, pipelines `|`/`;`, builtin `cd`, concurrence sans fuite de descripteurs (un pipe ouvert à la fois, validé avec `ulimit -n 30`), bonus `&&`/`||` short-circuit. Utilise **uniquement les 16 fonctions autorisées**. Validé par **11 tests unitaires + 22 intégration**.
 - **`miniRT/`** est le traceur de rayons CPU (Exam Rank 05) : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras. Validé par **9 suites / 14 660 tests**.
 - **`cpp_modules/`** contient les 10 modules **CPP 00–09** : chaque exercice (`cpp_XX/exYY/`) est autonome avec son `Makefile` et ses fichiers `*.hpp`/`*.cpp` en **C++98 strict** (`-Wall -Wextra -Werror`), forme canonique obligatoire de `cpp_02` à `cpp_09`, STL réservée aux modules 08–09. Les énoncés officiels sont dans `subjects/` et la suite de tests Python dans `tests/`.
+- **`ft_containers/`** recode les **conteneurs STL en C++98 strict** dans le namespace **`ft`** avec `std::allocator` : `vector`, `map` (arbre rouge-noir), `stack` (obligatoires) + `set`, `deque`, `queue`, `multimap`, `multiset` (bonus), ainsi que `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair`. Bibliothèque entièrement en headers (`includes/`), aucun binaire suivi. Validée par une **suite interne ASan/UBSan (3 408 assertions)**, **5 testeurs élèves** (llefranc, monkey, mazoise, mli, static) et la **testsuite OFFICIELLE libstdc++ GCC 4.9.4** (0 bug applicable). Le `Makefile` orchestre la suite interne et tous les testeurs via `make re`.
 
 Pour aller plus loin sur l'organisation professionnelle d'un projet C en entreprise et à 42, consultez [**`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`**](docs/C_PROJECT_ARCHITECTURE_GUIDE.md).
 
@@ -463,6 +485,9 @@ make -C netpratice
 
 # Compiler CPP Modules (chaque exercice dans cpp_modules/cpp_XX/exYY)
 make -C cpp_modules/cpp_09/ex02
+
+# Compiler FT_Containers (conteneurs STL en header-only, C++98) + suite interne + 5 testeurs
+make -C ft_containers re
 ```
 
 ---
@@ -520,6 +545,10 @@ bash miniRT/tests/run_tests.sh
 
 # CPP Modules 00-09 : 93 checks (build, fonctionnels, cas limites, stress 3000, ASan/TSan)
 python3 cpp_modules/tests/test_cpp_modules.py
+
+# FT_Containers : suite interne ASan/UBSan (3 408) + 5 testeurs (llefranc, monkey, mazoise, mli, static)
+#   + testsuite OFFICIELLE libstdc++ GCC 4.9.4 (PASS 172, FAIL 18 *_neg, 0 bug applicable)
+make -C ft_containers re
 ```
 
 ---
