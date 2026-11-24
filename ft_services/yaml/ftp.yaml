@@ -1,0 +1,56 @@
+# ============================================================================ #
+#  ft_services — FTPS Deployment + Service                                   #
+#  Secure FTP (FTP over SSL), port 21.                                       #
+# ============================================================================ #
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftp
+  labels:
+    app: ftp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftp
+  template:
+    metadata:
+      labels:
+        app: ftp
+    spec:
+      containers:
+        - name: ftp
+          image: ftp:ft_services
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 21
+          envFrom:
+            - configMapRef:
+                name: ft-services-config
+            - secretRef:
+                name: ft-services-secret
+          livenessProbe:
+            tcpSocket:
+              port: 21
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            tcpSocket:
+              port: 21
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftp
+  labels:
+    app: ftp
+spec:
+  type: LoadBalancer
+  selector:
+    app: ftp
+  ports:
+    - name: ftp
+      port: 21
+      targetPort: 21

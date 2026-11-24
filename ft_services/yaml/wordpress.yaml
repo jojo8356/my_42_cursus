@@ -1,0 +1,64 @@
+# ============================================================================ #
+#  ft_services — WordPress Deployment + Service                              #
+#  nginx + php-fpm serving WordPress on port 5050. Persistent volume for    #
+#  the WordPress files. Entrypoint waits for MySQL then installs WP + users.#
+# ============================================================================ #
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+        - name: wordpress
+          image: wordpress:ft_services
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5050
+          envFrom:
+            - configMapRef:
+                name: ft-services-config
+            - secretRef:
+                name: ft-services-secret
+          volumeMounts:
+            - name: wordpress-data
+              mountPath: /var/www/html
+          livenessProbe:
+            tcpSocket:
+              port: 5050
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          readinessProbe:
+            tcpSocket:
+              port: 5050
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: wordpress-data
+          persistentVolumeClaim:
+            claimName: wordpress-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  type: LoadBalancer
+  selector:
+    app: wordpress
+  ports:
+    - name: http
+      port: 5050
+      targetPort: 5050

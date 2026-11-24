@@ -1,0 +1,34 @@
+# ============================================================================ #
+#  ft_services — Telegraf Deployment (BONUS: metrics → InfluxDB)             #
+#  Collects system + docker metrics, pushes to InfluxDB. No external port.  #
+# ============================================================================ #
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegraf
+  labels:
+    app: telegraf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegraf
+  template:
+    metadata:
+      labels:
+        app: telegraf
+    spec:
+      containers:
+        - name: telegraf
+          image: telegraf:ft_services
+          imagePullPolicy: Never
+          livenessProbe:
+            exec:
+              command: ["/usr/local/bin/telegraf", "--test", "--config", "/etc/telegraf/telegraf.conf"]
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command: ["/usr/local/bin/telegraf", "--test", "--config", "/etc/telegraf/telegraf.conf"]
+            initialDelaySeconds: 10
+            periodSeconds: 20

@@ -1,0 +1,29 @@
+# ============================================================================ #
+#  ft_services — ConfigMap (non-sensitive configuration)                     #
+# ============================================================================ #
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ft-services-config
+data:
+  # WordPress
+  WP_PATH: "/var/www/html"
+  WP_URL: "http://localhost:5050"
+  WP_TITLE: "ft_services"
+  WP_ADMIN: "webmaster"
+  WP_ADMIN_EMAIL: "webmaster@42.fr"
+  WP_USER: "editor"
+  WP_USER_EMAIL: "editor@42.fr"
+
+  # Database
+  DB_NAME: "wordpress"
+  DB_USER: "wordpress"
+  DB_HOST: "mysql"
+
+  # FTP
+  FTP_USER: "ftpuser"
+
+  # phpMyAdmin
+  PMA_HOST: "mysql"
+  PMA_PORT: "3306"
+  PMA_USER: "root"
