@@ -1,0 +1,22 @@
+# ============================================================================ #
+#  ft_containers — Build artefacts (header-only library + test harness)        #
+# ============================================================================ #
+
+# Monkey tester binaries (ft_* / std_*) — regenerables via `make re`
+tests/testers/tester_monkey/ft_*
+tests/testers/tester_monkey/std_*
+tests/testers/tester_monkey/.objs/
+
+# Internal ASan/UBSan test binary
+tests/test_containers
+
+# Llefranc tester binary
+tests/testers/tester_llefranc/containers_test
+
+# Mazoise generated headers & logs
+tests/testers/tester_mazoise/.INCLUDES/*_UC.HPP
+tests/testers/tester_mazoise/VECTOR/logs/
+
+# Official libstdc++ testsuite build artefacts
+tests/official/obj/
+tests/official/results/
