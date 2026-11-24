@@ -1,0 +1,4 @@
+#include "map.hpp"
+namespace std {
+using ft::map;
+}

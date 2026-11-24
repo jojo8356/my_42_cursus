@@ -1,0 +1,4 @@
+#include "priority_queue.hpp"
+namespace std {
+using ft::priority_queue;
+}

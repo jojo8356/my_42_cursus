@@ -29,18 +29,18 @@ public:
     typedef typename Alloc::size_type        size_type;
     typedef typename Alloc::difference_type  difference_type;
 
-    typedef typename rb_tree<value_type, value_compare, Alloc>::iterator       iterator;
-    typedef typename rb_tree<value_type, value_compare, Alloc>::const_iterator const_iterator;
-    typedef typename rb_tree<value_type, value_compare, Alloc>::reverse_iterator       reverse_iterator;
-    typedef typename rb_tree<value_type, value_compare, Alloc>::const_reverse_iterator const_reverse_iterator;
+    typedef typename rb_tree<const value_type, value_compare, Alloc>::iterator       iterator;
+    typedef typename rb_tree<const value_type, value_compare, Alloc>::const_iterator const_iterator;
+    typedef typename rb_tree<const value_type, value_compare, Alloc>::reverse_iterator       reverse_iterator;
+    typedef typename rb_tree<const value_type, value_compare, Alloc>::const_reverse_iterator const_reverse_iterator;
 
-    typedef value_type&       reference;
+    typedef const value_type&       reference;
     typedef const value_type& const_reference;
     typedef typename Alloc::pointer      pointer;
     typedef typename Alloc::const_pointer const_pointer;
 
 private:
-    typedef rb_tree<value_type, value_compare, Alloc> tree_type;
+    typedef rb_tree<const value_type, value_compare, Alloc> tree_type;
     tree_type _tree;
     key_compare _key_comp;
 
@@ -84,6 +84,7 @@ public:
     const_iterator end(void) const { return _tree.end(); }
 
     key_compare key_comp(void) const { return _key_comp; }
+    value_compare value_comp(void) const { return _key_comp; }
 
     reverse_iterator rbegin(void) { return _tree.rbegin(); }
     const_reverse_iterator rbegin(void) const { return _tree.rbegin(); }
@@ -136,12 +137,11 @@ public:
         return 1;
     }
 
-    iterator erase(iterator pos) { return _tree.erase(pos); }
-    iterator erase(iterator first, iterator last)
+    void erase(iterator pos) { _tree.erase(pos); }
+    void erase(iterator first, iterator last)
     {
         while (first != last)
-            first = erase(first);
-        return first;
+            first = _tree.erase(first);
     }
 
     // ------------------------------------------------------- Search
@@ -171,7 +171,7 @@ public:
     }
 
     void clear(void) { _tree.clear(); }
-    void swap(set& x) { _tree.swap(x._tree); }
+    void swap(set& x) { _tree.swap(x._tree); ft::swap(_key_comp, x._key_comp); }
 };
 
 template <class Key, class Compare, class Alloc>

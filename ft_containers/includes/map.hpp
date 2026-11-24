@@ -62,7 +62,7 @@ private:
 public:
     explicit map(const Compare& comp = Compare(),
                  const allocator_type& alloc = allocator_type())
-        : _tree(value_compare(comp), alloc)
+        : _tree(value_compare(comp), alloc), _key_comp(comp)
     {
     }
 
@@ -86,7 +86,10 @@ public:
     map& operator=(const map& x)
     {
         if (this != &x)
+        {
             _tree = x._tree;
+            _key_comp = x._key_comp;
+        }
         return *this;
     }
 
@@ -97,6 +100,7 @@ public:
     const_iterator end(void) const { return _tree.end(); }
 
     key_compare key_comp(void) const { return _key_comp; }
+    value_compare value_comp(void) const { return value_compare(_key_comp); }
 
     reverse_iterator rbegin(void) { return _tree.rbegin(); }
     const_reverse_iterator rbegin(void) const { return _tree.rbegin(); }
@@ -160,12 +164,11 @@ public:
         return 1;
     }
 
-    iterator erase(iterator pos) { return _tree.erase(pos); }
-    iterator erase(iterator first, iterator last)
+    void erase(iterator pos) { _tree.erase(pos); }
+    void erase(iterator first, iterator last)
     {
         while (first != last)
-            first = erase(first);
-        return first;
+            first = _tree.erase(first);
     }
 
     // ------------------------------------------------------- Search
@@ -195,7 +198,7 @@ public:
     }
 
     void clear(void) { _tree.clear(); }
-    void swap(map& x) { _tree.swap(x._tree); }
+    void swap(map& x) { _tree.swap(x._tree); ft::swap(_key_comp, x._key_comp); }
 
 private:
     // Build a value_type with a default-constructed mapped_type for searching

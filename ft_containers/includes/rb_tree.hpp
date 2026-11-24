@@ -46,6 +46,8 @@ private:
 
 public:
     // -------------------------------------------------------- Iterator
+    class const_iterator; // forward-declaration (definie apres iterator)
+
     class iterator
     {
     public:
@@ -56,13 +58,18 @@ public:
         typedef ft::size_t                       size_type;
         typedef ft::bidirectional_iterator_tag   iterator_category;
 
-        iterator(void) : _tree(0), _node(0) {}
-        iterator(const iterator& x) : _tree(x._tree), _node(x._node) {}
+        iterator(void) : _nil(0), _root(0), _node(0) {}
+        iterator(const iterator& x) : _nil(x._nil), _root(x._root), _node(x._node) {}
+        // set/multiset (V = const T) autorise const_iterator -> iterator (pas map)
+        template <class U>
+        iterator(const U& x,
+                 typename ft::enable_if<ft::is_same<U, const_iterator>::value &&
+                                        ft::is_same<V&, const V&>::value>::type* = 0);
         ~iterator(void) {}
 
         iterator& operator=(const iterator& x)
         {
-            _tree = x._tree; _node = x._node;
+            _nil = x._nil; _root = x._root; _node = x._node;
             return *this;
         }
 
@@ -71,12 +78,12 @@ public:
 
         iterator& operator++(void)
         {
-            _node = _tree->successor(_node);
+            _node = _successor(_nil, _node);
             return *this;
         }
         iterator& operator--(void)
         {
-            _node = _tree->predecessor(_node);
+            _node = _predecessor(_nil, _root, _node);
             return *this;
         }
         iterator  operator++(int) { iterator x(*this); ++*this; return x; }
@@ -86,10 +93,11 @@ public:
         pointer   operator->(void) const { return &(_node->value); }
 
     private:
-        iterator(const rb_tree* tree, node_ptr node) : _tree(tree), _node(node) {}
+        iterator(node_ptr nil, node_ptr root, node_ptr node) : _nil(nil), _root(root), _node(node) {}
 
-        const rb_tree* _tree;
-        node_ptr       _node;
+        node_ptr _nil;
+        node_ptr _root;
+        node_ptr _node;
 
         friend class rb_tree;
         friend class reverse_iterator<iterator>;
@@ -105,15 +113,15 @@ public:
         typedef ft::size_t                       size_type;
         typedef ft::bidirectional_iterator_tag   iterator_category;
 
-        const_iterator(void) : _tree(0), _node(0) {}
-        const_iterator(const const_iterator& x) : _tree(x._tree), _node(x._node) {}
+        const_iterator(void) : _nil(0), _root(0), _node(0) {}
+        const_iterator(const const_iterator& x) : _nil(x._nil), _root(x._root), _node(x._node) {}
         ~const_iterator(void) {}
 
-        const_iterator(const iterator& x) : _tree(x._tree), _node(x._node) {}
+        const_iterator(const iterator& x) : _nil(x._nil), _root(x._root), _node(x._node) {}
 
         const_iterator& operator=(const const_iterator& x)
         {
-            _tree = x._tree; _node = x._node;
+            _nil = x._nil; _root = x._root; _node = x._node;
             return *this;
         }
 
@@ -122,12 +130,12 @@ public:
 
         const_iterator& operator++(void)
         {
-            _node = _tree->successor(_node);
+            _node = _successor(_nil, _node);
             return *this;
         }
         const_iterator& operator--(void)
         {
-            _node = _tree->predecessor(_node);
+            _node = _predecessor(_nil, _root, _node);
             return *this;
         }
         const_iterator  operator++(int) { const_iterator x(*this); ++*this; return x; }
@@ -137,12 +145,14 @@ public:
         pointer   operator->(void) const { return &(_node->value); }
 
     private:
-        const_iterator(const rb_tree* tree, node_ptr node) : _tree(tree), _node(node) {}
+        const_iterator(node_ptr nil, node_ptr root, node_ptr node) : _nil(nil), _root(root), _node(node) {}
 
-        const rb_tree* _tree;
-        node_ptr       _node;
+        node_ptr _nil;
+        node_ptr _root;
+        node_ptr _node;
 
         friend class rb_tree;
+        friend class iterator;
         friend class reverse_iterator<const_iterator>;
     };
 
@@ -155,18 +165,13 @@ public:
         : _comp(comp), _node_alloc(alloc), _root(0), _size(0)
     {
         _nil = _node_alloc.allocate(1);
-        _node_alloc.construct(_nil, node(V()));
-        _nil->red = false;
-        _nil->parent = _nil;
-        _nil->left = _nil;
-        _nil->right = _nil;
+        _init_nil();
         _root = _nil;
     }
 
     ~rb_tree(void)
     {
         clear();
-        _node_alloc.destroy(_nil);
         _node_alloc.deallocate(_nil, 1);
     }
 
@@ -175,11 +180,7 @@ public:
         : _comp(x._comp), _node_alloc(x._node_alloc), _root(0), _size(0)
     {
         _nil = _node_alloc.allocate(1);
-        _node_alloc.construct(_nil, node(V()));
-        _nil->red = false;
-        _nil->parent = _nil;
-        _nil->left = _nil;
-        _nil->right = _nil;
+        _init_nil();
         _root = _nil;
         if (x._root != x._nil)
             _root = _copy_subtree(x._root, x._nil, _nil);
@@ -200,10 +201,10 @@ public:
     }
 
     // ------------------------------------------------------- Iterators
-    iterator begin(void) { return iterator(this, leftmost(_root)); }
-    const_iterator begin(void) const { return const_iterator(this, leftmost(_root)); }
-    iterator end(void) { return iterator(this, _nil); }
-    const_iterator end(void) const { return const_iterator(this, _nil); }
+    iterator begin(void) { return iterator(_nil, _root, _leftmost(_nil, _root)); }
+    const_iterator begin(void) const { return const_iterator(_nil, _root, _leftmost(_nil, _root)); }
+    iterator end(void) { return iterator(_nil, _root, _nil); }
+    const_iterator end(void) const { return const_iterator(_nil, _root, _nil); }
 
     reverse_iterator rbegin(void) { return reverse_iterator(end()); }
     const_reverse_iterator rbegin(void) const { return const_reverse_iterator(end()); }
@@ -213,7 +214,7 @@ public:
     // ------------------------------------------------------- Capacity
     size_type size(void) const { return _size; }
     bool      empty(void) const { return _size == 0; }
-    size_type max_size(void) const { return allocator_type().max_size(); }
+    size_type max_size(void) const { return node_allocator_type().max_size(); }
 
     // expose the comparator (used by wrappers to check key equality)
     const value_compare& comp(void) const { return _comp; }
@@ -233,7 +234,7 @@ public:
                 x = x->left;
             }
         }
-        return iterator(this, y);
+        return iterator(_nil, _root, y);
     }
 
     const_iterator lower_bound(const V& val) const
@@ -250,7 +251,7 @@ public:
                 x = x->left;
             }
         }
-        return const_iterator(this, y);
+        return const_iterator(_nil, _root, y);
     }
 
     iterator upper_bound(const V& val)
@@ -267,7 +268,7 @@ public:
             else
                 x = x->right;
         }
-        return iterator(this, y);
+        return iterator(_nil, _root, y);
     }
 
     const_iterator upper_bound(const V& val) const
@@ -284,7 +285,7 @@ public:
             else
                 x = x->right;
         }
-        return const_iterator(this, y);
+        return const_iterator(_nil, _root, y);
     }
 
     iterator find(const V& val)
@@ -299,7 +300,7 @@ public:
         }
         if (x == _nil)
             return end();
-        return iterator(this, x);
+        return iterator(_nil, _root, x);
     }
 
     const_iterator find(const V& val) const
@@ -314,7 +315,7 @@ public:
         }
         if (x == _nil)
             return end();
-        return const_iterator(this, x);
+        return const_iterator(_nil, _root, x);
     }
 
     size_type count(const V& val)
@@ -383,14 +384,14 @@ public:
 
         insert_fixup(z);
         ++_size;
-        return iterator(this, z);
+        return iterator(_nil, _root, z);
     }
 
     // ------------------------------------------------------- Erase
     iterator erase(iterator pos)
     {
         node_ptr z = pos._node;
-        node_ptr succ = successor(z); // element following the erased one
+        node_ptr succ = _successor(_nil, z); // element following the erased one
         node_ptr y = z;
         bool y_original_color = y->red;
         node_ptr x;
@@ -433,7 +434,7 @@ public:
         _node_alloc.destroy(z);
         _node_alloc.deallocate(z, 1);
         --_size;
-        return iterator(this, succ);
+        return iterator(_nil, _root, succ);
     }
 
     void clear(void)
@@ -450,7 +451,7 @@ public:
         ft::swap(_root, x._root);
         ft::swap(_size, x._size);
         ft::swap(_nil, x._nil);
-        // _comp is not swapped (both trees share the same comparator type)
+        ft::swap(_comp, x._comp);
     }
 
     Compare  _comp;
@@ -629,6 +630,18 @@ public:
         v->parent = u->parent;
     }
 
+    void _init_nil(void)
+    {
+        // The sentinel node's value is never dereferenced, so we set up its
+        // pointer fields directly without going through the allocator's
+        // construct()/destroy() (which would otherwise be counted as extra
+        // value constructions/destructions by tracking allocators).
+        _nil->red = false;
+        _nil->parent = _nil;
+        _nil->left = _nil;
+        _nil->right = _nil;
+    }
+
     node_ptr tree_minimum(node_ptr x)
     {
         while (x->left != _nil)
@@ -636,26 +649,26 @@ public:
         return x;
     }
 
-    node_ptr leftmost(node_ptr x) const
+    static node_ptr _leftmost(node_ptr nil, node_ptr x)
     {
-        if (x == _nil)
-            return _nil;
-        while (x->left != _nil)
+        if (x == nil)
+            return nil;
+        while (x->left != nil)
             x = x->left;
         return x;
     }
 
-    node_ptr successor(node_ptr n) const
+    static node_ptr _successor(node_ptr nil, node_ptr n)
     {
-        if (n->right != _nil)
+        if (n->right != nil)
         {
             n = n->right;
-            while (n->left != _nil)
+            while (n->left != nil)
                 n = n->left;
             return n;
         }
         node_ptr p = n->parent;
-        while (p != _nil && n == p->right)
+        while (p != nil && n == p->right)
         {
             n = p;
             p = p->parent;
@@ -663,24 +676,24 @@ public:
         return p;
     }
 
-    node_ptr predecessor(node_ptr n) const
+    static node_ptr _predecessor(node_ptr nil, node_ptr root, node_ptr n)
     {
-        if (n == _nil)
+        if (n == nil)
         {
-            n = _root;
-            while (n->right != _nil)
+            n = root;
+            while (n->right != nil)
                 n = n->right;
             return n;
         }
-        if (n->left != _nil)
+        if (n->left != nil)
         {
             n = n->left;
-            while (n->right != _nil)
+            while (n->right != nil)
                 n = n->right;
             return n;
         }
         node_ptr p = n->parent;
-        while (p != _nil && n == p->left)
+        while (p != nil && n == p->left)
         {
             n = p;
             p = p->parent;
@@ -709,6 +722,15 @@ public:
         _node_alloc.deallocate(x, 1);
     }
 };
+
+// set/multiset (V = const T) autorise const_iterator -> iterator
+template <class V, class Compare, class Alloc>
+template <class U>
+rb_tree<V, Compare, Alloc>::iterator::iterator(const U& x,
+                                               typename ft::enable_if<ft::is_same<U, const_iterator>::value &&
+                                                                     ft::is_same<V&, const V&>::value>::type*)
+    : _nil(x._nil), _root(x._root), _node(x._node)
+{}
 
 } // namespace ft
 

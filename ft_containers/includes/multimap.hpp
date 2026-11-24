@@ -96,6 +96,7 @@ public:
     const_iterator end(void) const { return _tree.end(); }
 
     key_compare key_comp(void) const { return _key_comp; }
+    value_compare value_comp(void) const { return value_compare(_key_comp); }
 
     reverse_iterator rbegin(void) { return _tree.rbegin(); }
     const_reverse_iterator rbegin(void) const { return _tree.rbegin(); }
@@ -147,12 +148,11 @@ public:
         return n;
     }
 
-    iterator erase(iterator pos) { return _tree.erase(pos); }
-    iterator erase(iterator first, iterator last)
+    void erase(iterator pos) { _tree.erase(pos); }
+    void erase(iterator first, iterator last)
     {
         while (first != last)
-            first = erase(first);
-        return first;
+            first = _tree.erase(first);
     }
 
     iterator       find(const key_type& key) { return _tree.find(value_type(key, mapped_type())); }
@@ -181,7 +181,7 @@ public:
     }
 
     void clear(void) { _tree.clear(); }
-    void swap(multimap& x) { _tree.swap(x._tree); }
+    void swap(multimap& x) { _tree.swap(x._tree); ft::swap(_key_comp, x._key_comp); }
 };
 
 template <class Key, class T, class Compare, class Alloc>

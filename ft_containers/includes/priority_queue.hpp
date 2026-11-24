@@ -24,7 +24,7 @@ public:
     typedef Container                             container_type;
     typedef Compare                               compare_type;
 
-private:
+protected:
     Container   c;
     Compare     comp;
 
@@ -106,7 +106,6 @@ public:
     size_type size(void) const { return c.size(); }
 
     const_reference top(void) const { return c.front(); }
-    reference top(void) { return c.front(); }
 
     void push(const value_type& val)
     {

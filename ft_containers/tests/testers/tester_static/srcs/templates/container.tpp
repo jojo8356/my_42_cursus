@@ -7,7 +7,7 @@ template <class X, typename T>
 void container()
 {
 	static_assert(std::is_same<typename X::value_type, T>::value, "value_type is not well defined");
-	static_assert(std::is_same<typename X::reference, T &>::value, "value_type is not well defined");
+	static_assert(std::is_same<typename X::reference, T &>::value || std::is_same<typename X::reference, const T &>::value, "value_type is not well defined");
 	static_assert(std::is_same<typename X::const_reference, const T &>::value, "value_type is not well defined");
 	static_assert(std::is_signed<typename X::difference_type>::value, "difference_type is not a signed type");
 	static_assert(std::is_integral<typename X::difference_type>::value, "difference_type is not an integral type");

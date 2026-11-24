@@ -1,0 +1,4 @@
+#include "multimap.hpp"
+namespace std {
+using ft::multimap;
+}

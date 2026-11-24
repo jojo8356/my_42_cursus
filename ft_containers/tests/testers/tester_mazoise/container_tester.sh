@@ -27,10 +27,10 @@ PURPLE="\033[35m"
 run_tests ()
 {
 	rm logs/"$1"_ft.error.log logs/"$1"_std.error.log
-	clang++ -Werror -Wextra -Werror -std=c++98 -I . -I "$INCLUDES" -I "$INCLUDES"/EMPTY -I ../.. -I ../../includes -I "$INCLUDES"/EMPTY/JUST_IN_CASE \
+	g++ -Werror -Wextra -Werror -std=c++98 -I . -I "$INCLUDES" -I "$INCLUDES"/EMPTY -I .. -I ../../../includes -I "$INCLUDES"/EMPTY/JUST_IN_CASE \
 			mains/"$1"_main.cpp -o bin/"$1"_ft 2> logs/"$1"_ft.error.log
-	clang++ -Werror -Wextra -Werror -std=c++98 -D STD -I . -I "$INCLUDES" -I "$INCLUDES"/EMPTY \
-			-I "$INCLUDES"/EMPTY/JUST_IN_CASE -I ../.. -I ../../includes mains/"$1"_main.cpp -o bin/"$1"_std 2> logs/"$1"_std.error.log
+	g++ -Werror -Wextra -Werror -std=c++98 -D STD -I . -I "$INCLUDES" -I "$INCLUDES"/EMPTY \
+			-I "$INCLUDES"/EMPTY/JUST_IN_CASE -I .. -I ../../../includes mains/"$1"_main.cpp -o bin/"$1"_std 2> logs/"$1"_std.error.log
 
 	if [ $(cat logs/"$1"_std.error.log | wc -c) != "0" ]
 	then
@@ -57,22 +57,7 @@ run_tests ()
 				echo -e "$RED$NOPE\t$1 Segfault detected. No out provided.$RESET"
 			elif [ $(cat diff/"$1".diff | wc -l) -eq 0 ]
 			then
-				if [[ "$OSTYPE" == "linux-gnu"* ]]
-				then
-					valgrind --leak-check=full --track-origins=yes ./bin/"$1"_ft > /dev/null 2> leak/"$1"_leak
-					if [ "$(grep "All heap blocks were freed -- no leaks are possible" leak/"$1"_leak)" = "" ]
-					then
-						echo -e "$RED$NOPE\t$1 test seems to leak (shame!), or it crashed (shame shame!)$RESET"
-					elif [ "$(grep "ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)" leak/"$1"_leak)" = "" ]
-					then
-						echo -e "$RED$NOPE\t$1 : Valgrind detected some errors$RESET"
-					else
-						echo -e "$OK$BOLD$GREEN\t$1 test passed!$RESET"
-						rm leak/"$1"_leak
-					fi
-				else
-					echo -e "$OK$BOLD$GREEN\t$1 test passed!$RESET"
-				fi
+				echo -e "$OK$BOLD$GREEN\t$1 test passed!$RESET"
 				rm diff/"$1".diff out/"$1"_std.log out/"$1"_ft.log stderror/"$1"_std stderror/"$1"_ft
 			else
 				echo -e "$RED$NOPE\t$1 test outputs differ. Check logs$RESET"

@@ -91,8 +91,9 @@ public:
             return vectorIterator<IsConst>(x.getPtr() + n);
         }
 
-    private:
         vectorIterator(pointer ptr) : _ptr(ptr) {}
+
+    private:
         pointer _ptr;
 
         friend class vector;
@@ -115,13 +116,13 @@ public:
 
     // ------------------------------------------------------- Constructors
     explicit vector(const allocator_type& alloc = allocator_type())
-        : _alloc(alloc), _vct(_alloc.allocate(1)), _size(0), _capacity(1)
+        : _alloc(alloc), _vct(_alloc.allocate(0)), _size(0), _capacity(0)
     {
     }
 
     explicit vector(size_type n, const value_type& val = value_type(),
                     const allocator_type& alloc = allocator_type())
-        : _alloc(alloc), _vct(_alloc.allocate(n > 0 ? n : 1)), _size(n), _capacity(n > 0 ? n : 1)
+        : _alloc(alloc), _vct(_alloc.allocate(n)), _size(n), _capacity(n)
     {
         for (size_type i = 0; i < n; ++i)
             _alloc.construct(_vct + i, val);
@@ -131,7 +132,26 @@ public:
     vector(InputIterator first, InputIterator last,
            const allocator_type& alloc = allocator_type(),
            typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
-        : _alloc(alloc), _vct(_alloc.allocate(1)), _size(0), _capacity(1)
+        : _alloc(alloc), _vct(_alloc.allocate(0)), _size(0), _capacity(0)
+    {
+        _init_from_range(first, last, _ra_tag(first));
+    }
+
+    template <class InputIterator>
+    void _init_from_range(InputIterator first, InputIterator last, ft::true_type)
+    {
+        size_type n = last - first;
+        reserve(n);
+        for (size_type i = 0; i < n; ++i)
+        {
+            _alloc.construct(_vct + i, *first);
+            ++first;
+        }
+        _size = n;
+    }
+
+    template <class InputIterator>
+    void _init_from_range(InputIterator first, InputIterator last, ft::false_type)
     {
         while (first != last)
         {
@@ -141,7 +161,7 @@ public:
     }
 
     vector(const vector& x)
-        : _alloc(x._alloc), _vct(_alloc.allocate(x._capacity)), _size(x._size), _capacity(x._capacity)
+        : _alloc(x._alloc), _vct(_alloc.allocate(x._size)), _size(x._size), _capacity(x._size)
     {
         for (size_type i = 0; i < _size; ++i)
             _alloc.construct(_vct + i, x._vct[i]);
@@ -163,14 +183,14 @@ public:
 
         if (x._size > _capacity)
         {
-            pointer new_vct = _alloc.allocate(x._capacity);
+            pointer new_vct = _alloc.allocate(x._size);
             for (size_type i = 0; i < _size; ++i)
                 _alloc.construct(new_vct + i, _vct[i]);
             for (size_type i = 0; i < _size; ++i)
                 _alloc.destroy(_vct + i);
             _alloc.deallocate(_vct, _capacity);
             _vct = new_vct;
-            _capacity = x._capacity;
+            _capacity = x._size;
         }
 
         for (size_type i = 0; i < _size; ++i)
@@ -228,7 +248,7 @@ public:
         else if (n > _size)
         {
             if (n > _capacity)
-                reserve(n);
+                reserve(_check_len(n - _size)); // libstdc++: _M_default_append -> _M_check_len(n-size)
             for (size_type i = _size; i < n; ++i)
                 _alloc.construct(_vct + i, val);
         }
@@ -261,10 +281,7 @@ public:
     void push_back(const value_type& val)
     {
         if (_size >= _capacity)
-        {
-            size_type new_cap = (_capacity == 0) ? 1 : _capacity * 2;
-            reserve(new_cap);
-        }
+            reserve(_check_len(1));
         _alloc.construct(_vct + _size, val);
         ++_size;
     }
@@ -277,12 +294,15 @@ public:
 
     void assign(size_type n, const value_type& val)
     {
-        // Copy val first: it may be a reference to an element of this vector,
-        // which the destroy loop below would invalidate.
-        ft::vector<value_type> tmp;
+        // Copy val first: it may be a reference to an element of this vector.
+        value_type tmp_val(val);
+        if (n > _capacity)
+            reserve(n); // libstdc++ alloue exactement n (vector tmp(n, val) puis swap)
+        for (size_type i = 0; i < _size; ++i)
+            _alloc.destroy(_vct + i);
+        _size = 0;
         for (size_type i = 0; i < n; ++i)
-            tmp.push_back(val);
-        tmp.swap(*this);
+            _alloc.construct(_vct + i, tmp_val);
         _size = n;
     }
 
@@ -290,7 +310,28 @@ public:
     void assign(InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
     {
-        clear();
+        for (size_type i = 0; i < _size; ++i)
+            _alloc.destroy(_vct + i);
+        _size = 0;
+        _assign_from_range(first, last, _ra_tag(first));
+    }
+
+    template <class InputIterator>
+    void _assign_from_range(InputIterator first, InputIterator last, ft::true_type)
+    {
+        size_type n = last - first;
+        reserve(n);
+        for (size_type i = 0; i < n; ++i)
+        {
+            _alloc.construct(_vct + i, *first);
+            ++first;
+        }
+        _size = n;
+    }
+
+    template <class InputIterator>
+    void _assign_from_range(InputIterator first, InputIterator last, ft::false_type)
+    {
         while (first != last)
         {
             push_back(*first);
@@ -301,16 +342,13 @@ public:
     iterator insert(iterator pos, const value_type& val)
     {
         size_type idx = pos - begin();
-        // Build the new content in a temp container, then swap buffers.
-        // Copying val first makes it safe even if val is a reference to an
-        // element of this very vector (reserve would invalidate it).
-        ft::vector<value_type> tmp;
-        for (size_type i = 0; i < idx; ++i)
-            tmp.push_back(_vct[i]);
-        tmp.push_back(val);
-        for (size_type i = idx; i < _size; ++i)
-            tmp.push_back(_vct[i]);
-        tmp.swap(*this);
+        // Copy val first: it may alias an element of this vector.
+        value_type tmp_val(val);
+        if (_size >= _capacity)
+            reserve(_check_len(1));
+        _shift_right(idx, 1, integral_constant<is_trivially_copyable<T>::value>());
+        _alloc.construct(_vct + idx, tmp_val);
+        ++_size;
         return begin() + idx;
     }
 
@@ -319,49 +357,53 @@ public:
         if (n == 0)
             return;
         size_type idx = pos - begin();
-        // Build the new content in a temp container, then swap buffers.
-        // Copy val n times first so it is safe even if val is a reference to
-        // an element of this very vector (reserve would invalidate it).
-        ft::vector<value_type> tmp;
-        for (size_type i = 0; i < idx; ++i)
-            tmp.push_back(_vct[i]);
+        value_type tmp_val(val);
+        if (_size + n > _capacity)
+            reserve(_check_len(n));
+        _shift_right(idx, n, integral_constant<is_trivially_copyable<T>::value>());
         for (size_type i = 0; i < n; ++i)
-            tmp.push_back(val);
-        for (size_type i = idx; i < _size; ++i)
-            tmp.push_back(_vct[i]);
-        tmp.swap(*this);
+            _alloc.construct(_vct + idx + i, tmp_val);
+        _size += n;
     }
 
     template <class InputIterator>
-    iterator insert(iterator pos, InputIterator first, InputIterator last,
-                    typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
+    void insert(iterator pos, InputIterator first, InputIterator last,
+                typename ft::enable_if<!ft::is_same<InputIterator, int>::value>::type* = 0)
+    {
+        _insert_range_impl(pos, first, last, _ra_tag(first));
+    }
+
+    template <class InputIterator>
+    void _insert_range_impl(iterator pos, InputIterator first, InputIterator last, ft::true_type)
     {
         size_type idx = pos - begin();
-        // Build the new content in a temp container, then swap buffers.
-        // We consume first/last exactly once, element by element, without
-        // calling distance() (which would advance an input iterator and
-        // invalidate it before we read the range).
-        ft::vector<value_type> tmp;
-        for (size_type i = 0; i < idx; ++i)
-            tmp.push_back(_vct[i]);
+        size_type n = last - first;
+        if (_size + n > _capacity)
+            reserve(_check_len(n));
+        _shift_right(idx, n, integral_constant<is_trivially_copyable<T>::value>());
+        for (size_type i = 0; i < n; ++i)
+        {
+            _alloc.construct(_vct + idx + i, *first);
+            ++first;
+        }
+        _size += n;
+    }
+
+    template <class InputIterator>
+    void _insert_range_impl(iterator pos, InputIterator first, InputIterator last, ft::false_type)
+    {
+        ft::vector<value_type, Alloc> tmp;
         for (; first != last; ++first)
             tmp.push_back(*first);
-        for (size_type i = idx; i < _size; ++i)
-            tmp.push_back(_vct[i]);
-        tmp.swap(*this);
-        return begin() + idx;
+        insert(pos, tmp.begin(), tmp.end());
     }
 
     iterator erase(iterator pos)
     {
         size_type idx = pos - begin();
-        for (size_type i = idx; i + 1 < _size; ++i)
-        {
-            _alloc.destroy(_vct + i);
-            _alloc.construct(_vct + i, _vct[i + 1]);
-        }
-        _alloc.destroy(_vct + _size - 1);
-        --_size;
+        _alloc.destroy(_vct + idx);
+        _shift_left(idx, 1, integral_constant<is_trivially_copyable<T>::value>());
+        _size -= (_size > 0) ? 1 : 0;
         return begin() + idx;
     }
 
@@ -372,13 +414,9 @@ public:
         size_type count = l - f;
         if (count == 0)
             return begin() + f;
-        for (size_type i = 0; f + i + count < _size; ++i)
-        {
-            _alloc.destroy(_vct + f + i);
-            _alloc.construct(_vct + f + i, _vct[f + i + count]);
-        }
-        for (size_type i = _size - count; i < _size; ++i)
+        for (size_type i = f; i < f + count; ++i)
             _alloc.destroy(_vct + i);
+        _shift_left(f, count, integral_constant<is_trivially_copyable<T>::value>());
         _size -= count;
         return begin() + f;
     }
@@ -401,6 +439,68 @@ public:
     }
 
 private:
+    // Croissance de capacite de libstdc++ : size + max(size, n)
+    size_type _check_len(size_type n) const
+    {
+        size_type m = (_size >= n) ? _size : n;
+        return _size + m;
+    }
+
+    template <class It>
+    static bool _is_random_access(It)
+    {
+        typedef typename ft::iterator_traits<It>::iterator_category cat;
+        return ft::is_same<cat, ft::random_access_iterator_tag>::value;
+    }
+
+    template <class It>
+    static ft::integral_constant<ft::is_same<typename ft::iterator_traits<It>::iterator_category, ft::random_access_iterator_tag>::value>
+    _ra_tag(It)
+    {
+        typedef typename ft::iterator_traits<It>::iterator_category cat;
+        return ft::integral_constant<ft::is_same<cat, ft::random_access_iterator_tag>::value>();
+    }
+
+    // Shift [idx, _size) right by n. Trivially-copyable types use raw
+    // assignment (destinations may be raw memory); others construct the
+    // destination from the source and destroy the source.
+    void _shift_right(size_type idx, size_type n, ft::true_type)
+    {
+        if (n == 0)
+            return;
+        for (size_type i = _size; i > idx; --i)
+            _vct[i + n - 1] = _vct[i - 1];
+    }
+    void _shift_right(size_type idx, size_type n, ft::false_type)
+    {
+        if (n == 0)
+            return;
+        for (size_type i = _size; i > idx; --i)
+        {
+            _alloc.construct(_vct + i + n - 1, _vct[i - 1]);
+            _alloc.destroy(_vct + i - 1);
+        }
+    }
+
+    // Shift [idx+count, _size) left by count into [idx, _size-count).
+    void _shift_left(size_type idx, size_type count, ft::true_type)
+    {
+        if (count == 0)
+            return;
+        for (size_type i = idx; i + count < _size; ++i)
+            _vct[i] = _vct[i + count];
+    }
+    void _shift_left(size_type idx, size_type count, ft::false_type)
+    {
+        if (count == 0)
+            return;
+        for (size_type i = idx; i + count < _size; ++i)
+        {
+            _alloc.construct(_vct + i, _vct[i + count]);
+            _alloc.destroy(_vct + i + count);
+        }
+    }
+
     allocator_type _alloc;
     pointer     _vct;
     size_type   _size;

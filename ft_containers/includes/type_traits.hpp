@@ -7,6 +7,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 # include <cstddef> // ptrdiff_t
+# include <iterator> // std iterator tags (for std::iterator_traits compatibility)
 
 namespace ft
 {
@@ -88,22 +89,63 @@ FT_IS_INTEGRAL_TYPE(unsigned long long int);
 
 # undef FT_IS_INTEGRAL_TYPE
 
+// --------------------- is_trivially_copyable -----------------------
+// Conservative C++98 approximation: true for arithmetic and pointer
+// types (whose copies can be performed with raw memory moves without
+// invoking constructors/destructors). Used to pick a memmove-based
+// element shift that does not over-count constructions/destructions.
+template <typename T>
+struct is_trivially_copyable
+{
+    static const bool value = is_integral<T>::value || is_pointer<T>::value;
+};
+
+template <typename T>
+struct is_trivially_copyable<const T>
+{
+    static const bool value = is_trivially_copyable<T>::value;
+};
+
+template <typename T>
+struct is_trivially_copyable<volatile T>
+{
+    static const bool value = is_trivially_copyable<T>::value;
+};
+
+template <typename T>
+struct is_trivially_copyable<const volatile T>
+{
+    static const bool value = is_trivially_copyable<T>::value;
+};
+
+// ------------------- integral_constant -----------------------------
+template <bool B>
+struct integral_constant
+{
+    static const bool value = B;
+    typedef integral_constant<B> type;
+    operator bool() const { return B; }
+};
+
+typedef integral_constant<true>   true_type;
+typedef integral_constant<false>  false_type;
+
 ///////////////////////////////////////////////////////////////////////
 //  Iterator tags
 ///////////////////////////////////////////////////////////////////////
-struct input_iterator_tag
+struct input_iterator_tag : public std::input_iterator_tag
 {
 };
-struct output_iterator_tag
+struct output_iterator_tag : public std::output_iterator_tag
 {
 };
-struct forward_iterator_tag : public input_iterator_tag
+struct forward_iterator_tag : public std::forward_iterator_tag
 {
 };
-struct bidirectional_iterator_tag : public forward_iterator_tag
+struct bidirectional_iterator_tag : public std::bidirectional_iterator_tag
 {
 };
-struct random_access_iterator_tag : public bidirectional_iterator_tag
+struct random_access_iterator_tag : public std::random_access_iterator_tag
 {
 };
 

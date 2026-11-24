@@ -1,5 +1,4 @@
-
-INCLUDE_PATH := .. # Path to your headers
+INCLUDE_PATH := ../../../includes
 
 SRCS_DIR = srcs
 
@@ -10,4 +9,13 @@ CONTAINERS = $(FILES:${SRCS_DIR}/%.cpp=%)
 all: ${CONTAINERS}
 
 ${CONTAINERS}:
-	clang++ -c ${CXXFLAGS} -o /dev/null -I ${INCLUDE_PATH} -D NAMESPACE=ft ${SRCS_DIR}/$@.cpp
+	g++ -c ${CXXFLAGS} -o /dev/null -I ${INCLUDE_PATH} -D NAMESPACE=ft ${SRCS_DIR}/$@.cpp
+
+clean:
+	@true
+
+fclean: clean
+
+re: fclean all
+
+.PHONY: all clean fclean re

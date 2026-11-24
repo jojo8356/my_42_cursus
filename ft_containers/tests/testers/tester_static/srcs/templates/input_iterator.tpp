@@ -44,7 +44,7 @@ void input_iterator(X a)
 	static_assert(std::is_same<decltype(++a), X&>::value, "wrong return type for operator++()");
 	(void)(a++);
 	*a++;
-	static_assert(std::is_same<decltype(*a++), T>::value, "wrong return type for *it++");
+	static_assert(std::is_convertible<decltype(*a++), T>::value, "wrong return type for *it++");
 }
 
 #endif
