@@ -2,7 +2,7 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · FT_Containers · Cub3D · NetPratice · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · MiniRT**
+**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · FT_Containers · Cub3D · NetPratice · MiniRT · FT_Transcendence · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · Exam Rank 05 · Exam Rank 06**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
@@ -77,6 +77,12 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | **Rank 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercises (`cpp_00`–`cpp_09`) | OOP: classes, inheritance, exceptions, templates, orthodox canonical form; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, functional, edge cases, 3000-element stress, ASan/TSan) |
 | **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | STL containers recoded from scratch in C++98, namespace `ft`, `std::allocator`: `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), red-black trees, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ All bonus containers | **3,408 ASan/UBSan assertions** + **5 testers** (llefranc, monkey, mazoise, mli, static) + **official libstdc++ GCC 4.9.4 testsuite** (0 applicable bugs) |
 
+#### 🟣 Final Project — Web
+
+| Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Final** | [**`ft_transcendence/`**](ft_transcendence/README.md) | Full-stack web app | Pong multiplayer game over websockets (Django + Channels + vanilla JS SPA), IA adversary, tournaments + matchmaking, live chat, OAuth 2.0 (42), JWT + 2FA, user management, customization, multilingue, RGPD | ✅ All modules | **147/147 tests** (engine, AI, bracket, API, security, student patterns) |
+
 #### 📚 Exam Rank Practice
 
 | Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
@@ -85,6 +91,8 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | **Rank 03** | [**`exam_rank_03/`**](exam_rank_03/README.md) | 8 programs | Exam Rank 03 practice — level 1 (filter, ft_scanf, get_next_line) & level 2 (n_queens, permutations, powerset, rip, tsp) | ✅ | **90/90 tests** |
 | **Rank 04** | [**`exam_rank_04/`**](exam_rank_04/README.md) | `microshell` binary | Exam Rank 04 — microshell: shell command execution, `|`/`;` pipelines, `cd` builtin, fd-safe concurrency | ✅ `&&`/`||` short-circuit | **33 tests** (11 unit parseur + 22 integration) |
 | **Rank 05** | [**`miniRT/`**](miniRT/README.md) | `miniRT` binary | Exam Rank 05 — CPU ray tracer: `.rt` scene parsing, intersections, lighting, shadows, reflections, cameras | ✅ Full features | **14,660 tests** (9 suites: matrix, parser, objects, intersect, lighting, camera, integration) |
+| **Rank 05** | [**`exam_rank_05/`**](exam_rank_05/README.md) | `vect2` · `bigint` · `polyset` · `life` · `bsq` | Exam Rank 05 (new 2025) — level 0 C++98 (2D vector, arbitrary-precision int, polymorphic set) & level 1 C (Conway's Game of Life, biggest square) | ✅ All bonuses | **Suite complète** (unit C++ + intégration Python, testers étudiants) |
+| **Rank 06** | [**`exam_rank_06/`**](exam_rank_06/README.md) | `mini_serv` · `mini_db` | Exam Rank 06 (new 2025) — `mini_serv`: chat TCP multi-clients non-bloquant (`select`) ; `mini_db`: base clé-valeur sur TCP avec persistance | ✅ Full scope | **97/97 tests** (fonctionnels, statiques, testers étudiants) |
 
 ---
 
@@ -217,6 +225,22 @@ my_42_cursus/
     │   ├── official/                   # Official libstdc++ GCC 4.9.4 testsuite (shim + run.sh)
     │   └── testers/                    # llefranc, monkey, mazoise, mli, static testers
     └── (no binaries tracked)           # header-only library, builds via Makefile
+├── ft_transcendence/                   # Final — Full-stack Pong web app (Django + Channels + SPA)
+│   ├── config/                         # settings (JWT/OAuth/Channels), ASGI, urls + SPA catch-all
+│   ├── accounts/ games/ tournaments/ chat/   # Django apps: auth, engine/AI, bracket, chat
+│   ├── frontend/                       # vanilla JS SPA (Pong canvas, auth, chat, tournaments)
+│   ├── subject.txt                     # full subject v3.0.1
+│   └── tests/                          # 147-test suite (engine, AI, bracket, API, security)
+├── exam_rank_05/                       # Exam Rank 05 (new 2025) — vect2/bigint/polyset (C++98), Life/BSQ (C)
+│   ├── level-0/                        # vect2, bigint, polyset
+│   ├── level-1/                        # Life, BSQ
+│   ├── subject.md                      # full subjects
+│   └── tests/                          # unit C++ + integration Python suite
+└── exam_rank_06/                       # Exam Rank 06 (new 2025) — mini_serv (C) + mini_db (C++)
+    ├── mini_serv/                      # non-blocking multi-client TCP chat server (select)
+    ├── mini_db/                        # key-value database over TCP (persistent connections)
+    ├── subject.md                      # full subjects
+    └── tests/                          # 97-test suite + student reference testers
 ```
 
 ---
@@ -270,6 +294,15 @@ make -C cpp_modules/cpp_09/ex02
 
 # 11. Build FT_Containers (header-only STL containers, C++98) + run internal suite + 5 testers
 make -C ft_containers re
+
+# 12. Build Exam Rank 05 (new 2025: vect2, bigint, polyset, Life, BSQ)
+make -C exam_rank_05
+
+# 13. Build Exam Rank 06 (new 2025: mini_serv + mini_db)
+make -C exam_rank_06
+
+# 14. FT_Transcendence (Django full-stack Pong web app)
+cd ft_transcendence && pip install -r requirements.txt && python manage.py migrate
 ```
 
 ---
@@ -333,6 +366,15 @@ python3 cpp_modules/tests/test_cpp_modules.py
 # FT_Containers: internal ASan/UBSan suite (3,408) + 5 testers (llefranc, monkey, mazoise, mli, static)
 #   + official libstdc++ GCC 4.9.4 testsuite (PASS 172, FAIL 18 *_neg, 0 applicable bugs)
 make -C ft_containers re
+
+# Exam Rank 05 (new 2025): full suite (vect2, bigint, polyset, Life, BSQ)
+python3 exam_rank_05/tests/run_tests.py
+
+# Exam Rank 06 (new 2025): mini_serv + mini_db (97/97)
+python3 exam_rank_06/tests/run_tests.py
+
+# FT_Transcendence: 147-test suite (engine, AI, bracket, API, security, student patterns)
+cd ft_transcendence && python3 tests/run_tests.py
 ```
 
 ---
@@ -408,6 +450,12 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | **Rang 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercices (`cpp_00`–`cpp_09`) | POO : classes, héritage, exceptions, templates, forme canonique ; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, fonctionnels, cas limites, stress 3000, ASan/TSan) |
 | **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | Conteneurs STL recodés de zéro en C++98, namespace `ft`, `std::allocator` : `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), arbres rouge-noir, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ Tous les conteneurs bonus | **3 408 assertions ASan/UBSan** + **5 testeurs** (llefranc, monkey, mazoise, mli, static) + **testsuite OFFICIELLE libstdc++ GCC 4.9.4** (0 bug applicable) |
 
+#### 🟣 Projet final — Web
+
+| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Final** | [**`ft_transcendence/`**](ft_transcendence/README.md) | Application web full-stack | Jeu Pong multijoueur en temps réel (websockets, Django + Channels + SPA vanilla JS), IA adversaire, tournois + matchmaking, chat temps réel, OAuth 2.0 (42), JWT + 2FA, gestion utilisateurs, personnalisation, multilingue, RGPD | ✅ Tous les modules | **147/147 tests** (moteur, IA, bracket, API, sécurité, patterns étudiants) |
+
 #### 📚 Exam Rank — Recueils d'examen
 
 | Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
@@ -416,6 +464,8 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | **Rang 03** | [**`exam_rank_03/`**](exam_rank_03/README.md) | 8 programmes | Pratique Exam Rank 03 — niveau 1 (filter, ft_scanf, get_next_line) et niveau 2 (n_queens, permutations, powerset, rip, tsp) | ✅ | **90/90 tests** |
 | **Rang 04** | [**`exam_rank_04/`**](exam_rank_04/README.md) | binaire `microshell` | Exam Rank 04 — microshell : exécution de commandes shell, pipelines `|`/`;`, builtin `cd`, concurrence sans fuite de descripteurs | ✅ `&&`/`||` short-circuit | **33 tests** (11 unitaires parseur + 22 intégration) |
 | **Rang 05** | [**`miniRT/`**](miniRT/README.md) | binaire `miniRT` | Exam Rank 05 — traceur de rayons CPU : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras | ✅ Fonctionnalités complètes | **14 660 tests** (9 suites : matrix, parser, objects, intersect, lighting, camera, intégration) |
+| **Rang 05** | [**`exam_rank_05/`**](exam_rank_05/README.md) | `vect2` · `bigint` · `polyset` · `life` · `bsq` | Exam Rank 05 (nouveau 2025) — niveau 0 C++98 (vecteur 2D, entier à précision arbitraire, ensemble polymorphe) et niveau 1 C (Jeu de la vie, plus grand carré) | ✅ Tous les bonus | **Suite complète** (unitaires C++ + intégration Python, testers étudiants) |
+| **Rang 06** | [**`exam_rank_06/`**](exam_rank_06/README.md) | `mini_serv` · `mini_db` | Exam Rank 06 (nouveau 2025) — `mini_serv` : chat TCP multi-clients non-bloquant (`select`) ; `mini_db` : base clé-valeur sur TCP avec persistance | ✅ Périmètre complet | **97/97 tests** (fonctionnels, statiques, testers étudiants) |
 
 ---
 
@@ -488,6 +538,15 @@ make -C cpp_modules/cpp_09/ex02
 
 # Compiler FT_Containers (conteneurs STL en header-only, C++98) + suite interne + 5 testeurs
 make -C ft_containers re
+
+# Compiler Exam Rank 05 (nouveau 2025 : vect2, bigint, polyset, Life, BSQ)
+make -C exam_rank_05
+
+# Compiler Exam Rank 06 (nouveau 2025 : mini_serv + mini_db)
+make -C exam_rank_06
+
+# FT_Transcendence (application web Pong full-stack Django)
+cd ft_transcendence && pip install -r requirements.txt && python manage.py migrate
 ```
 
 ---
@@ -549,6 +608,15 @@ python3 cpp_modules/tests/test_cpp_modules.py
 # FT_Containers : suite interne ASan/UBSan (3 408) + 5 testeurs (llefranc, monkey, mazoise, mli, static)
 #   + testsuite OFFICIELLE libstdc++ GCC 4.9.4 (PASS 172, FAIL 18 *_neg, 0 bug applicable)
 make -C ft_containers re
+
+# Exam Rank 05 (nouveau 2025) : suite complète (vect2, bigint, polyset, Life, BSQ)
+python3 exam_rank_05/tests/run_tests.py
+
+# Exam Rank 06 (nouveau 2025) : mini_serv + mini_db (97/97)
+python3 exam_rank_06/tests/run_tests.py
+
+# FT_Transcendence : suite 147 tests (moteur, IA, bracket, API, sécurité, patterns étudiants)
+cd ft_transcendence && python3 tests/run_tests.py
 ```
 
 ---
