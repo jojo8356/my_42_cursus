@@ -1,0 +1,11 @@
+# Binary & build artifacts
+ircserv
+objs/
+
+# Python / test artifacts
+__pycache__/
+*.pyc
+
+# OS / editor noise
+.DS_Store
+*.swp
