@@ -1,0 +1,4 @@
+# compiled binaries (anchored to this directory so the source dirs are kept)
+/mini_serv/mini_serv
+/mini_db/mini_db
+*.o
