@@ -1,0 +1,32 @@
+/* ft_transcendence frontend styles */
+body {
+  background: #14181f;
+  color: #e6e6e6;
+  min-height: 100vh;
+}
+.navbar {
+  background: #0f1216 !important;
+}
+canvas#pong-canvas {
+  display: block;
+  background: #0b0e12;
+  border: 2px solid #2a3138;
+  border-radius: 6px;
+}
+.card {
+  border-color: #2a3138;
+}
+.card-header {
+  background: #1b2128;
+}
+.view { animation: fade 0.2s ease; }
+@keyframes fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.nav-tabs .nav-link { color: #aab; }
+.nav-tabs .nav-link.active { color: #fff; }
+.chat-msg { margin-bottom: 6px; }
+.chat-msg .who { font-weight: 600; color: #6cb6ff; }
+.bracket-round { border-left: 2px solid #2a3138; margin-left: 1rem; padding-left: 1rem; }
+.bracket-match { border: 1px solid #2a3138; border-radius: 4px; padding: 4px 8px; margin: 4px 0; }
