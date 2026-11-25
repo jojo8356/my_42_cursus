@@ -1,0 +1,12 @@
+# Dépendances de la Piscine Python
+# Module 08 (Environnement & dépendances)
+pandas>=2.0
+numpy>=1.24
+matplotlib>=3.7
+python-dotenv>=1.0
+
+# Module 09 (Validation de données)
+pydantic>=2.0
+
+# Suite de tests
+pytest>=8.0
