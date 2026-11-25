@@ -1,0 +1,15 @@
+# Build artifacts
+objs/
+webserv
+
+# Logs
+access.log
+error.log
+
+# Uploaded files (runtime)
+www/upload/*
+!www/upload/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
