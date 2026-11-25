@@ -1,0 +1,7 @@
+# compiled binaries
+vect2
+bigint
+polyset
+life
+bsq
+*.o
