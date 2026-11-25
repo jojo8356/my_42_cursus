@@ -1,0 +1,28 @@
+Assignment name : bigint
+Expected files   : bigint.hpp, bigint.cpp
+-----------------------------------------------------------------
+
+Implement an arbitrary-precision unsigned integer class in C++98, stored as
+base-10 digits (so left shift by n multiplies by 10^n, etc.).
+
+The class bigint holds a non-negative integer of arbitrary size.
+
+Mandatory:
+- Constructor from an int, and a default constructor (value 0).
+- Copy constructor and assignment operator (orthodox canonical form).
+- Addition: operator+ and operator+= between two bigints.
+- Addition with an int: bigint + int (the subject main uses (bigint(23) << 9) + 42).
+- Digitshift (base-10): operator<< (multiply by 10^n) and operator>>
+  (divide by 10^n), plus operator<<= and operator>>=.
+- Increment and decrement operators ++ and -- (prefix and postfix).
+  Decrementing zero must stay zero (unsigned).
+- Comparison operators: <, <=, >, >=, ==, !=.
+- Stream output operator<< with no leading zeros.
+
+Bonus:
+- Subtraction operator- (unsigned: if the result would be negative, return 0).
+- Multiplication operator* (grade-school digit multiplication).
+- Division operator/ by an int (integer division, rounds down).
+- Modulo operator% by an int.
+
+The value must never be printed with leading zeros.

@@ -1,0 +1,26 @@
+Assignment name : vect2
+Expected files   : vect2.hpp, vect2.cpp
+-----------------------------------------------------------------
+
+Implement a simple 2D vector class in C++98.
+
+The class vect2 holds two integer coordinates x and y.
+
+Mandatory:
+- Constructor vect2(int x, int y) and a default constructor vect2() (0, 0).
+- Copy constructor and assignment operator (orthodox canonical form).
+- operator[] to read and write the coordinates by index (0 = x, 1 = y),
+  including on const instances (read-only).
+- Arithmetic operators between vect2 instances: +, -.
+- Scalar multiplication and division by an int: *, /.
+- Compound assignment: +=, -=, *=, /= (must return a reference to allow
+  chaining, e.g. v2 += v2 += v3).
+- Unary minus operator -.
+- Equality operators == and !=.
+- Stream output operator<< printing the format "{x, y}".
+
+Bonus:
+- Increment and decrement operators ++ and -- (prefix and postfix).
+
+The destructor must be defined (even if empty) to satisfy orthodox canonical
+form requirements.

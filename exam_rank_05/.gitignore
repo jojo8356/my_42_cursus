@@ -1,7 +1,7 @@
-# compiled binaries
-vect2
-bigint
-polyset
-life
-bsq
+# compiled binaries (anchored so source directories are kept)
+/level-0/vect2/vect2
+/level-0/bigint/bigint
+/level-0/polyset/polyset
+/level-1/Life/life
+/level-1/BSQ/bsq
 *.o
