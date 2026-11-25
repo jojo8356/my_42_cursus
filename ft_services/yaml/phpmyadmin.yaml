@@ -1,0 +1,56 @@
+# ============================================================================ #
+#  ft_services — phpMyAdmin Deployment + Service                             #
+#  DB administration, port 5000. Reached via the nginx reverse proxy.        #
+# ============================================================================ #
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmyadmin
+  labels:
+    app: phpmyadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmyadmin
+  template:
+    metadata:
+      labels:
+        app: phpmyadmin
+    spec:
+      containers:
+        - name: phpmyadmin
+          image: phpmyadmin:ft_services
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: ft-services-config
+            - secretRef:
+                name: ft-services-secret
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmyadmin
+  labels:
+    app: phpmyadmin
+spec:
+  type: ClusterIP
+  selector:
+    app: phpmyadmin
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000

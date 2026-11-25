@@ -1,0 +1,16 @@
+# ============================================================================ #
+#  ft_services — MetalLB (bare-metal load balancer for the cluster)          #
+#  Publishes a single public IP for all exposed services.                    #
+# ============================================================================ #
+apiVersion: metallb.io/v1beta1
+kind: MetalLB
+metadata:
+  name: metallb
+  namespace: metallb-system
+spec:
+  addressPools:
+    - name: default
+      protocol: IPv4
+      addresses:
+        - 192.168.42.42-192.168.42.52
+  listenPort: 7072

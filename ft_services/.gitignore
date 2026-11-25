@@ -1,0 +1,11 @@
+# Real secrets must never be committed
+yaml/secret.yaml
+
+# Build / runtime artifacts
+*.log
+__pycache__/
+*.pyc
+
+# OS / editor noise
+.DS_Store
+*.swp
