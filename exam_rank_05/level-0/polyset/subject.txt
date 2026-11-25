@@ -1,0 +1,35 @@
+Assignment name : polyset
+Expected files   : searchable_array_bag.hpp/.cpp, searchable_tree_bag.hpp/.cpp,
+                   set.hpp/.cpp
+-----------------------------------------------------------------
+
+The subject provides (given-code) three base classes:
+- array_bag: stores elements in a dynamic array. Provides insert(int),
+  insert(int*, int), count(), empty(), clear() and a virtual destructor.
+- tree_bag: stores elements in a binary search tree. Provides the same
+  insert/count/empty/clear interface and a virtual destructor.
+- searchable_bag: an abstract interface declaring has(int), insert(int) and
+  insert(int*, int) as pure virtual, plus a virtual destructor.
+
+Implement the following classes in C++98:
+
+1. searchable_array_bag
+   - Inherits from array_bag and searchable_bag.
+   - Implements has(int) by linear search over the array.
+   - Must satisfy the searchable_bag insert interface (using array_bag::insert).
+
+2. searchable_tree_bag
+   - Inherits from tree_bag and searchable_bag.
+   - Implements has(int) by searching the binary search tree.
+   - Must satisfy the searchable_bag insert interface (using tree_bag::insert).
+
+3. set
+   - Wraps a searchable_bag (held by reference/pointer).
+   - insert(int) inserts only if the value is not already present (dedup).
+   - insert(int*, int) inserts an array with dedup.
+   - has(int) delegates to the underlying bag.
+   - get_bag() returns the underlying searchable_bag.
+
+Bonus accessors already provided by the base classes: count() and empty().
+Copy constructors must produce independent deep copies (modifying the copy
+must not affect the original).
