@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Environnements
+.venv/
+venv/
+matrix_env/
+
+# Variables d'environnement (secrets)
+.env
+
+# Artifacts générés
+module08/ex1/matrix_analysis.png
