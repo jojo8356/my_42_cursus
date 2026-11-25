@@ -1,0 +1,140 @@
+ft_transcendence — Sujet complet
+Version : 3.0.1 — Date : 15.12.2024
+(Projet final de 42 — application web full-stack)
+
+============================================================
+PARTIE OBLIGATOIRE
+============================================================
+
+-- Exigences techniques minimales --
+- Le frontend doit être développé en Javascript pur (vanilla).
+- Le site doit être une application à page unique (SPA). L'utilisateur doit
+  pouvoir utiliser les boutons Retour (Back) et Après (Forward) du navigateur.
+- Le site doit être compatible avec la dernière version stable de Chrome.
+- L'utilisateur ne doit rencontrer aucune erreur non gérée ni aucun warning.
+- Tout doit être lancé avec une seule commande pour exécuter un conteneur
+  autonome fourni par Docker (ex: docker-compose up --build).
+
+-- Jeu --
+- L'objectif principal est de jouer à Pong contre d'autres joueurs.
+- Les utilisateurs doivent pouvoir participer à un jeu Pong en direct contre
+  un autre joueur directement sur le site. Les deux joueurs utilisent le même
+  clavier. Le module « Remote players » peut améliorer cette fonctionnalité
+  avec des joueurs distants.
+- Un joueur doit pouvoir jouer contre un autre joueur, mais il doit aussi être
+  possible de proposer un tournoi. Ce tournoi comprend plusieurs joueurs qui
+  peuvent jouer successivement les uns contre les autres. La mise en œuvre du
+  tournoi est libre, mais elle doit afficher clairement qui joue contre qui
+  et l'ordre des joueurs.
+- Un système d'inscription est requis : au début d'un tournoi, chaque joueur
+  doit saisir son alias. Les alias sont réinitialisés au début d'un nouveau
+  tournoi. (Peut être modifié par le module « Standard User Management »).
+- Il doit exister un système de matchmaking : le système de tournoi organise
+  les matchs des participants et annonce le prochain combat.
+- Tous les joueurs doivent respecter les mêmes règles, notamment une vitesse
+  de raquette identique. Cette exigence s'applique aussi à l'IA : l'IA doit
+  avoir la même vitesse qu'un joueur régulier.
+- Le jeu doit respecter les contraintes frontend par défaut, ou utiliser le
+  module FrontEnd, ou le module Graphics. Quelle que soit l'esthétique, il
+  doit capturer l'essence du Pong original (1972).
+
+-- Préoccupations de sécurité --
+- Tout mot de passe stocké dans la base de données doit être haché.
+- Le site doit être protégé contre les injections SQL / XSS.
+- S'il y a un backend, il est obligatoire d'activer une connexion HTTPS
+  (utiliser wss au lieu de ws).
+- Une validation des forms et des saisies utilisateur doit être implémentée
+  côté serveur (ou côté client si pas de backend).
+
+ATTENTION : utiliser un algorithme de hachage de mots de passe puissant.
+Pour des raisons de sécurité, tout identifiant, clé API, variable d'environnement
+doit être stocké localement dans un fichier .env ignoré par git.
+
+============================================================
+MODULES MAJEURS
+============================================================
+
+1. Standard user management, authentication, users across tournaments
+   - Inscription sécurisée ; connexion sécurisée.
+   - L'utilisateur choisit un nom d'affichage unique pour les tournois.
+   - Mise à jour des informations ; upload d'avatar (avec option par défaut).
+   - Ajouter d'autres utilisateurs en amis et voir leur statut en ligne.
+   - Les profils affichent des statistiques (victoires/défaites).
+   - Chaque utilisateur a un historique de matchs (1v1, dates, détails),
+     accessible aux utilisateurs connectés.
+
+2. Implémenter une authentification distante (OAuth 2.0 avec 42)
+   - Intégrer le système d'authentification pour se connecter en sécurité.
+   - Obtenir les identifiants/permissions de l'autorité.
+   - Mettre en place des flux de connexion/autorisation conformes aux bonnes
+     pratiques.
+   - Échanger sécurisé des tokens et infos utilisateur avec le fournisseur.
+   (La gestion des doublons de noms/emails est à la discrétion de l'étudiant,
+   mais une justification est requise.)
+
+3. Remote players
+   - Deux joueurs distants, chacun sur son ordinateur, accédant au même site
+     et jouant au même jeu Pong. Penser aux problèmes réseau (déconnexion,
+     lag) pour offrir la meilleure expérience possible.
+
+4. Utiliser un framework côté backend : Django
+   - Le framework backend est imposé : Django.
+   (Un backend sans cette contrainte est possible en langage/framework par
+   défaut, mais ce module n'est valide que si la contrainte est respectée.)
+
+5. Live Chat
+   - Envoyer des messages directs (DM) à d'autres utilisateurs.
+   - Bloquer d'autres utilisateurs (ne plus voir leurs messages).
+   - Inviter d'autres utilisateurs à jouer à Pong via l'interface de chat.
+   - Le système de tournoi doit pouvoir prévenir les utilisateurs attendus pour
+     le prochain match.
+   - Accéder aux profils d'autres joueurs via l'interface de chat.
+
+6. Introduire un adversaire IA
+   - Intégrer un joueur IA. L'algorithme A* n'est pas autorisé.
+   - L'IA doit simuler la saisie clavier (comportement humain).
+   - L'IA ne peut rafraîchir sa vue du jeu qu'une fois par seconde, elle doit
+     donc anticiper les rebonds.
+   - L'IA doit utiliser les bonus si le module de personnalisation est implémenté.
+   - Décisions intelligentes et stratégiques ; adaptation aux scénarios.
+
+7. Ajouter un autre jeu avec historique utilisateur et matchmaking
+   - Développer un nouveau jeu (différent de Pong).
+   - Historique utilisateur ; système de matchmaking pour des matchs équilibrés.
+   - Stockage sécurisé et à jour des données.
+
+============================================================
+MODULES SECONDAIRES (MINEURS)
+============================================================
+
+1. Utiliser un framework/toolkit frontend : Bootstrap.
+2. Utiliser une base de données côté backend : PostgreSQL.
+3. Options de personnalisation du jeu
+   - Bonus, attaques, cartes différentes ; version par défaut basique.
+   - Menus de paramètres ; cohérence entre tous les jeux.
+4. Compatibilité navigateur étendue (ajouter un navigateur).
+5. Support multilingue (min 3 langues, sélecteur, traductions, choix par
+   défaut pour les visites suivantes).
+6. Conformité RGPD : anonymisation, gestion locale des données, suppression
+   d'compte.
+
+============================================================
+IMPLEMENTATION DU PROJET (avec bonus)
+============================================================
+
+Stack : Django (backend) + Django Channels (websockets) + SQLite par défaut
+(PostgreSQL en production via POSTGRES_* env) + vanilla JS SPA + Bootstrap.
+
+Bonus implémentés :
+- OAuth 2.0 avec 42 (flux complet, provider configurable + mock pour tests).
+- JWT (access + refresh) + logout avec blacklist des tokens.
+- Authentification à deux facteurs (2FA, secret TOTP).
+- IA adversaire (1 Hz refresh, anticipation des rebonds, pas A*, même vitesse).
+- Personnalisation du jeu (bonus : vitesse/taille/balle lente).
+- Chat temps réel via websockets (DM, canaux, blocage, présence).
+- Tournois (bracket à élimination directe, matchmaking, historique).
+- Multilingue (EN/FR/DE) + sélecteur.
+- RGPD (anonymisation, suppression de compte).
+- Historique de matchs + statistiques victoires/défaites.
+- Amis (demandes/acceptations/rejets).
+- Sécurité : hachage PBKDF2, protection XSS/SQL injection, validation.

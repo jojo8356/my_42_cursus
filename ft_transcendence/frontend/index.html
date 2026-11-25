@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transcend — Pong Contest</title>
+  <!-- Bootstrap toolkit (minor module: front-end toolkit) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/static/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#/" data-route>Transcend</a>
+      <div class="d-flex align-items-center gap-3">
+        <select id="lang-switcher" class="form-select form-select-sm w-auto" aria-label="Language">
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+        </select>
+        <span id="nav-user" class="text-light small"></span>
+        <button id="logout-btn" class="btn btn-outline-light btn-sm d-none">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-4">
+    <!-- Auth view -->
+    <section id="view-auth" class="view d-none">
+      <div class="card mx-auto" style="max-width: 420px;">
+        <div class="card-body">
+          <h2 class="card-title" data-i18n="auth_title">Sign in / Register</h2>
+          <ul class="nav nav-tabs" id="auth-tabs">
+            <li class="nav-item"><a class="nav-link active" data-auth="login" href="#" data-i18n="tab_login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" data-auth="register" href="#" data-i18n="tab_register">Register</a></li>
+          </ul>
+          <div class="mt-3">
+            <div id="auth-login-fields">
+              <input id="login-email" class="form-control mb-2" type="email" placeholder="Email" />
+              <input id="login-password" class="form-control mb-2" type="password" placeholder="Password" />
+              <button id="login-submit" class="btn btn-primary w-100" data-i18n="login_btn">Login</button>
+            </div>
+            <div id="auth-register-fields" class="d-none">
+              <input id="reg-email" class="form-control mb-2" type="email" placeholder="Email" />
+              <input id="reg-username" class="form-control mb-2" type="text" placeholder="Username" />
+              <input id="reg-password" class="form-control mb-2" type="password" placeholder="Password (8+ chars)" />
+              <button id="reg-submit" class="btn btn-primary w-100" data-i18n="register_btn">Register</button>
+            </div>
+          </div>
+          <div id="auth-error" class="text-danger mt-2 small"></div>
+          <hr>
+          <button id="oauth-btn" class="btn btn-outline-secondary w-100" data-i18n="oauth_42">Login with 42 (OAuth)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game view -->
+    <section id="view-game" class="view d-none">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span data-i18n="pong_title">Pong</span>
+              <div>
+                <label class="form-check-label me-2"><input type="checkbox" id="vs-ai" /> <span data-i18n="vs_ai">vs AI</span></label>
+                <button id="start-game" class="btn btn-success btn-sm" data-i18n="start_game">Start Game</button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <canvas id="pong-canvas" width="800" height="600"></canvas>
+            </div>
+          </div>
+          <div class="mt-2">
+            <button id="customize-btn" class="btn btn-outline-secondary btn-sm" data-i18n="customize">Customize</button>
+            <button id="powerup-btn" class="btn btn-outline-warning btn-sm d-none" data-i18n="powerup">Power-up</button>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header" data-i18n="instructions">Controls</div>
+            <div class="card-body small">
+              <p><b>Player 1 (left):</b> <code>W</code> / <code>S</code></p>
+              <p><b>Player 2 (right):</b> <code>↑</code> / <code>↓</code></p>
+              <p class="text-muted" data-i18n="ai_note">AI moves at the same paddle speed and refreshes once per second.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tournament view -->
+    <section id="view-tournament" class="view d-none">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header" data-i18n="tournament_create">Create / Join Tournament</div>
+            <div class="card-body">
+              <input id="tour-name" class="form-control mb-2" placeholder="Tournament name" />
+              <button id="create-tour" class="btn btn-primary mb-2" data-i18n="create_tour">Create</button>
+              <hr>
+              <div id="tour-list"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header" data-i18n="matchmaking">Matchmaking</div>
+            <div class="card-body">
+              <button id="join-queue" class="btn btn-success" data-i18n="join_queue">Join Matchmaking Queue</button>
+              <div id="queue-info" class="mt-3 small"></div>
+              <hr>
+              <div id="bracket-display"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat view -->
+    <section id="view-chat" class="view d-none">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between">
+              <span data-i18n="channels">Channels</span>
+              <button id="new-channel" class="btn btn-sm btn-outline-primary" data-i18n="new_channel">New</button>
+            </div>
+            <div class="card-body p-0" id="channel-list"></div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header" id="chat-title">Chat</div>
+            <div class="card-body" id="chat-messages" style="height: 400px; overflow-y: auto;"></div>
+            <div class="card-footer">
+              <input id="chat-input" class="form-control" placeholder="Message..." />
+              <button id="chat-send" class="btn btn-primary mt-2" data-i18n="send">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile view -->
+    <section id="view-profile" class="view d-none">
+      <div class="card">
+        <div class="card-header" data-i18n="profile">Profile</div>
+        <div class="card-body" id="profile-body"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
