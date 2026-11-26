@@ -1,0 +1,2 @@
+# A-Maze-ing depends only on the Python standard library at runtime.
+# Development tools (flake8, mypy, pytest) are used through the Makefile.
