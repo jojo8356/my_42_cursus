@@ -1,79 +1,111 @@
+/* ************************************************************************** */
+/* ** */
+/* ** */
+/*   coder.c */
+/* ** */
+/*   By: jojo8356 */
+/* ** */
+/*   Created: 8 Nov by jojo8356 */
+/*   Updated: 8 Nov by jojo8356 */
+/* ** */
+/* ************************************************************************** */
 /* ** coder.c - coder lifecycle: acquire, compile, debug, refactor ** */
 #include "coder.h"
 #include "utils.h"
 #include "log.h"
 #include "dongle.h"
 
-void *coder_routine(void *arg)
+static int	coder_compile(t_coder *c, t_sim *sim)
 {
-	t_coder *c = (t_coder *)arg;
-	t_sim *sim = c->sim;
-	t_dongle *d_first;
-	t_dongle *d_second;
-	t_waiter *w1;
-	t_waiter *w2;
-	int first;
-	int second;
-	int done;
+	int	done;
 
+	pthread_mutex_lock(&c->state_mutex);
+	c->compile_count = c->compile_count + 1;
+	c->last_compile_start = rel_now_ms(sim);
+	if (c->compile_count >= sim->n_compiles)
+		done = 1;
+	else
+		done = 0;
+	pthread_mutex_unlock(&c->state_mutex);
+	log_event(sim, c->id, "is compiling");
+	sim_sleep(sim, sim->tc);
+	return (done);
+}
+
+static t_waiter	*coder_take(t_coder *c, t_sim *sim, t_dongle *d)
+{
+	t_waiter	*w;
+
+	w = dongle_acquire(d, c, sim);
+	if (w == NULL)
+		return (NULL);
+	log_event(sim, c->id, "has taken a dongle");
+	return (w);
+}
+
+static void	release_pair(t_dongle *d1, t_waiter *w1, t_dongle *d2, t_waiter *w2)
+{
+	t_sim	*sim;
+
+	sim = w1->coder->sim;
+	dongle_release(d1, w1, sim);
+	dongle_release(d2, w2, sim);
+}
+
+static int	coder_iterate(t_coder *c, t_sim *sim, t_dongle *d1, t_dongle *d2)
+{
+	t_waiter	*w1;
+	t_waiter	*w2;
+
+	if (stop_is_set(sim) != 0)
+		return (-1);
+	w1 = coder_take(c, sim, d1);
+	if (w1 == NULL)
+		return (-1);
+	w2 = coder_take(c, sim, d2);
+	if (w2 == NULL)
+	{
+		dongle_release(d1, w1, sim);
+		return (-1);
+	}
+	coder_compile(c, sim);
+	release_pair(d1, w1, d2, w2);
+	if (stop_is_set(sim) != 0)
+		return (-1);
+	log_event(sim, c->id, "is debugging");
+	sim_sleep(sim, sim->td);
+	if (stop_is_set(sim) != 0)
+		return (-1);
+	log_event(sim, c->id, "is refactoring");
+	sim_sleep(sim, sim->tr);
+	return (0);
+}
+
+void	*coder_routine(void *arg)
+{
+	t_coder		*c;
+	t_sim		*sim;
+	t_dongle	*d_first;
+	t_dongle	*d_second;
+
+	c = (t_coder *)arg;
+	sim = c->sim;
 	if (c->left < c->right)
 	{
-		first = c->left;
-		second = c->right;
+		d_first = sim->dongles[c->left];
+		d_second = sim->dongles[c->right];
 	}
 	else
 	{
-		first = c->right;
-		second = c->left;
+		d_first = sim->dongles[c->right];
+		d_second = sim->dongles[c->left];
 	}
-	d_first = sim->dongles[first];
-	d_second = sim->dongles[second];
-
 	while (1)
 	{
-		if (stop_is_set(sim) != 0)
-			break;
-		w1 = dongle_acquire(d_first, c, sim);
-		if (w1 == NULL)
-			break;
-		log_event(sim, c->id, "has taken a dongle");
-		w2 = dongle_acquire(d_second, c, sim);
-		if (w2 == NULL)
-		{
-			dongle_release(d_first, w1, sim);
-			break;
-		}
-		log_event(sim, c->id, "has taken a dongle");
-
-		pthread_mutex_lock(&c->state_mutex);
-		c->compile_count = c->compile_count + 1;
-		c->last_compile_start = rel_now_ms(sim);
-		done = (c->compile_count >= sim->n_compiles) ? 1 : 0;
-		pthread_mutex_unlock(&c->state_mutex);
-
-		log_event(sim, c->id, "is compiling");
-		sim_sleep(sim, sim->tc);
-		if (stop_is_set(sim) != 0)
-		{
-			dongle_release(d_first, w1, sim);
-			dongle_release(d_second, w2, sim);
-			break;
-		}
-		dongle_release(d_first, w1, sim);
-		dongle_release(d_second, w2, sim);
-		w1 = NULL;
-		w2 = NULL;
-
-		log_event(sim, c->id, "is debugging");
-		sim_sleep(sim, sim->td);
-		if (stop_is_set(sim) != 0)
-			break;
-		log_event(sim, c->id, "is refactoring");
-		sim_sleep(sim, sim->tr);
-		if (stop_is_set(sim) != 0)
-			break;
-		if (done != 0)
-			break;
+		if (coder_iterate(c, sim, d_first, d_second) < 0)
+			break ;
+		if (c->compile_count >= sim->n_compiles)
+			break ;
 	}
-	return NULL;
+	return (NULL);
 }
