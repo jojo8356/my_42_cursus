@@ -1,4 +1,4 @@
-"""Tests complets - A-Maze-ing (génération, validation, parsing, sortie)."""
+"""Tests complets - A-Maze-ing (generation, validation, parsing, sortie)."""
 
 import pytest
 
@@ -19,7 +19,10 @@ from mazegen.validator import (
 
 # ---------------------------------------------------------------- parsing
 class TestParser:
+    """Tests du parsing strict des fichiers de configuration."""
+
     def test_valid_config(self):
+        """Une configuration complete est parsée correctement."""
         cfg = parse_text("WIDTH=20\nHEIGHT=15\nENTRY=0,0\n"
                          "EXIT=19,14\nOUTPUT_FILE=m.txt\nPERFECT=True")
         assert cfg.width == 20
@@ -29,12 +32,14 @@ class TestParser:
         assert cfg.perfect is True
 
     def test_comments_and_blanks_ignored(self):
+        """Les commentaires et lignes vides sont ignores."""
         cfg = parse_text("# comment\n\nWIDTH=5\n#HEIGHT=x\n"
                          "HEIGHT=4\nENTRY=0,0\nEXIT=4,3\n"
                          "OUTPUT_FILE=m.txt\nPERFECT=False")
         assert cfg.width == 5 and cfg.perfect is False
 
     def test_seed_and_algorithm(self):
+        """SEED et ALGORITHM sont analysés correctement."""
         cfg = parse_text("WIDTH=5\nHEIGHT=5\nENTRY=0,0\nEXIT=4,4\n"
                          "OUTPUT_FILE=m.txt\nPERFECT=True\nSEED=7\n"
                          "ALGORITHM=prim")
@@ -55,54 +60,70 @@ class TestParser:
         "WIDTH=5\nWIDTH=6\nHEIGHT=5\nENTRY=0,0\nEXIT=4,4\nOUTPUT_FILE=m.txt\nPERFECT=True",
     ])
     def test_invalid_config(self, bad):
+        """Une configuration invalide leve ConfigError."""
         with pytest.raises(ConfigError):
             parse_text(bad)
 
 
-# ---------------------------------------------------------------- génération
+# ---------------------------------------------------------------- generation
 class TestGeneratorPerfect:
+    """Tests du generateur en mode perfect (arbre, pas de boucle)."""
+
     def _gen(self, w=20, h=15, seed=42):
+        """Construit un generateur perfect."""
         return MazeGenerator(w, h, (0, 0), (w - 1, h - 1),
                              perfect=True, seed=seed)
 
     def test_perfect_is_tree(self):
+        """Un maze perfect a un rang de cycle nul."""
         assert cycle_rank(self._gen().maze) == 0
 
     def test_no_structural_problems(self):
+        """Le maze perfect passe toutes les validations."""
         assert validate(self._gen().maze, True) == []
 
     def test_walls_coherent_and_border(self):
+        """Les murs sont coherents et le bord est ferme."""
         m = self._gen().maze
         assert wall_mismatch(m) == []
         assert open_border(m) == []
 
     def test_no_3x3(self):
+        """Il n'y a aucune aire ouverte 3x3."""
         assert open_3x3(self._gen().maze) == []
 
     def test_path_valid_and_shortest(self):
+        """Le chemin est valide et est le plus court."""
         gen = self._gen()
         ok, why, _ = maze_walk(gen.maze, gen.path)
         assert ok, why
         assert len(gen.path) == len(shortest_path(gen.maze))
 
     def test_deterministic_seed(self):
+        """Un seed donne un maze reproductible."""
         a = to_text(self._gen().maze, self._gen().path)
         b = to_text(self._gen().maze, self._gen().path)
         assert a == b
 
 
 class TestGeneratorBoard:
+    """Tests du generateur en mode Pac-Man (boucles, coins, centre)."""
+
     def _gen(self, w=20, h=15, seed=42):
+        """Construit un generateur non-perfect."""
         return MazeGenerator(w, h, (0, 0), (w - 1, h - 1),
                              perfect=False, seed=seed)
 
     def test_at_least_two_loops(self):
+        """Le board a au moins deux boucles independentes."""
         assert cycle_rank(self._gen().maze) >= 2
 
     def test_no_structural_problems(self):
+        """Le board passe toutes les validations."""
         assert validate(self._gen().maze, False) == []
 
     def test_few_dead_ends(self):
+        """Il reste peu de dead-ends (hors zone du 42)."""
         m = self._gen().maze
         closed = {(x, y) for y in range(m.height) for x in range(m.width)
                   if m.cell(x, y).walls == 15}
@@ -112,13 +133,17 @@ class TestGeneratorBoard:
         assert len(real) <= 2
 
     def test_path_valid(self):
+        """Le chemin du board est valide."""
         gen = self._gen()
         ok, why, _ = maze_walk(gen.maze, gen.path)
         assert ok, why
 
 
 class TestPattern42:
+    """Tests du motif '42' de cellules totalement fermees."""
+
     def test_pattern_present_on_large(self):
+        """Le 42 est present sur un grand maze et entierement ferme."""
         gen = MazeGenerator(20, 15, (0, 0), (19, 14), perfect=True, seed=1)
         assert not gen.pattern_omitted
         assert len(gen.forty_two) >= 8
@@ -128,13 +153,17 @@ class TestPattern42:
         assert gen.forty_two and set(gen.forty_two) <= closed
 
     def test_pattern_omitted_on_small(self):
+        """Le 42 est omis (et signale) sur un petit maze."""
         gen = MazeGenerator(5, 5, (0, 0), (4, 4), perfect=True, seed=1)
         assert gen.pattern_omitted
 
 
 # ---------------------------------------------------------------- sortie
 class TestOutput:
+    """Tests du format de sortie hexadecimal."""
+
     def test_format(self):
+        """Le fichier respecte le format sujet (grille, entry, exit, chemin)."""
         gen = MazeGenerator(6, 4, (0, 0), (5, 3), perfect=True, seed=3)
         text = to_text(gen.maze, gen.path)
         assert text.endswith("\n")
@@ -151,7 +180,10 @@ class TestOutput:
 
 # ---------------------------------------------------------------- CLI
 class TestCLI:
+    """Tests de la ligne de commande a_maze_ing.py."""
+
     def test_generates_output_file(self, tmp_path):
+        """Le CLI genere le fichier de sortie attendu."""
         cfg = tmp_path / "c.txt"
         cfg.write_text("WIDTH=8\nHEIGHT=6\nENTRY=0,0\nEXIT=7,5\n"
                        "OUTPUT_FILE=m.txt\nPERFECT=True\nSEED=1\n")
@@ -165,6 +197,7 @@ class TestCLI:
         out_file.unlink()
 
     def test_invalid_config_error_message(self, tmp_path):
+        """Une config invalide produit un message clair sans traceback."""
         cfg = tmp_path / "c.txt"
         cfg.write_text("WIDTH=abc\n")
         code, out, err = run_cli([str(cfg)])
@@ -173,6 +206,7 @@ class TestCLI:
         assert "Traceback" not in (err + out)
 
     def test_small_maze_pattern_message(self, tmp_path):
+        """Un petit maze signale l'omission du 42."""
         cfg = tmp_path / "c.txt"
         cfg.write_text("WIDTH=3\nHEIGHT=3\nENTRY=0,0\nEXIT=2,2\n"
                        "OUTPUT_FILE=m.txt\nPERFECT=True\nSEED=1\n")
