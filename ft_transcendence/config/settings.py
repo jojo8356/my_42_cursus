@@ -91,13 +91,24 @@ else:
         }
     }
 
-# Channels - in-memory channel layer keeps the app self-contained and
-# testable without Redis. A Redis layer can be swapped in for production.
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+# Channels channel layer. A Redis backend is used in production (when
+# REDIS_URL is set) so websockets scale across multiple ASGI workers; the
+# in-memory layer keeps the app self-contained and testable without Redis.
+if os.environ.get("REDIS_URL"):
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [os.environ["REDIS_URL"]],
+            },
+        }
     }
-}
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer",
+        }
+    }
 
 AUTH_USER_MODEL = "accounts.User"
 

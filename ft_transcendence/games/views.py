@@ -10,6 +10,7 @@ from .engine import PongGame
 from .ai import PongAI
 from .connect4 import Connect4
 from .connect4_ai import Connect4AI
+from .room import get_room
 from .models import GameSession, GameCustomization, PowerUpTemplate
 
 
@@ -85,19 +86,19 @@ def create_session(request):
         name=name, kind=kind, player1=request.user, is_ai=is_ai,
         customization=custom,
     )
-    if kind == GameSession.CONNECT4:
-        state = Connect4().to_state()
-    else:
-        state = PongGame(
-            enable_powerups=custom.enable_powerups,
-            enable_custom_map=custom.enable_custom_map,
-        ).to_state()
+    # Pre-create the authoritative game room so the first websocket client
+    # connects to the shared, server-owned state (Remote players module).
+    room = get_room(
+        session.id, kind=kind, is_ai=is_ai,
+        enable_powerups=custom.enable_powerups,
+        enable_custom_map=custom.enable_custom_map,
+    )
     return Response({
         "id": session.id,
         "name": session.name,
         "kind": session.kind,
         "is_ai": session.is_ai,
-        "state": state,
+        "state": room.state(),
     }, status=status.HTTP_201_CREATED)
 
 

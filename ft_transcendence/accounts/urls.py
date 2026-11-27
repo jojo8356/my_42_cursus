@@ -19,4 +19,5 @@ urlpatterns = [
     path("2fa/disable/", views.two_factor_disable, name="two_factor_disable"),
     path("gdpr/anonymize/", views.anonymize, name="anonymize"),
     path("gdpr/delete/", views.delete_account, name="delete_account"),
+    path("avatar/upload/", views.avatar_upload, name="avatar_upload"),
 ]

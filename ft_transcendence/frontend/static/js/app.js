@@ -10,6 +10,7 @@ const I18N = {
     login_btn: "Login", register_btn: "Register", oauth_42: "Login with 42 (OAuth)",
     pong_title: "Pong", vs_ai: "vs AI", start_game: "Start Game",
     customize: "Customize", powerup: "Power-up", instructions: "Controls",
+    pu_speed: "Speed", pu_size: "Size", pu_slow: "Slow ball",
     ai_note: "AI moves at the same paddle speed and refreshes once per second.",
     game_select: "Game", connect4_title: "Connect-4",
     connect4_help: "Click a column (1-7) to drop a piece. First to align 4 wins.",
@@ -23,6 +24,7 @@ const I18N = {
     login_btn: "Connexion", register_btn: "Inscription", oauth_42: "Connexion 42 (OAuth)",
     pong_title: "Pong", vs_ai: "contre IA", start_game: "Lancer",
     customize: "Personnaliser", powerup: "Bonus", instructions: "Contrôles",
+    pu_speed: "Vitesse", pu_size: "Taille", pu_slow: "Balle lente",
     ai_note: "L'IA se déplace à la même vitesse et se rafraîchit une fois par seconde.",
     game_select: "Jeu", connect4_title: "Puissance 4",
     connect4_help: "Cliquez sur une colonne (1-7) pour y poser un pion. Le premier à aligner 4 gagne.",
@@ -36,7 +38,8 @@ const I18N = {
     login_btn: "Anmelden", register_btn: "Registrieren", oauth_42: "Mit 42 anmelden (OAuth)",
     pong_title: "Pong", vs_ai: "gegen KI", start_game: "Starten",
     customize: "Anpassen", powerup: "Power-up", instructions: "Steuerung",
-    ai_note: "Die KI bewegt sich mit derselben Paddle-Geschwindigkeit und 刷新t einmal pro Sekunde.",
+    pu_speed: "Geschwindigkeit", pu_size: "Größe", pu_slow: "Langsame Ball",
+    ai_note: "Die KI bewegt sich mit derselben Paddle-Geschwindigkeit und wechselt einmal pro Sekunde.",
     game_select: "Spiel", connect4_title: "Connect-4",
     connect4_help: "Klicke auf eine Spalte (1-7), um einen Stein fallen zu lassen. Wer 4er setzt, gewinnt.",
     tournament_create: "Turnier erstellen / beitreten", create_tour: "Erstellen",
@@ -54,6 +57,14 @@ function applyI18n() {
     if (dict[key]) el.textContent = dict[key];
   });
   document.documentElement.lang = currentLang;
+}
+
+// Escape user-supplied text before injecting it into the DOM (XSS defence
+// in depth - the server also sanitizes, but we never trust the client).
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
 }
 
 // --------------------------------------------------------------------------- API client
@@ -200,6 +211,7 @@ const Pong = (function () {
   const PADDLE_SPEED = 6, BALL_SPEED = 6;
   const canvas = () => document.getElementById("pong-canvas");
   let game = null, raf = null, keys = {}, powerupBtn = null;
+  let ws = null, sessionId = null;
 
   function newGame(ai) {
     game = {
@@ -211,34 +223,92 @@ const Pong = (function () {
     };
   }
 
-  function start() {
+  function wsConnected() { return ws && ws.readyState === WebSocket.OPEN; }
+
+  async function start() {
     if (game) stop();
-    newGame(document.getElementById("vs-ai").checked);
+    const ai = document.getElementById("vs-ai").checked;
+    newGame(ai);
     game.running = true;
-    game.ball.x = W / 2; game.ball.y = H / 2;
-    game.vx = game.ai ? -BALL_SPEED : BALL_SPEED; game.vy = 0;
+    try {
+      // Create a server-authoritative session and join it over wss so two
+      // distant players share the same game (Remote players module).
+      const res = await API.post("/api/games/sessions/", {
+        name: "pong-" + Date.now(), kind: "pong", ai: ai,
+      });
+      sessionId = res.id;
+      await connectWs(res.id, "left");
+    } catch (e) {
+      // Fall back to a local-only game if the server is unreachable.
+      game.local = true;
+    }
     if (!raf) raf = requestAnimationFrame(loop);
   }
-  function stop() { game && (game.running = false); if (raf) cancelAnimationFrame(raf); raf = null; }
+
+  function connectWs(id, side) {
+    return new Promise((resolve) => {
+      const proto = location.protocol === "https:" ? "wss" : "ws";
+      ws = new WebSocket(`${proto}://${location.host}/ws/game/${id}/${side}/`);
+      ws.onopen = () => resolve();
+      ws.onmessage = (e) => {
+        let msg;
+        try { msg = JSON.parse(e.data); } catch (_) { return; }
+        if (msg.type === "state") applyState(msg.state);
+      };
+      ws.onclose = () => { ws = null; };
+    });
+  }
+
+  function applyState(s) {
+    if (!game) return;
+    game.left = s.left_paddle;
+    game.right = s.right_paddle;
+    game.ball = s.ball;
+    game.vx = s.ball_vx;
+    game.vy = s.ball_vy;
+    game.leftScore = s.left_score;
+    game.rightScore = s.right_score;
+  }
+
+  function stop() {
+    game && (game.running = false);
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+    if (ws) { try { ws.close(); } catch (_) {} ws = null; }
+    sessionId = null;
+  }
 
   function loop() {
     if (game && game.running) {
-      handleInput();
-      step();
+      if (game.local) {
+        handleInputLocal();
+        step();
+      } else if (wsConnected()) {
+        // Drive the authoritative server loop: send input + a step tick.
+        sendMove();
+        ws.send(JSON.stringify({ type: "step" }));
+      }
       draw();
     }
     raf = requestAnimationFrame(loop);
   }
 
-  function handleInput() {
+  function sendMove() {
+    if (!wsConnected()) return;
+    if (keys["w"] || keys["W"]) ws.send(JSON.stringify({ type: "move", side: "left", direction: -1 }));
+    if (keys["s"] || keys["S"]) ws.send(JSON.stringify({ type: "move", side: "left", direction: 1 }));
+    if (keys["ArrowUp"]) ws.send(JSON.stringify({ type: "move", side: "right", direction: -1 }));
+    if (keys["ArrowDown"]) ws.send(JSON.stringify({ type: "move", side: "right", direction: 1 }));
+  }
+
+  function handleInputLocal() {
     if (!game) return;
     if (keys["w"] || keys["W"]) game.left.y -= PADDLE_SPEED;
     if (keys["s"] || keys["S"]) game.left.y += PADDLE_SPEED;
-    // AI: refresh once per second, simulate keyboard input
     if (game.ai) {
       if (!game._aiT) game._aiT = 0;
       game._aiT += 1;
-      if (game._aiT >= 60) { // ~1s at 60fps
+      if (game._aiT >= 60) {
         aiMove();
         game._aiT = 0;
       }
@@ -326,14 +396,28 @@ const Pong = (function () {
     document.addEventListener("keydown", (e) => { keys[e.key] = true; });
     document.addEventListener("keyup", (e) => { keys[e.key] = false; });
     const cb = document.getElementById("customize-btn");
-    cb.addEventListener("click", async () => {
-      const data = await API.get("/api/games/customizations/");
-      alert("Customizations: " + data.customizations.map((c) => c.name).join(", "));
+    const panel = document.getElementById("customize-panel");
+    cb.addEventListener("click", () => {
+      panel.classList.toggle("d-none");
+    });
+    panel.querySelectorAll(".custom-pu").forEach((b) => {
+      b.addEventListener("click", () => {
+        const kind = b.dataset.kind;
+        if (wsConnected()) {
+          ws.send(JSON.stringify({ type: "powerup", side: "left", kind }));
+        } else if (game) {
+          if (kind === "speed" && game.leftPower.length < 2) game.leftPower.push("speed");
+        }
+      });
     });
     powerupBtn = document.getElementById("powerup-btn");
     powerupBtn.addEventListener("click", () => {
       if (!game) return;
-      if (game.leftPower.length < 2) game.leftPower.push("speed");
+      if (wsConnected()) {
+        ws.send(JSON.stringify({ type: "powerup", side: "left", kind: "speed" }));
+      } else if (game.leftPower.length < 2) {
+        game.leftPower.push("speed");
+      }
     });
   }
   return { init, start, stop };
@@ -346,6 +430,9 @@ const Connect4 = (function () {
   const canvas = () => document.getElementById("connect4-canvas");
   const CELL = 80, PAD = 20;
   let game = null, raf = null, current = "connect4";
+  let ws = null, sessionId = null;
+
+  function wsConnected() { return ws && ws.readyState === WebSocket.OPEN; }
 
   function newGame(ai) {
     game = {
@@ -358,14 +445,52 @@ const Connect4 = (function () {
     };
   }
 
-  function start() {
+  async function start() {
     if (game) stop();
-    newGame(document.getElementById("vs-ai").checked);
+    const ai = document.getElementById("vs-ai").checked;
+    newGame(ai);
     game.over = false;
+    try {
+      const res = await API.post("/api/games/sessions/", {
+        name: "connect4-" + Date.now(), kind: "connect4", ai: ai,
+      });
+      sessionId = res.id;
+      await connectWs(res.id, "left");
+    } catch (e) {
+      game.local = true;
+    }
     if (!raf) raf = requestAnimationFrame(loop);
     draw();
   }
-  function stop() { if (raf) cancelAnimationFrame(raf); raf = null; }
+
+  function connectWs(id, side) {
+    return new Promise((resolve) => {
+      const proto = location.protocol === "https:" ? "wss" : "ws";
+      ws = new WebSocket(`${proto}://${location.host}/ws/connect4/${id}/${side}/`);
+      ws.onopen = () => resolve();
+      ws.onmessage = (e) => {
+        let msg;
+        try { msg = JSON.parse(e.data); } catch (_) { return; }
+        if (msg.type === "state") applyState(msg.state);
+      };
+      ws.onclose = () => { ws = null; };
+    });
+  }
+
+  function applyState(s) {
+    if (!game) return;
+    game.board = s.board.map((row) => row.slice());
+    game.turn = s.current;
+    game.winner = s.winner;
+    game.over = s.winner !== 0;
+  }
+
+  function stop() {
+    if (raf) cancelAnimationFrame(raf);
+    raf = null;
+    if (ws) { try { ws.close(); } catch (_) {} ws = null; }
+    sessionId = null;
+  }
   function loop() { draw(); raf = requestAnimationFrame(loop); }
 
   function isValid(col) {
@@ -373,6 +498,11 @@ const Connect4 = (function () {
   }
   function drop(col) {
     if (game.over || !isValid(col)) return false;
+    if (wsConnected()) {
+      // The server is authoritative for the board; just send the drop.
+      ws.send(JSON.stringify({ type: "drop", column: col }));
+      return true;
+    }
     let r = 0;
     while (r < ROWS && game.board[r][col] !== EMPTY) r++;
     game.board[r][col] = game.turn;
@@ -556,7 +686,11 @@ const Connect4 = (function () {
         if (!game || game.over) return;
         if (drop(Number(btn.dataset.col))) {
           draw();
-          if (game.ai && game.turn === game.aiSide && !game.over) aiMove();
+          // In local mode the AI replies locally; in server mode the
+          // authoritative server resolves the AI and broadcasts the state.
+          if (!wsConnected() && game.ai && game.turn === game.aiSide && !game.over) {
+            aiMove();
+          }
         }
       });
     });
@@ -583,7 +717,7 @@ const Tournament = (function () {
       data.tournaments.forEach((t) => {
         const row = document.createElement("div");
         row.className = "d-flex justify-content-between align-items-center border rounded p-2 my-1";
-        row.innerHTML = `<span>${t.name} <span class="badge">${t.status}</span></span>
+        row.innerHTML = `<span>${escapeHtml(t.name)} <span class="badge">${escapeHtml(t.status)}</span></span>
           <button class="btn btn-sm btn-outline-primary join-tour" data-id="${t.id}">Join</button>`;
         el.appendChild(row);
       });
@@ -593,19 +727,25 @@ const Tournament = (function () {
   }
   async function create() {
     const name = document.getElementById("tour-name").value || "Tournament";
-    await API.post("/api/tournaments/", { name });
-    load();
+    try {
+      await API.post("/api/tournaments/", { name });
+      load();
+    } catch (e) { console.error(e); }
   }
   async function join(id) {
     const alias = prompt("Your alias:") || "player";
-    await API.post("/api/tournaments/" + id + "/", { alias });
-    load();
+    try {
+      await API.post("/api/tournaments/" + id + "/", { alias });
+      load();
+    } catch (e) { console.error(e); }
   }
   async function joinQueue() {
-    const data = await API.post("/api/tournaments/matchmaking/", {});
-    const info = document.getElementById("queue-info");
-    if (data.matched) info.textContent = "Match found: you vs user " + data.match[1];
-    else info.textContent = "Waiting in queue... (" + data.queue_size + " waiting)";
+    try {
+      const data = await API.post("/api/tournaments/matchmaking/", {});
+      const info = document.getElementById("queue-info");
+      if (data.matched) info.textContent = "Match found: you vs user " + data.match[1];
+      else info.textContent = "Waiting in queue... (" + data.queue_size + " waiting)";
+    } catch (e) { console.error(e); }
   }
   function init() {
     document.getElementById("create-tour").addEventListener("click", create);
@@ -653,7 +793,7 @@ const Chat = (function () {
     const el = document.getElementById("chat-messages");
     const div = document.createElement("div");
     div.className = "chat-msg";
-    div.innerHTML = `<span class="who">${who}:</span> ${content}`;
+    div.innerHTML = `<span class="who">${escapeHtml(who)}:</span> ${escapeHtml(content)}`;
     el.appendChild(div);
     el.scrollTop = el.scrollHeight;
   }
@@ -676,7 +816,9 @@ const Chat = (function () {
     });
     document.getElementById("new-channel").addEventListener("click", async () => {
       const name = prompt("Channel name:");
-      if (name) { await API.post("/api/chat/channels/", { name }); renderChannels(); }
+      if (!name) return;
+      try { await API.post("/api/chat/channels/", { name }); renderChannels(); }
+      catch (e) { console.error(e); }
     });
   }
   return { init, connect };
@@ -693,11 +835,13 @@ const Profile = (function () {
       body.innerHTML = `
         <div class="row">
           <div class="col-md-4">
-            <img class="rounded" src="${u.avatar || 'https://via.placeholder.com/80'}" width="80" height="80" />
-            <h4>${u.username}</h4>
-            <p class="text-muted">${u.email}</p>
+            <img class="rounded" src="${escapeHtml(u.avatar || 'https://via.placeholder.com/80')}" width="80" height="80" />
+            <h4>${escapeHtml(u.username)}</h4>
+            <p class="text-muted">${escapeHtml(u.email)}</p>
             <p>Wins: <b>${u.wins}</b> · Losses: <b>${u.losses}</b></p>
-            <p>2FA: <b>${u.two_factor_enabled ? 'on' : 'off'}</b> · Lang: <b>${u.language}</b></p>
+            <p>2FA: <b>${u.two_factor_enabled ? 'on' : 'off'}</b> · Lang: <b>${escapeHtml(u.language)}</b></p>
+            <input type="file" id="avatar-input" accept="image/*" class="form-control form-control-sm mb-1" />
+            <button class="btn btn-sm btn-outline-primary mb-2" id="avatar-upload-btn">Upload avatar</button>
             <button class="btn btn-sm btn-outline-danger" id="anon-btn">Anonymize (GDPR)</button>
             <button class="btn btn-sm btn-outline-warning" id="del-btn">Delete account (GDPR)</button>
           </div>
@@ -705,11 +849,26 @@ const Profile = (function () {
             <h5>Match History</h5>
             <ul class="list-group">
               ${matches.matches.map((m) => `
-                <li class="list-group-item">vs ${m.opponent} —
-                  <b>${m.result}</b> (${m.user_score}-${m.opponent_score})</li>`).join("") || "<li>No matches yet</li>"}
+                <li class="list-group-item">vs ${escapeHtml(m.opponent)} —
+                  <b>${escapeHtml(m.result)}</b> (${m.user_score}-${m.opponent_score})</li>`).join("") || "<li>No matches yet</li>"}
             </ul>
           </div>
         </div>`;
+      document.getElementById("avatar-upload-btn").addEventListener("click", async () => {
+        const input = document.getElementById("avatar-input");
+        if (!input.files.length) return;
+        const fd = new FormData();
+        fd.append("avatar", input.files[0]);
+        try {
+          const res = await fetch("/api/auth/avatar/upload/", {
+            method: "POST",
+            headers: API.authHeader(),
+            body: fd,
+          });
+          if (!res.ok) throw new Error("upload failed");
+          load();
+        } catch (e) { console.error(e); }
+      });
       document.getElementById("anon-btn").addEventListener("click", async () => {
         await API.post("/api/auth/gdpr/anonymize/", {}); load();
       });

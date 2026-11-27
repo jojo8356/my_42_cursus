@@ -7,3 +7,5 @@ daphne>=4.1
 gunicorn>=21.2
 # Serve collected static files in production (self-contained container)
 whitenoise>=6.6
+# Redis channel layer (scalable multi-process websockets in production)
+channels-redis>=4.2

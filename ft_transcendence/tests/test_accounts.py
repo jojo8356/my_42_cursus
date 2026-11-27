@@ -5,6 +5,7 @@ Covers: registration validation, login, JWT access/refresh, OAuth 2.0 with 42
 (mock provider), profile, friends, blocking, direct messages, match history,
 two-factor auth, GDPR anonymization and deletion.
 """
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from rest_framework.test import APIClient
 
@@ -243,3 +244,46 @@ class AccountsApiTests(TestCase):
         u = User.objects.create_user(email="r@x.com", username="r", password="strongpass1")
         self.assertNotEqual(u.password, "strongpass1")
         self.assertTrue(u.password.startswith("pbkdf2_"))
+
+
+class AvatarUploadTests(TestCase):
+    """Avatar upload endpoint (Standard user management module)."""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(
+            email="av@x.com", username="av", password="strongpass1"
+        )
+        r = self.client.post("/api/auth/login/", {
+            "email": "av@x.com", "password": "strongpass1",
+        }, format="json")
+        token = r.json()["tokens"]["access"]
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token)
+
+    def _png(self):
+        return SimpleUploadedFile("avatar.png", b"\\x89PNG\\r\\n\\x1a\\n",
+                                  content_type="image/png")
+
+    def test_avatar_upload_success(self):
+        r = self.client.post("/api/auth/avatar/upload/",
+                             {"avatar": self._png()})
+        self.assertEqual(r.status_code, 200)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.avatar)
+        self.assertIn("avatar", r.json())
+
+    def test_avatar_upload_invalid_type(self):
+        bad = SimpleUploadedFile("avatar.txt", b"not an image",
+                                 content_type="text/plain")
+        r = self.client.post("/api/auth/avatar/upload/", {"avatar": bad})
+        self.assertEqual(r.status_code, 400)
+
+    def test_avatar_upload_missing_file(self):
+        r = self.client.post("/api/auth/avatar/upload/", {})
+        self.assertEqual(r.status_code, 400)
+
+    def test_avatar_upload_requires_auth(self):
+        self.client.credentials()
+        r = self.client.post("/api/auth/avatar/upload/",
+                             {"avatar": self._png()})
+        self.assertIn(r.status_code, (401, 403))
