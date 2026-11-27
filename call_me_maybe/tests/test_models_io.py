@@ -69,7 +69,8 @@ def test_missing_file(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     ("functions", "message"),
     [
-        ([{**ADD, "parameters": {"x": {"type": "array"}}}], "unsupported"),
+        ([{**ADD, "parameters": {"x": {"type": "bad"}}}], "unsupported"),
+        ([{**ADD, "parameters": {"x": {"type": "array"}}}], "items"),
         ([{**ADD, "name": ""}], "must not be empty"),
         ([{"name": "f"}], "parameters"),
         ([ADD, ADD], "duplicate"),

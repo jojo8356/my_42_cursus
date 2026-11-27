@@ -16,17 +16,23 @@ DEFAULT_OUTPUT = Path("data/output/function_calling_results.json")
 
 
 class Settings(BaseModel):
-    """Paths given on the command line.
+    """Paths and options given on the command line.
 
     Attributes:
         functions_definition: Function definitions file.
         input: Test prompts file.
         output: Results file to write.
+        model: Hugging Face model identifier (bonus: multiple models).
+        visualize: Print each generated token to stderr (bonus).
+        timeout: Per-prompt time limit in seconds (bonus).
     """
 
     functions_definition: Path = DEFAULT_FUNCTIONS
     input: Path = DEFAULT_INPUT
     output: Path = DEFAULT_OUTPUT
+    model: str = "Qwen/Qwen3-0.6B"
+    visualize: bool = False
+    timeout: float = 60.0
 
 
 def parse_args(argv: list[str] | None = None) -> Settings:
@@ -46,6 +52,12 @@ def parse_args(argv: list[str] | None = None) -> Settings:
                         default=DEFAULT_FUNCTIONS)
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--model", default="Qwen/Qwen3-0.6B",
+                        help="Hugging Face model identifier")
+    parser.add_argument("--visualize", action="store_true",
+                        help="print each generated token to stderr")
+    parser.add_argument("--timeout", type=float, default=60.0,
+                        help="per-prompt time limit in seconds")
     return Settings(**vars(parser.parse_args(argv)))
 
 
@@ -76,7 +88,7 @@ def run(settings: Settings) -> int:
         return 1
 
     start = time.perf_counter()
-    print("Loading model...", flush=True)
+    print(f"Loading model {settings.model}...", flush=True)
     try:
         # Imported here so that input errors are reported instantly.
         from llm_sdk import Small_LLM_Model
@@ -84,12 +96,15 @@ def run(settings: Settings) -> int:
         from src.decoder import FunctionCaller
         from src.vocab import Vocabulary
 
-        llm = Small_LLM_Model()
+        llm = Small_LLM_Model(settings.model)
         vocab = Vocabulary.from_file(Path(llm.get_path_to_vocab_file()))
     except Exception as exc:
         error(f"cannot load the model: {exc}")
         return 1
-    caller = FunctionCaller(llm=llm, vocab=vocab, functions=functions)
+    caller = FunctionCaller(
+        llm=llm, vocab=vocab, functions=functions,
+        visualize=settings.visualize,
+    )
     print(f"Model ready in {time.perf_counter() - start:.1f}s", flush=True)
 
     calls: list[FunctionCall] = []
@@ -104,9 +119,18 @@ def run(settings: Settings) -> int:
             error(f"prompt {number} ({item.prompt!r}) failed: {exc}")
             continue
         calls.append(call)
+        elapsed = time.perf_counter() - prompt_start
+        if elapsed > settings.timeout:
+            failures += 1
+            calls.pop()
+            error(
+                f"prompt {number} ({item.prompt!r}) exceeded the "
+                f"{settings.timeout:.0f}s timeout"
+            )
+            continue
         print(
             f"[{number}/{len(prompts)}] "
-            f"{time.perf_counter() - prompt_start:.2f}s  "
+            f"{elapsed:.2f}s  "
             f"{call.name}({call.parameters})",
             flush=True,
         )

@@ -5,13 +5,24 @@ models describe the function definitions, the test prompts and the final
 function-call results, and enforce the supported argument types.
 """
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from __future__ import annotations
 
-# Argument types the constrained decoder can generate.
-SUPPORTED_TYPES: tuple[str, ...] = ("number", "integer", "string", "boolean")
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+
+# Argument types the constrained decoder can generate. The first four are the
+# subject's core types; ``null``, ``array`` and ``object`` are bonus types.
+SUPPORTED_TYPES: tuple[str, ...] = (
+    "number",
+    "integer",
+    "string",
+    "boolean",
+    "null",
+    "array",
+    "object",
+)
 
 # A generated argument value, narrowed to the supported JSON types.
-ArgumentValue = bool | int | float | str
+ArgumentValue = bool | int | float | str | None | list | dict
 
 
 class ParameterSpec(BaseModel):
@@ -19,11 +30,15 @@ class ParameterSpec(BaseModel):
 
     Attributes:
         type: JSON type name, one of ``SUPPORTED_TYPES``.
+        items: For ``array`` types, the schema of each element (bonus).
+        properties: For ``object`` types, the schema of each field (bonus).
     """
 
     model_config = ConfigDict(extra="ignore")
 
     type: str
+    items: ParameterSpec | None = None
+    properties: dict[str, ParameterSpec] | None = None
 
     @field_validator("type")
     @classmethod
@@ -45,6 +60,24 @@ class ParameterSpec(BaseModel):
                 f"(supported: {', '.join(SUPPORTED_TYPES)})"
             )
         return value
+
+    @model_validator(mode="after")
+    def check_nested_schema(self) -> "ParameterSpec":
+        """Validate the nested schema of ``array``/``object`` types.
+
+        Returns:
+            The model itself.
+
+        Raises:
+            ValueError: If a nested schema is missing or malformed.
+        """
+        if self.type == "array":
+            if self.items is None:
+                raise ValueError("array type requires an 'items' schema")
+        if self.type == "object":
+            if self.properties is None:
+                raise ValueError("object type requires a 'properties' schema")
+        return self
 
 
 class FunctionDefinition(BaseModel):
@@ -107,6 +140,12 @@ class FunctionDefinition(BaseModel):
                 valid = spec.type == "integer"
             elif isinstance(value, float):
                 valid = spec.type == "number"
+            elif value is None:
+                valid = spec.type == "null"
+            elif isinstance(value, list):
+                valid = spec.type == "array"
+            elif isinstance(value, dict):
+                valid = spec.type == "object"
             else:
                 valid = spec.type == "string"
             if not valid:
