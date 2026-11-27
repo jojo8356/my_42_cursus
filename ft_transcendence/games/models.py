@@ -41,13 +41,22 @@ class PowerUpTemplate(models.Model):
 
 
 class GameSession(models.Model):
-    """A live Pong game session coordinated through websockets."""
+    """A live game session coordinated through websockets.
+
+    ``kind`` distinguishes the two games required by the subject: Pong
+    (default) and the second game, Connect-4 (module 7).
+    """
+    PONG = "pong"
+    CONNECT4 = "connect4"
+    KIND_CHOICES = [(PONG, "Pong"), (CONNECT4, "Connect-4")]
+
     OPEN = "open"
     PLAYING = "playing"
     FINISHED = "finished"
     STATUS_CHOICES = [(OPEN, "Open"), (PLAYING, "Playing"), (FINISHED, "Finished")]
 
     name = models.CharField(max_length=64, unique=True)
+    kind = models.CharField(max_length=10, choices=KIND_CHOICES, default=PONG)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=OPEN)
     player1 = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,

@@ -4,6 +4,11 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+# Virtual environments (any Python venv used to run/test the project)
+.ft_venv/
+.cm_venv/
+*_venv/
+env/
 
 # Django
 db.sqlite3

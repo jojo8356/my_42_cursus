@@ -11,6 +11,8 @@ const I18N = {
     pong_title: "Pong", vs_ai: "vs AI", start_game: "Start Game",
     customize: "Customize", powerup: "Power-up", instructions: "Controls",
     ai_note: "AI moves at the same paddle speed and refreshes once per second.",
+    game_select: "Game", connect4_title: "Connect-4",
+    connect4_help: "Click a column (1-7) to drop a piece. First to align 4 wins.",
     tournament_create: "Create / Join Tournament", create_tour: "Create",
     matchmaking: "Matchmaking", join_queue: "Join Matchmaking Queue",
     channels: "Channels", new_channel: "New", chat_title: "Chat", send: "Send",
@@ -22,6 +24,8 @@ const I18N = {
     pong_title: "Pong", vs_ai: "contre IA", start_game: "Lancer",
     customize: "Personnaliser", powerup: "Bonus", instructions: "Contrôles",
     ai_note: "L'IA se déplace à la même vitesse et se rafraîchit une fois par seconde.",
+    game_select: "Jeu", connect4_title: "Puissance 4",
+    connect4_help: "Cliquez sur une colonne (1-7) pour y poser un pion. Le premier à aligner 4 gagne.",
     tournament_create: "Créer / Rejoindre un tournoi", create_tour: "Créer",
     matchmaking: "Matchmaking", join_queue: "Rejoindre la file",
     channels: "Canaux", new_channel: "Nouveau", chat_title: "Chat", send: "Envoyer",
@@ -33,6 +37,8 @@ const I18N = {
     pong_title: "Pong", vs_ai: "gegen KI", start_game: "Starten",
     customize: "Anpassen", powerup: "Power-up", instructions: "Steuerung",
     ai_note: "Die KI bewegt sich mit derselben Paddle-Geschwindigkeit und 刷新t einmal pro Sekunde.",
+    game_select: "Spiel", connect4_title: "Connect-4",
+    connect4_help: "Klicke auf eine Spalte (1-7), um einen Stein fallen zu lassen. Wer 4er setzt, gewinnt.",
     tournament_create: "Turnier erstellen / beitreten", create_tour: "Erstellen",
     matchmaking: "Matchmaking", join_queue: "Queue beitreten",
     channels: "Kanäle", new_channel: "Neu", chat_title: "Chat", send: "Senden",
@@ -319,7 +325,6 @@ const Pong = (function () {
   function init() {
     document.addEventListener("keydown", (e) => { keys[e.key] = true; });
     document.addEventListener("keyup", (e) => { keys[e.key] = false; });
-    document.getElementById("start-game").addEventListener("click", start);
     const cb = document.getElementById("customize-btn");
     cb.addEventListener("click", async () => {
       const data = await API.get("/api/games/customizations/");
@@ -332,6 +337,239 @@ const Pong = (function () {
     });
   }
   return { init, start, stop };
+})();
+
+// --------------------------------------------------------------------------- Connect-4 (module 7: second game)
+const Connect4 = (function () {
+  const ROWS = 6, COLS = 7, WIN = 4;
+  const EMPTY = 0, P1 = 1, P2 = 2;
+  const canvas = () => document.getElementById("connect4-canvas");
+  const CELL = 80, PAD = 20;
+  let game = null, raf = null, current = "connect4";
+
+  function newGame(ai) {
+    game = {
+      board: Array.from({ length: ROWS }, () => Array(COLS).fill(0)),
+      turn: P1,
+      winner: 0,
+      ai: !!ai,
+      aiSide: ai ? P2 : null,
+      over: false,
+    };
+  }
+
+  function start() {
+    if (game) stop();
+    newGame(document.getElementById("vs-ai").checked);
+    game.over = false;
+    if (!raf) raf = requestAnimationFrame(loop);
+    draw();
+  }
+  function stop() { if (raf) cancelAnimationFrame(raf); raf = null; }
+  function loop() { draw(); raf = requestAnimationFrame(loop); }
+
+  function isValid(col) {
+    return col >= 0 && col < COLS && game.board[0][col] === EMPTY;
+  }
+  function drop(col) {
+    if (game.over || !isValid(col)) return false;
+    let r = 0;
+    while (r < ROWS && game.board[r][col] !== EMPTY) r++;
+    game.board[r][col] = game.turn;
+    if (checkWin(r, col, game.turn)) game.winner = game.turn;
+    else if (game.board[0].every((v) => v !== EMPTY)) game.winner = 3;
+    else game.turn = game.turn === P1 ? P2 : P1;
+    game.over = game.winner !== 0;
+    return true;
+  }
+  function checkWin(row, col, player) {
+    const dirs = [[0, 1], [1, 0], [1, 1], [1, -1]];
+    for (const [dr, dc] of dirs) {
+      let count = 1;
+      let r = row + dr, c = col + dc;
+      while (r >= 0 && r < ROWS && c >= 0 && c < COLS && game.board[r][c] === player) { count++; r += dr; c += dc; }
+      r = row - dr; c = col - dc;
+      while (r >= 0 && r < ROWS && c >= 0 && c < COLS && game.board[r][c] === player) { count++; r -= dr; c -= dc; }
+      if (count >= WIN) return true;
+    }
+    return false;
+  }
+
+  // Heuristic AI (mirrors connect4_ai.py): centre control + threats, no A*.
+  function aiMove() {
+    if (!game || game.over) return;
+    const available = [];
+    for (let c = 0; c < COLS; c++) if (isValid(c)) available.push(c);
+    if (!available.length) return;
+    let best = -Infinity, bestCol = available[0];
+    for (const col of available) {
+      const score = minimax(col, 3, true);
+      if (score > best) { best = score; bestCol = col; }
+    }
+    drop(bestCol);
+    draw();
+  }
+  function cloneBoard() { return game.board.map((row) => row.slice()); }
+  function evalBoard(b, me) {
+    let score = 0;
+    const opp = me === P1 ? P2 : P1;
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      if (b[r][c] === me) score += 1 + (1 - Math.abs(c - 3) / 3) * 0.5;
+      else if (b[r][c] === opp) score -= 1 + (1 - Math.abs(c - 3) / 3) * 0.5;
+    }
+    // lines of 2 and 3
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      for (const [dr, dc] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+        let cnt = 0, rr = r, cc = c;
+        while (rr >= 0 && rr < ROWS && cc >= 0 && cc < COLS && b[rr][cc] === me) { cnt++; rr += dr; cc += dc; }
+        if (cnt === 2) score += 2;
+        else if (cnt === 3) score += 12;
+        else if (cnt >= 4) score += 1000;
+      }
+    }
+    return score;
+  }
+  function minimax(col, depth, maximizing) {
+    // simulate drop
+    const b = cloneBoard();
+    let r = 0;
+    while (r < ROWS && b[r][col] !== EMPTY) r++;
+    b[r][col] = game.turn;
+    const me = game.aiSide;
+    // quick win check on this board
+    let winner = 0;
+    if (checkWinOn(b, r, col, game.turn)) winner = game.turn;
+    else if (b[0].every((v) => v !== EMPTY)) winner = 3;
+    if (winner !== 0 || depth === 0) {
+      return winner === me ? 1000 - (4 - depth) : winner === (me === P1 ? P2 : P1) ? -1000 + (4 - depth) : 0;
+    }
+    const nextTurn = game.turn === P1 ? P2 : P1;
+    const avail = [];
+    for (let c = 0; c < COLS; c++) if (b[0][c] === EMPTY) avail.push(c);
+    if (!avail.length) return 0;
+    if (maximizing) {
+      let best = -Infinity;
+      for (const c of avail) {
+        const nb = cloneBoard2(b);
+        let rr = 0;
+        while (rr < ROWS && nb[rr][c] !== EMPTY) rr++;
+        nb[rr][c] = nextTurn;
+        const sub = minimaxOn(nb, nextTurn, me, depth - 1, false);
+        if (sub > best) best = sub;
+      }
+      return best;
+    } else {
+      let best = Infinity;
+      for (const c of avail) {
+        const nb = cloneBoard2(b);
+        let rr = 0;
+        while (rr < ROWS && nb[rr][c] !== EMPTY) rr++;
+        nb[rr][c] = nextTurn;
+        const sub = minimaxOn(nb, nextTurn, me, depth - 1, true);
+        if (sub < best) best = sub;
+      }
+      return best;
+    }
+  }
+  function cloneBoard2(b) { return b.map((row) => row.slice()); }
+  function checkWinOn(b, row, col, player) {
+    const dirs = [[0, 1], [1, 0], [1, 1], [1, -1]];
+    for (const [dr, dc] of dirs) {
+      let count = 1;
+      let r = row + dr, c = col + dc;
+      while (r >= 0 && r < ROWS && c >= 0 && c < COLS && b[r][c] === player) { count++; r += dr; c += dc; }
+      r = row - dr; c = col - dc;
+      while (r >= 0 && r < ROWS && c >= 0 && c < COLS && b[r][c] === player) { count++; r -= dr; c -= dc; }
+      if (count >= WIN) return true;
+    }
+    return false;
+  }
+  function minimaxOn(b, turn, me, depth, maximizing) {
+    // recursive eval on a cloned board
+    let winner = 0;
+    for (let r = 0; r < ROWS && winner === 0; r++)
+      for (let c = 0; c < COLS && winner === 0; c++)
+        if (b[r][c] !== EMPTY && checkWinOn(b, r, c, b[r][c])) winner = b[r][c];
+    if (winner !== 0) return winner === me ? 1000 : -1000;
+    if (depth === 0) return evalBoard(b, me);
+    const avail = [];
+    for (let c = 0; c < COLS; c++) if (b[0][c] === EMPTY) avail.push(c);
+    if (!avail.length) return 0;
+    const nextTurn = turn === P1 ? P2 : P1;
+    if (maximizing) {
+      let best = -Infinity;
+      for (const c of avail) {
+        const nb = cloneBoard2(b);
+        let rr = 0;
+        while (rr < ROWS && nb[rr][c] !== EMPTY) rr++;
+        nb[rr][c] = turn;
+        const sub = minimaxOn(nb, nextTurn, me, depth - 1, false);
+        if (sub > best) best = sub;
+      }
+      return best;
+    } else {
+      let best = Infinity;
+      for (const c of avail) {
+        const nb = cloneBoard2(b);
+        let rr = 0;
+        while (rr < ROWS && nb[rr][c] !== EMPTY) rr++;
+        nb[rr][c] = turn;
+        const sub = minimaxOn(nb, nextTurn, me, depth - 1, true);
+        if (sub < best) best = sub;
+      }
+      return best;
+    }
+  }
+
+  function draw() {
+    const c = canvas(); if (!c || !game) return;
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    const W = COLS * CELL, H = ROWS * CELL;
+    const ox = (c.width - W) / 2, oy = (c.height - H) / 2;
+    // grid
+    for (let r = 0; r <= ROWS; r++) {
+      ctx.beginPath(); ctx.moveTo(ox, oy + r * CELL); ctx.lineTo(ox + W, oy + r * CELL); ctx.stroke();
+    }
+    for (let col = 0; col <= COLS; col++) {
+      ctx.beginPath(); ctx.moveTo(ox + col * CELL, oy); ctx.lineTo(ox + col * CELL, oy + H); ctx.stroke();
+    }
+    // pieces (row 0 top)
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      const v = game.board[r][c];
+      if (v === EMPTY) continue;
+      const cx = ox + c * CELL + CELL / 2;
+      const cy = oy + r * CELL + CELL / 2;
+      ctx.beginPath(); ctx.arc(cx, cy, CELL / 2 - 4, 0, Math.PI * 2);
+      ctx.fillStyle = v === P1 ? "#e63946" : "#ffd166";
+      ctx.fill();
+    }
+    // turn indicator
+    ctx.fillStyle = "#333";
+    ctx.font = "14px sans-serif";
+    ctx.fillText(game.over ? "Game over" : ("Player " + game.turn + " to move"), ox, oy - 8);
+  }
+
+  function init() {
+    document.querySelectorAll(".connect4-col").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (!game || game.over) return;
+        if (drop(Number(btn.dataset.col))) {
+          draw();
+          if (game.ai && game.turn === game.aiSide && !game.over) aiMove();
+        }
+      });
+    });
+  }
+  function show(showIt) {
+    const cv = canvas();
+    cv.classList.toggle("d-none", !showIt);
+    document.getElementById("connect4-controls").classList.toggle("d-none", !showIt);
+    document.getElementById("connect4-controls-help").classList.toggle("d-none", !showIt);
+    document.getElementById("pong-controls").classList.toggle("d-none", showIt);
+    if (showIt) { start(); } else { stop(); }
+  }
+  return { init, start, stop, show, draw };
 })();
 
 // --------------------------------------------------------------------------- tournament
@@ -491,8 +729,31 @@ function boot() {
   applyI18n();
   Auth.init();
   Pong.init();
+  Connect4.init();
   Tournament.init();
   Chat.init();
+
+  // Game selector: switch between Pong and Connect-4 (module 7).
+  const gameSelect = document.getElementById("game-select");
+  function switchGame(name) {
+    if (name === "connect4") {
+      Pong.stop();
+      document.getElementById("pong-canvas").classList.add("d-none");
+      Connect4.show(true);
+    } else {
+      Connect4.stop();
+      document.getElementById("connect4-canvas").classList.add("d-none");
+      document.getElementById("pong-canvas").classList.remove("d-none");
+      Pong.show ? Pong.show(false) : null;
+    }
+  }
+  gameSelect.addEventListener("change", (e) => switchGame(e.target.value));
+  document.getElementById("start-game").addEventListener("click", () => {
+    const name = gameSelect.value;
+    if (name === "connect4") Connect4.start();
+    else Pong.start();
+  });
+
   document.getElementById("lang-switcher").value = currentLang;
   document.getElementById("lang-switcher").addEventListener("change", (e) => {
     currentLang = e.target.value;

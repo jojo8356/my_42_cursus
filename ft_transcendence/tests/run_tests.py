@@ -25,6 +25,7 @@ def main():
     labels = [
         "tests.test_engine",
         "tests.test_ai",
+        "tests.test_connect4",
         "tests.test_bracket",
         "tests.test_accounts",
         "tests.test_games",

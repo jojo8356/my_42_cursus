@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -153,3 +154,40 @@ OAUTH_42_USER_URL = os.environ.get(
 OAUTH_42_REDIRECT_URI = os.environ.get(
     "OAUTH_42_REDIRECT_URI", "http://localhost:8000/api/auth/oauth/callback"
 )
+
+# --------------------------------------------------------------------------- HTTPS / WSS
+# The subject makes HTTPS mandatory whenever a backend is used ("utiliser wss
+# au lieu de ws"). Secure transport is enabled by the Docker container via
+# DJANGO_SECURE=1. It stays off for the local dev server and the test suite
+# (which run over plain HTTP) so development and tests keep working.
+SECURE_TRANSPORT = os.environ.get("DJANGO_SECURE", "0") == "1"
+
+if SECURE_TRANSPORT:
+    # Force HTTPS for every request and harden cookies / HSTS.
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000          # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "same-origin"
+    X_FRAME_OPTIONS = "DENY"
+else:
+    # Defence-in-depth headers that are safe in every mode.
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "same-origin"
+    X_FRAME_OPTIONS = "DENY"
+
+# WebSocket scheme: wss over TLS in production, ws for local development.
+# (The ASGI server / reverse proxy terminates TLS; the frontend also picks
+# wss automatically from location.protocol.)
+WS_SCHEME = "wss" if SECURE_TRANSPORT else "ws"
+
+# WhiteNoise serves the collected static files in production (DEBUG=0),
+# keeping the container self-contained without a separate static server.
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
