@@ -1,0 +1,18 @@
+{
+  "sandbox": {
+    "authorized_imports": ["math", "re", "json", "collections", "itertools", "typing", "os.path"],
+    "allowed_directories": [],
+    "max_memory_mb": 512,
+    "max_cpu_seconds": 30,
+    "max_output_chars": 8000,
+    "allow_network": false,
+    "persistence": true
+  },
+  "agent": {
+    "max_iterations": 10,
+    "max_input_tokens": 120000,
+    "max_output_tokens": 16000,
+    "max_wall_time_s": 600,
+    "history_token_margin": 0.1
+  }
+}

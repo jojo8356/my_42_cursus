@@ -1,0 +1,7 @@
+{
+  "task_id": "swe_001",
+  "benchmark": "swebench",
+  "prompt": "Issue: `add` returns a difference instead of a sum. Fix it so the tests pass.",
+  "repo_path": "../pacman",
+  "eval_script": "python3 -c \"import sys; sys.exit(0)\""
+}
