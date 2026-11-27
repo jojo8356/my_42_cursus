@@ -1,0 +1,10 @@
+[rag]
+repo_path = ..
+work_dir = data
+embedder = hashing
+generator = template
+chunk_max_size = 2000
+chunk_overlap = 200
+top_k = 5
+hybrid = false
+retrieval_mode = bm25

@@ -1,0 +1,252 @@
+# RAG — RAG Against the Machine
+
+**Projet 42 — Retrieval-Augmented Generation sur un dépôt de code.**
+
+## 1. Description
+
+### 1.1. Contexte
+
+Transformer un dépôt de logiciel (ici le code **vLLM**) en une base de
+connaissance interrogeable. Les LLM sont très bons pour raisonner sur
+l'information qu'ils reçoivent, mais ils sont limités par la connaissance
+disponible dans leur contexte. Un modèle, quelle que soit sa capacité, ne peut
+pas répondre précisément à des questions sur du code qu'il n'a jamais vu.
+
+La **RAG** (Retrieval-Augmented Generation) contourne cette limite en
+récupérant les fragments de information les plus pertinents **avant** de
+demander au modèle de générer une réponse. Le modèle n'est jamais tenu d'inventer
+de l'information : il reçoit des fragments soigneusement sélectionnés du
+dépôt et est instruit de répondre **uniquement** à partir de ce contexte.
+
+Le résultat est un système RAG **entièrement local**, avec :
+
+- récupération lexicale par **BM25** (ou TF-IDF) ;
+- récupération sémantique par **embeddings** ;
+- classement hybride par **Reciprocal Rank Fusion (RRF)** ;
+- indexation **incrémentale** ;
+- caches persistants (embeddings + requêtes) ;
+- génération de réponses **ancrées** (grounded) ;
+- évaluation automatique **Recall@k** ;
+- interfaces : **CLI**, **API HTTP**, **interface terminale interactive**.
+
+### 1.2. Objectif
+
+Transformer un dépôt en base de connaissances recherchable. Le pipeline
+compte quatre étapes successives :
+
+1. **Indexation** — scan du dépôt, identification des fichiers supportés,
+   découpage en chunks significatifs.
+2. **Récupération** — sélection des chunks les plus pertinents pour la
+   question (lexical, sémantique, ou hybride).
+3. **Augmentation** — assembly des chunks récupérés en un contexte compact
+   qui conserve leurs localisations exactes.
+4. **Génération** — un modèle génère une réponse strictement ancrée sur le
+   contexte récupéré.
+
+Chaque chunk conserve son **chemin de fichier** et ses **offsets de caractère**
+(`first_character_index`, `last_character_index`), de sorte que toute réponse
+puisse être retracée jusqu'au dépôt. Tous les traitements restent **locaux** :
+aucune API externe n'est requise pour l'indexation, la récupération ou la
+génération.
+
+## 2. Architecture
+
+Les composants (chaque responsabilité isolée, communication via modèles fortement
+typés) :
+
+| Composant | Responsabilité |
+|---|---|
+| **Ingest** | Découverte du dépôt, gestion du manifeste, génération de chunks |
+| **SearchEngine** | Indexation et récupération **BM25** |
+| **VectorSearchEngine** | Embeddings sémantiques et recherche vectorielle |
+| **HybridSearchEngine** | Fusion **RRF** entre lexical et sémantique |
+| **Generator** | Génération de réponses ancrées |
+| **CLI / API / Interface** | Front-ends partageant le même pipeline |
+
+Les trois interfaces (CLI, API HTTP, interface terminale) exécutent **exactement
+le même** code interne, garantissant un comportement identique quel que soit
+le front-end.
+
+## 3. Stratégie de chunking
+
+La qualité de récupération dépend fortement du découpage. Les chunks doivent
+être : sémantiquement cohérents, assez petits pour tenir dans le contexte,
+assez grands pour rester compréhensibles, stables et réutilisables.
+
+Trois stratégies par type de fichier :
+
+### 3.1. Code Python
+- Parser avec le module `ast` (standard).
+- Identifier chaque classe/fonction de premier niveau et leurs positions de
+  caractère exactes. Les chunks correspondent à des composants logiques, pas à
+  des fragments arbitraires.
+- Les définitions trop longues sont divisés récursivement avec un **overlap**
+  configurable.
+- Si la syntaxe est invalide, traiter le fichier comme **texte brut** (robustesse).
+- **Extraction de symboles** (noms de classes, fonctions, méthodes) stockés
+  avec chaque chunk, servant de signal de classement supplémentaire.
+
+### 3.2. Documentation Markdown
+- Préserver la **hiérarchie des titres** : un chunk hérite du contexte des
+  titres parents.
+- Grandes sections divisés en chunks **overlappants** en conservant la hiérarchie
+  active.
+
+### 3.3. Texte brut
+- Découpage aux **frontières naturelles** (lignes vides, paragraphes, ponctuation,
+  sauts de ligne, espaces) plutôt qu'à une position fixe.
+- Applicable aux `.txt`, `.rst`, `Dockerfile`, `Makefile`.
+
+### 3.4. Enrichissement par chemin
+Chaque chunk est enrichi des mots-clés extraits de son **chemin de fichier**
+(ex. `docs/features/tool_calling.md` → `docs`, `features`, `tool`, `calling`),
+sans modifier le contenu source.
+
+### 3.5. Localisations stables
+Chaque chunk stocke `file_path`, `first_character_index`, `last_character_index`
+— valeurs **exactes**, jamais approximatives. L'évaluateur officiel compare ces
+localisations au jeu de données attendu : c'est une **exigence fonctionnelle**.
+
+## 4. Méthode de récupération
+
+Trois modes :
+
+### 4.1. Récupération lexicale **BM25** (obligatoire)
+BM25 (ou TF-IDF) évalue chaque chunk selon : fréquence du terme dans la requête,
+IDF, normalisation de longueur de document. Très efficace sur les dépôts de
+code (identifiants, terminologie technique).
+
+Bonus associés :
+- **Expansion de requête** : certaines expressions techniques ont plusieurs
+  formes ; les concepts sélectionnés peuvent être étendus avec un poids moindre.
+- **Bonus symboles AST** : si la requête correspond à un symbole stocké, bonus
+  de classement (petit, pour ne pas dénaturer le BM25).
+- **Bonus documentation** : bonus configurable pour favoriser les chunks
+  documentaires.
+- **Cache de requêtes** : les résultats BM25 peuvent être mis en cache sur disque
+  (clé = texte de requête, k, expansion).
+
+### 4.2. Récupération sémantique (bonus)
+- Embeddings via `sentence-transformers/all-MiniLM-L6-v2`.
+- Similarité **cosinus**, index **FAISS** (vecteurs normalisés, produit interne).
+- Index séparé du lexical ; dégradation gracieuse si absent.
+
+### 4.3. Recherche hybride (bonus) — RRF
+Chaque moteur récupère un **candidate set** plus grand que le k final. Le
+classement final ne dépend que des **positions** dans chaque moteur :
+
+```
+score RRF = 1 / (k + rang)
+```
+
+Les contributions des deux moteurs sont sommées. Les chunks bien classés par
+les deux remontent naturellement. Cela évite la normalisation difficile des
+scores BM25 et cosinus.
+
+### 4.4. Sélection de candidats
+`candidate_count = max(k × multiplier, minimum_candidates)`, plafonné par la
+taille du dépôt.
+
+### 4.5. Fallback gracieux
+Si l'index sémantique est absent/incompatible, le système **ne plante pas** : il
+retombe sur le BM25 avec un avertissement.
+
+## 5. Indexation incrémentale et caches (bonus)
+
+L'indexation sémantique complète est coûteuse (plusieurs minutes). Il faut
+reconstruire **seulement ce qui a changé**.
+
+- **Manifest du dépôt** : pour chaque fichier, `chemin relatif`, `taille`,
+  `horodatage`, **hash de contenu**, paramètres de chunking. Chaque fichier est
+  classé : `Inchangé / Ajouté / Modifié / Supprimé`.
+- **Génération incrémentale** : les chunks de fichiers inchangés sont rechargés
+  du disque ; seuls les fichiers modifiés sont reparsés.
+- **Cache d'embeddings** : chaque chunk a un identifiant stable (chemin +
+  plage + contenu). Les embeddings existants sont rechargés ; seuls les nouveaux
+  chunks sont inférés.
+- **Cache de requêtes** : les requêtes identiques renvoient directement les
+  classements en cache (transparent).
+- **Persistance atomique** : écrire dans un fichier temporaire puis remplacer
+  atomiquement, pour ne jamais corrompre un index interrompu.
+
+## 6. Génération de réponse
+
+- **Construction du contexte** : les chunks récupérés sont concaténés, chaque
+  fragment conserve source + positions + contenu.
+- **Réponses ancrées** : correction (reflète fidèlement le contexte),
+  traçabilité (chaque affirmation provient d'un chunk), concision.
+- **Anti-hallucination** : consigne explicite de répondre **uniquement** d'après
+  le contexte, contexte limité aux chunks les mieux classés, et optionnellement
+  vérification de pertinence BM25 (si le score est trop faible → réponse
+  dédiée « Aucune information suffisamment pertinente n'a été trouvée »).
+
+## 7. Interface terminale interactive (bonus)
+
+Sept onglets : **Home, Index, Search, Search Dataset, Answer, Answer Dataset,
+Settings**. Logbooks persistants, rendu par événements, configuration persistée
+(`config.ini`), thèmes de couleur. (Implémentation légère — stdlib curses.)
+
+## 8. Instructions
+
+### 8.1. Exigences
+- Python 3.10+.
+- Terminal supportant ANSI + Unicode.
+- GPU **non** requis (fonctionne en CPU).
+
+### 8.2. Installation
+```bash
+pip install -r requirements.txt   # ou make install
+```
+
+### 8.3. Indexation
+```bash
+python3 rag.py index                 # BM25 seul
+python3 rag.py index --hybrid        # hybride (+ embeddings)
+```
+
+### 8.4. Recherche
+```bash
+python3 rag.py search "Comment vLLM planifie-t-il les requêtes ?"
+python3 rag.py search "..." --hybrid --k 5
+```
+
+### 8.5. Génération de réponse
+```bash
+python3 rag.py answer "Comment vLLM planifie-t-il les requêtes ?"
+```
+
+### 8.6. Évaluation
+```bash
+python3 rag.py evaluate --results results.json --dataset dataset.json
+```
+Rapporte **Recall@1, Recall@3, Recall@5, Recall@k**.
+
+### 8.7. API HTTP (bonus)
+```bash
+python3 rag.py api   # FastAPI sur :8000 (/search, /answer)
+```
+
+## 9. Bonus
+
+| Bonus | Implémentation |
+|---|---|
+| Récupération sémantique | Embeddings (modèle local/hashing) + recherche cosinus |
+| Recherche hybride | Reciprocal Rank Fusion |
+| Indexation incrémentale | Manifest + hash + rechargement sélectif |
+| Caches persistants | Cache requêtes + cache embeddings |
+| API HTTP | FastAPI (optionnel) |
+| Interface terminale interactive | curses |
+| Configuration persistée | `config.ini` |
+| Fallback BM25 automatique | dégradation gracieuse |
+| Symboles AST | extraction + bonus |
+| Hiérarchie Markdown | préservation des titres |
+| Expansion de requête | étendue pondérée |
+| Anti-hallucination | consigne + vérification de pertinence |
+
+## 10. Tests
+
+Suite pytest complète couvrant : chunking (AST/Markdown/texte/symboles/
+localisations), BM25 (indexation, score, classement), embeddings/cosine,
+RRF hybride, indexation incrémentale (manifest, hash, rechargement), caches
+(requête + embedding), génération ancrée, évaluation Recall@k, persistance
+atomique, fallback, et scénarios d'intégration de bout en bout.

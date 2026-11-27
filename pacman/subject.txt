@@ -1,0 +1,173 @@
+Pacman — Ghosts! More ghosts!
+Sujet complet
+Version : 1.5
+(Projet de jeu — École 42)
+
+============================================================
+PARTIE OBLIGATOIRE
+============================================================
+
+-- Objectif --
+Recréer l'expérience arcade du jeu Pac-Man (Namco, 1980) : le joueur
+contrôle Pac-Man à travers un labyrinthe, collecte des pac-gums (points),
+évite — ou quand c'est possible, dévore — quatre fantômes, et progresse
+niveau après niveau en cherchant le score le plus élevé.
+
+-- Monde --
+- Un labyrinthe **généré procéduralement** (non-parfait : il contient des
+  boucles et supprime les impasses, ce qui donne des couloirs à la
+  Pac-Man). Chaque niveau génère son propre labyrinthe à partir d'une
+  largeur, d'une hauteur et d'une graine (seed) de reproduction.
+- Le labyrinthe est un grille de cellules ; chaque cellule porte les
+  murs (nord/est/sud/ouest) qui la délimitent. Un mouvement est possible
+  d'une cellule vers sa voisine si le mur entre les deux est absent.
+- **Tunnel** : une ouverture sur le bord gauche et le bord droit du
+  labyrinthe permet à Pac-Man et aux fantômes de faire l'aller-retour
+  (téléportation d'un bord à l'autre).
+
+-- Personnages --
+- **Pac-Man** : contrôlé par le joueur. Déplacement sur la grille,
+  contraint par les murs. Il collecte les pac-gums en passant sur leurs
+  cellules.
+- **Quatre fantômes** : Blinky (rouge), Pinky (rose), Inky (bleu), Clyde
+  (orange). Chaque fantôme possède un **comportement autonome** et une
+  **couleur**. Ils se déplacent sur la même grille que Pac-Man.
+
+-- Comportement des fantômes (IA) --
+Chaque fantôme alterne entre deux grands modes, avec une phase de
+**peur** et une phase de **mort** :
+- **Chasse (chase)** : le fantôme se dirige vers une case cible liée à
+  la position de Pac-Man.
+  - Blinky cible la case de Pac-Man.
+  - Pinky cible une case en avant de Pac-Man (anticipation).
+  - Inky est imprévisible : moitié du temps il chasse comme Blinky,
+    moitié du temps il prend un mouvement aléatoire.
+  - Clyde cible Pac-Man s'il est loin, sinon retourne vers son coin.
+- **Dispersion (scatter)** : le fantôme se dirige vers son coin attitré.
+- **Peur (frightened)** : après que Pac-Man a mangé un **super pac-gum**,
+  les fantômes deviennent vulnérables (bleus), se déplacent aléatoirement
+  et peuvent être mangés pour un **bonus de points**. La durée de la peur
+  est limitée ; en fin de peur les fantômes reprennent leur chasse.
+- **Mort (dead)** : un fantôme mangé retourne à sa maison (ghost house)
+  et réapparaît après un délai.
+
+-- Règles de jeu --
+- **Pac-gums** : une cellule du labyrinthe contient un pac-gum (petit
+  point). Manger un pac-gum donne des points.
+- **Super pac-gums** : des pac-gums « gros » (power pellets) rendent les
+  fantômes vulnérables (phase de peur). Manger un super pac-gum donne
+  un bonus de points plus élevé.
+- **Rencontre avec un fantôme** :
+  - si le fantôme est en mode chasse/dispersion, Pac-Man perd **une
+    vie** et respawn au centre ; les fantômes retournent à leurs coins.
+  - si le fantôme est en mode peur (vulnérable), Pac-Man peut le manger
+    pour un **bonus de points** ; le fantôme entre en mode mort et
+    retourne à sa maison.
+- **Vies** : le joueur commence avec un nombre de vies donné (par
+  défaut 3). Quand il n'y a plus de vie, le jeu est fini (game over).
+- **Timer** : chaque niveau a une limite de temps. Le temps écoulé
+  fait perdre une vie (et le timer relance) ; les pac-gums déjà mangés
+  restent mangés.
+- **Fin de niveau** : quand **tous les pac-gums** du labyrinthe ont
+  été mangés, le niveau est terminé et le joueur passe au niveau suivant.
+
+-- Score --
+- Un compteur de points (score) totalise les points gagnés (pac-gums,
+  super pac-gums, fantômes mangés, fruit bonus).
+- Le score **haute score** (highscore) est conservé entre les parties.
+
+-- Interface --
+- Pac-Man est contrôlé par les flèches directionnelles ou W/A/S/D.
+- Pause : Espace ou Échap.
+- Menus : écran de menu principal, écran d'instructions, écran de pause,
+  écran de haute score, écran de victoire et d'arrêt de jeu.
+
+============================================================
+CONFIGURATION
+============================================================
+
+Le jeu est configuré par un fichier JSON. Il contient les paramètres
+généraux et un tableau `levels`. Chaque niveau précise son nom, la
+largeur et la hauteur du labyrinthe en cellules, le nombre de pac-gums
+normaux, la graine du labyrinthe et le temps limite en secondes.
+
+Paramètres généraux (défauts) :
+- `highscore_filename` : `highscores.json` — fichier des scores.
+- `lives` : `3` — vies de départ.
+- `screen_width` / `screen_height` : taille de la fenêtre.
+- `level_max_time` : temps de niveau par défaut.
+- `points_per_pacgum` : `10` — points d'un pac-gum.
+- `points_per_super_pacgum` : `50` — points d'un super pac-gum.
+- `points_per_ghost` : `200` — points d'un fantôme mangé.
+
+Niveaux par défaut (10 niveaux) :
+| Niveau | Labyrinthe | Pac-gums | Graine | Temps (s) |
+| --- | --- | --- | --- | --- |
+| 1 | 10 x 10 | 5 | 42 | 90 |
+| 2 | 15 x 15 | 8 | 0 | 180 |
+| 3 | 20 x 21 | 13 | 0 | 200 |
+| 4 | 25 x 25 | 16 | 0 | 250 |
+| 5 | 30 x 30 | 19 | 0 | 300 |
+| 6 | 35 x 35 | 23 | 0 | 350 |
+| 7 | 39 x 39 | 26 | 0 | 400 |
+| 8 | 42 x 42 | 30 | 0 | 450 |
+| 9 | 45 x 45 | 33 | 0 | 500 |
+| 10 | 20 x 20 | 8 | 0 | 550 |
+
+Le parseur de configuration valide les valeurs et retombe sur les
+défauts `GameConfig` pour les valeurs invalides ou absentes. Le fichier
+doit être un JSON valide ; les lignes de commentaire (`#`) sont ignorées.
+
+============================================================
+BONUS
+============================================================
+
+- **Fruit bonus** : un fruit apparaît à des instants précis (après un
+  certain nombre de pac-gums mangés) et peut être mangé pour un bonus de
+  points.
+- **Haute score persistée** : les scores sont sauvegardés dans un fichier
+  JSON ; écran de haute score ; saisie du nom (10 caractères alphanum.
+  ou espaces) ; seul le **top 10** est conservé, trié du plus haut.
+- **Mode cheat** : écran de cheat (invincibilité, etc.) pour la revue
+  par les pairs.
+- **Vies supplémentaires** : une vie bonus tous les 10 000 points.
+- **Tunnel** : téléportation d'un bord à l'autre pour Pac-Man et les
+  fantômes.
+- **Animations** : Pac-Man et les fantômes animés ; écrans de
+  transition (fin de niveau, mort, game over).
+- **10 niveaux** configurables avec tailles et objectifs variés.
+- **Son / musique** (effet de mange, bonus, mort, etc.).
+
+============================================================
+IMPLEMENTATION
+============================================================
+
+Stack : Python 3. Moteur de jeu **pur** (sans I/O) testable unitairement,
+interface en `curses` (terminal) pour rester autonome et sans dépendance
+graphique lourde.
+
+Structure :
+- `subject.txt` : énoncé complet.
+- `src/maze.py` : génération du labyrinthe (non-parfait) + modèle Cell.
+- `src/model.py` : Position, Direction, Pacman, Ghost, Pacgum, GameStatus.
+- `src/ghosts.py` : IA des fantômes (chasse/dispersion/peur/mort) +
+  recherche de chemin (BFS).
+- `src/game.py` : moteur de jeu (déplacement, collisions, score, vies,
+  timer, niveaux, fin de partie).
+- `src/config.py` : parseur JSON robuste (GameConfig).
+- `src/highscore.py` : validation + top 10 persisté JSON.
+- `pac-man.py` : point d'entrée + interface curses.
+- `tests/` : suite complète (pytest).
+
+============================================================
+TESTS
+============================================================
+
+Suite complète et déterministe :
+- Maze : génération, reproduction (seed), non-parfait, murs, tunnel.
+- Modèle : Position/Direction, Pacman, Ghost, Pacgum, GameStatus.
+- IA des fantômes : chasse, dispersion, peur, mort, BFS.
+- Moteur : déplacement, collisions, score, vies, timer, fin de niveau,
+  game over, victoire.
+- Configuration : parsing valide/invalide, defaults.
+- Haute score : validation nom/score, top 10, tri, persistance.
