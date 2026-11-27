@@ -1,0 +1,7 @@
+# Fly-In runtime dependencies.
+# The project itself only needs the Python standard library (3.10+).
+# Pillow is optional and only used by the extra GIF/frame renderer (bonus).
+# --- dev / validation tooling ---
+pytest>=7.0
+flake8>=6.0
+mypy>=1.0

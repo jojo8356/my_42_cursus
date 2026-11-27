@@ -152,3 +152,6 @@ exam_rank_03/powerset/powerset
 exam_rank_03/rip/rip
 exam_rank_03/tsp/tsp
 exam_rank_03/tests/__pycache__/
+
+# Fly-In dev virtual environment (tooling, not a project artifact)
+.flyin_venv/
