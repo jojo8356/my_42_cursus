@@ -1,0 +1,302 @@
+{
+  "name": "Arrakis",
+  "start_room": "loc.arrakeen_gate",
+  "sleep_room": "loc.guest_room",
+  "items": [
+    {
+      "id": "item.crysknife",
+      "name": "Crysknife",
+      "description": "A blade ground from the tooth of a sandworm, sacred to the Fremen.",
+      "damage": 8,
+      "value": 90
+    },
+    {
+      "id": "item.maker_hooks",
+      "name": "Maker Hooks",
+      "description": "Riding hooks forged for calling a sandworm.",
+      "damage": 5,
+      "value": 60
+    },
+    {
+      "id": "item.thumper",
+      "name": "Thumper",
+      "description": "A spike that drums the sand and summons Shai-Hulud.",
+      "damage": 2,
+      "value": 25
+    },
+    {
+      "id": "item.stillsuit",
+      "name": "Stillsuit",
+      "description": "A full-body suit that recycles every drop of water.",
+      "armor": 6,
+      "value": 75
+    },
+    {
+      "id": "item.water_of_life",
+      "name": "Water of Life",
+      "description": "A green vial of the spice essence.",
+      "heal": 40,
+      "value": 120
+    },
+    {
+      "id": "item.raw_melange",
+      "name": "Raw Melange",
+      "description": "A fistful of unrefined spice.",
+      "value": 15
+    },
+    {
+      "id": "item.guild_solari",
+      "name": "Guild Solari",
+      "description": "A coin bearing the Spacing Guild's seal.",
+      "value": 50
+    },
+    {
+      "id": "item.fremen_token",
+      "name": "Fremen Token",
+      "description": "A carved desert stone given to those the Fremen trust.",
+      "value": 10
+    }
+  ],
+  "npcs": [
+    {
+      "id": "npc.atreides_guard",
+      "name": "Atreides Trooper",
+      "role": "dialogue",
+      "description": "A soldier of House Atreides watching the gate.",
+      "dialogue": [
+        "Watch the sand, traveller. It moves on its own out there.",
+        "House Atreides holds Arrakeen, but not for want of enemies."
+      ]
+    },
+    {
+      "id": "npc.mentat",
+      "name": "Thufir Mentat",
+      "role": "dialogue",
+      "description": "A Mentat computing the odds of every outcome.",
+      "dialogue": [
+        "I calculate a nine per cent chance you survive the deep desert.",
+        "A mentat cannot lie to himself. That is the whole discipline."
+      ]
+    },
+    {
+      "id": "npc.spice_merchant",
+      "name": "Chani",
+      "role": "quest_giver",
+      "description": "A Fremen woman weighing spice on a copper scale.",
+      "dialogue": [
+        "Bring me melange and I will remember your face.",
+        "The desert takes, but it also pays."
+      ]
+    },
+    {
+      "id": "npc.smuggler",
+      "name": "Gurney Smuggler",
+      "role": "quest_giver",
+      "description": "A scarred smuggler with a ballad on his lips.",
+      "dialogue": [
+        "The Harkonnen patrol the ridge. Thin their numbers.",
+        "Every blade sings a different song."
+      ]
+    },
+    {
+      "id": "npc.sietch_elder",
+      "name": "Sietch Elder",
+      "role": "quest_giver",
+      "description": "An old Fremen who remembers the water before the desert.",
+      "dialogue": [
+        "My people trust tokens, not words.",
+        "Walk with the sand, and it will walk with you."
+      ]
+    },
+    {
+      "id": "npc.harkonnen_scout",
+      "name": "Harkonnen Scout",
+      "role": "enemy",
+      "description": "A Harkonnen scout in ink-black armour.",
+      "dialogue": [
+        "You are in the wrong desert."
+      ],
+      "hp": 30,
+      "damage": 10,
+      "gold_drop": 20
+    },
+    {
+      "id": "npc.shai_hulud",
+      "name": "Shai-Hulud",
+      "role": "enemy",
+      "description": "A maker, old as the desert itself.",
+      "dialogue": [
+        "The sand opens."
+      ],
+      "hp": 60,
+      "damage": 18,
+      "gold_drop": 40
+    }
+  ],
+  "rooms": [
+    {
+      "id": "loc.arrakeen_gate",
+      "name": "Arrakeen South Gate",
+      "description": "The gate of Arrakeen opens onto an ocean of sand. A trooper stands watch.",
+      "exits": {
+        "north": "loc.palace_courtyard",
+        "east": "loc.market",
+        "south": "loc.deep_desert"
+      },
+      "items": [
+        "item.thumper"
+      ],
+      "npcs": [
+        "npc.atreides_guard"
+      ]
+    },
+    {
+      "id": "loc.palace_courtyard",
+      "name": "Palace Courtyard",
+      "description": "The courtyard of the Atreides residence, tiled in pale stone.",
+      "exits": {
+        "south": "loc.arrakeen_gate",
+        "east": "loc.market",
+        "west": "loc.cantina"
+      },
+      "items": [
+        "item.stillsuit"
+      ],
+      "npcs": [
+        "npc.mentat"
+      ]
+    },
+    {
+      "id": "loc.market",
+      "name": "Arrakeen Market",
+      "description": "Spice traders hawk their wares under awnings stiff with dust.",
+      "exits": {
+        "west": "loc.palace_courtyard",
+        "south": "loc.arrakeen_gate",
+        "north": "loc.guest_room"
+      },
+      "items": [
+        "item.raw_melange",
+        "item.raw_melange"
+      ],
+      "npcs": [
+        "npc.spice_merchant"
+      ]
+    },
+    {
+      "id": "loc.guest_room",
+      "name": "Guest Room",
+      "description": "A quiet room with a cot and a water basin. You could rest here.",
+      "exits": {
+        "south": "loc.market"
+      },
+      "items": [],
+      "npcs": [],
+      "can_sleep": true
+    },
+    {
+      "id": "loc.cantina",
+      "name": "Smugglers' Cantina",
+      "description": "A low room smelling of spice beer and secrets.",
+      "exits": {
+        "east": "loc.palace_courtyard",
+        "north": "loc.smugglers_den"
+      },
+      "items": [
+        "item.crysknife"
+      ],
+      "npcs": [
+        "npc.smuggler"
+      ]
+    },
+    {
+      "id": "loc.smugglers_den",
+      "name": "Smugglers' Den",
+      "description": "A cave stacked with crates and Harkonnen contraband.",
+      "exits": {
+        "south": "loc.cantina"
+      },
+      "items": [
+        "item.water_of_life"
+      ],
+      "npcs": [
+        "npc.harkonnen_scout"
+      ]
+    },
+    {
+      "id": "loc.deep_desert",
+      "name": "Deep Desert",
+      "description": "Dunes stretch in every direction. Something enormous moves beneath them.",
+      "exits": {
+        "north": "loc.arrakeen_gate",
+        "east": "loc.sietch_tabr"
+      },
+      "items": [
+        "item.maker_hooks"
+      ],
+      "npcs": []
+    },
+    {
+      "id": "loc.sietch_tabr",
+      "name": "Sietch Tabr",
+      "description": "A Fremen sietch carved into the rock, cool and echoing.",
+      "exits": {
+        "west": "loc.deep_desert",
+        "south": "loc.sandworm_pit"
+      },
+      "items": [
+        "item.fremen_token"
+      ],
+      "npcs": [
+        "npc.sietch_elder"
+      ]
+    },
+    {
+      "id": "loc.sandworm_pit",
+      "name": "Sandworm Pit",
+      "description": "A bowl of sand ringed by rock. The ground trembles.",
+      "exits": {
+        "north": "loc.sietch_tabr"
+      },
+      "items": [
+        "item.guild_solari"
+      ],
+      "npcs": [
+        "npc.shai_hulud"
+      ]
+    }
+  ],
+  "quests": [
+    {
+      "id": "quest.spice_harvest",
+      "giver": "npc.spice_merchant",
+      "description": "Bring Chani 2 raw melange from the market.",
+      "type": "fetch",
+      "target": "item.raw_melange",
+      "target_count": 2,
+      "reward": "item.guild_solari",
+      "reward_count": 1
+    },
+    {
+      "id": "quest.harkonnen_raid",
+      "giver": "npc.smuggler",
+      "description": "Defeat the Harkonnen scout in the smugglers' den.",
+      "type": "kill",
+      "target": "npc.harkonnen_scout",
+      "target_count": 1,
+      "reward": "item.crysknife",
+      "reward_count": 1
+    },
+    {
+      "id": "quest.fremen_trust",
+      "giver": "npc.sietch_elder",
+      "description": "Recover the Fremen token from Sietch Tabr.",
+      "type": "fetch",
+      "target": "item.fremen_token",
+      "target_count": 1,
+      "reward": "item.maker_hooks",
+      "reward_count": 1,
+      "requires": "quest.spice_harvest"
+    }
+  ]
+}
