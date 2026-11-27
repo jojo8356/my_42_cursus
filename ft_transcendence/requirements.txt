@@ -2,3 +2,8 @@ Django>=4.2,<5.0
 channels>=4.0
 djangorestframework>=3.14
 PyJWT>=2.8
+# Production ASGI server (handles HTTP + websockets) and WSGI fallback
+daphne>=4.1
+gunicorn>=21.2
+# Serve collected static files in production (self-contained container)
+whitenoise>=6.6

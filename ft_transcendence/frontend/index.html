@@ -60,7 +60,13 @@
         <div class="col-md-8">
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-              <span data-i18n="pong_title">Pong</span>
+              <span>
+                <label class="me-2" for="game-select" data-i18n="game_select">Game</label>
+                <select id="game-select" class="form-select form-select-sm w-auto d-inline-block">
+                  <option value="pong" data-i18n="pong_title">Pong</option>
+                  <option value="connect4" data-i18n="connect4_title">Connect-4</option>
+                </select>
+              </span>
               <div>
                 <label class="form-check-label me-2"><input type="checkbox" id="vs-ai" /> <span data-i18n="vs_ai">vs AI</span></label>
                 <button id="start-game" class="btn btn-success btn-sm" data-i18n="start_game">Start Game</button>
@@ -68,19 +74,34 @@
             </div>
             <div class="card-body p-0">
               <canvas id="pong-canvas" width="800" height="600"></canvas>
+              <canvas id="connect4-canvas" width="640" height="560" class="d-none"></canvas>
             </div>
           </div>
-          <div class="mt-2">
+          <div class="mt-2 d-flex gap-2 flex-wrap">
             <button id="customize-btn" class="btn btn-outline-secondary btn-sm" data-i18n="customize">Customize</button>
             <button id="powerup-btn" class="btn btn-outline-warning btn-sm d-none" data-i18n="powerup">Power-up</button>
+            <span id="connect4-controls" class="d-none">
+              <button class="connect4-col btn btn-outline-secondary btn-sm" data-col="0">1</button>
+              <button class="connect4-col btn btn-outline-secondary btn-sm" data-col="1">2</button>
+              <button class="connect4-col btn btn-outline-secondary btn-sm" data-col="2">3</button>
+              <button class="connect4-col btn btn-outline-secondary btn-sm" data-col="3">4</button>
+              <button class="connect4-col btn btn-outline-secondary btn-sm" data-col="4">5</button>
+              <button class="connect4-col btn btn-outline-secondary btn-sm" data-col="5">6</button>
+              <button class="connect4-col btn btn-outline-secondary btn-sm" data-col="6">7</button>
+            </span>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card">
             <div class="card-header" data-i18n="instructions">Controls</div>
             <div class="card-body small">
-              <p><b>Player 1 (left):</b> <code>W</code> / <code>S</code></p>
-              <p><b>Player 2 (right):</b> <code>↑</code> / <code>↓</code></p>
+              <p id="pong-controls">
+                <b>Player 1 (left):</b> <code>W</code> / <code>S</code><br />
+                <b>Player 2 (right):</b> <code>↑</code> / <code>↓</code>
+              </p>
+              <p id="connect4-controls-help" class="d-none">
+                <b data-i18n="connect4_help">Click a column (1-7) to drop a piece. First to align 4 wins.</b>
+              </p>
               <p class="text-muted" data-i18n="ai_note">AI moves at the same paddle speed and refreshes once per second.</p>
             </div>
           </div>

@@ -155,3 +155,9 @@ exam_rank_03/tests/__pycache__/
 
 # Fly-In dev virtual environment (tooling, not a project artifact)
 .flyin_venv/
+
+# Python virtual environments (tooling, not project artifacts)
+.ft_venv/
+.cm_venv/
+*_venv/
+env/

@@ -1,0 +1,21 @@
+# Keep the build context lean (exclude local env, caches, DB, media).
+.git
+.gitignore
+.venv
+venv
+.ft_venv
+__pycache__
+*.py[cod]
+db.sqlite3
+db.sqlite3-journal
+*.log
+/staticfiles/
+/media/
+.env
+.env.local
+*.env
+Dockerfile
+docker-compose.yml
+nginx.conf
+docker-entrypoint.sh
+.dockerignore
