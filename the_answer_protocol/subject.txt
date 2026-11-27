@@ -1,0 +1,290 @@
+================================================================================
+ THE ANSWER PROTOCOL (TAP) — 42 Common Core (Milestone 4: AI & networks)
+ A shared-world multiplayer MUD over RFC 42TAP — server, CLI client, GUI client
+================================================================================
+
+I. DESCRIPTION
+--------------------------------------------------------------------------------
+The Answer Protocol is a small multiplayer text adventure (a MUD) played over
+TCP. Multiple players connect concurrently to ONE shared world: they walk through
+interconnected rooms, pick up and drop items, talk to NPCs, fight hostile
+creatures, complete quests, chat and form groups — all in real time.
+
+The project is built around RFC 42TAP, a line-based protocol:
+
+  * UTF-8 text, ONE message per line, terminated by LF (0x0A).
+  * A client sends one COMMAND per line.
+  * The server answers each command with exactly ONE reply line:
+        OK ...                      success, with the payload the command defines
+        ERR <code> <CONSTANT>       failure, with a numeric code and a symbol
+  * The server also pushes ASYNCHRONOUS events, at any time:
+        EVT <SCOPE> <TYPE> <data...>
+        (GLOBAL) <user>: <message>  and the ROOM / GROUP variants for chat
+  * Command verbs are case-insensitive; arguments preserve their case.
+
+Three deliverables:
+
+  * SERVER        authoritative game server: world state, protocol, events
+  * CLIENT CLI    terminal client, non-blocking: incoming events must not in-
+                  terrupt what the user is typing
+  * CLIENT GUI    graphical client (the subject allows any technology: a local
+                  web UI served over HTTP is accepted)
+
+The world is loaded from a data file at startup and validated: every exit, item,
+NPC and quest reference must resolve, or the server refuses to start.
+
+II. INSTRUCTIONS
+--------------------------------------------------------------------------------
+Prerequisites
+  * Python 3.10+ (the core is stdlib only: no mandatory dependency)
+  * Optional, for tests/coverage: pytest and coverage
+
+Build and run
+    make install                       # optional test/coverage dependencies
+    make test                          # the whole test suite
+    make coverage                      # tests + 100% source branch coverage
+    make run-server                    # defaults to 127.0.0.1:4242
+    make run-server PORT=4243          # custom port
+    make run-client                    # CLI client (another terminal)
+    make run-client-gui                # GUI client: http://127.0.0.1:8080
+
+Manual launch
+    python3 tap.py server --host 127.0.0.1 --port 4242 --world data/world.json
+    python3 tap.py client --host 127.0.0.1 --port 4242
+    python3 tap.py gui --host 0.0.0.0 --port 8080 \
+        --tap-host 127.0.0.1 --tap-port 4242
+
+III. RESOURCES
+--------------------------------------------------------------------------------
+  * RFC 42TAP — "The Answer Protocol: A TCP-Based Multi-User Dungeon
+    Communication Protocol", 42 School Network Working Group.
+  * Python `socket`, `selectors`, `asyncio`, `threading`, `json` documentation.
+  * Classic MUD design (rooms, exits, NPCs, quests, groups).
+
+IV. ARCHITECTURE
+--------------------------------------------------------------------------------
+    tap.py                     CLI entry point: server / client / gui
+    src/protocol.py            RFC 42TAP: ABNF-shaped parser, replies, events,
+                               JSON payloads, the error table
+    src/world.py               world model (rooms, items, NPCs, quests) + loader
+                               + startup referential-integrity validation
+    src/state.py               authoritative GameState: players, groups, combat,
+                               quests, inventory, market, flood control
+    src/server.py              TCP server: one task per connection, per-client
+                               outbound queue, broadcast routing, JSON logging
+    src/client_cli.py          non-blocking terminal client
+    src/client_gui.py          HTTP + WebSocket GUI client
+    src/logging_json.py        structured JSON logging
+
+The server is a SINGLE-PROCESS, MULTI-TASK design:
+
+  * a listener accepts connections and spawns one handler per client;
+  * each client has an INDEPENDENT OUTBOUND QUEUE: a slow or dead socket can
+    never block a broadcast, and a failing send drops that client only;
+  * inbound lines are buffered by a per-connection reader, so TCP fragmentation
+    and coalescing across LF boundaries are handled correctly;
+  * the authoritative state is guarded, so two players can never take the same
+    item simultaneously.
+
+V. PROTOCOL (RFC 42TAP)
+--------------------------------------------------------------------------------
+Connection flow
+  1. Client connects over TCP.
+  2. Server immediately greets:                 OK hello proto=1
+  3. Before CONNECT, only CONNECT and QUIT are accepted; anything else answers
+     ERR <auth code> NOT_AUTHENTICATED.
+  4. CONNECT <username> authenticates. The name is 1..20 characters, alphanumeric,
+     underscore or hyphen only. A duplicate name answers ERR 201 NAME_IN_USE, an
+     invalid one ERR 202 INVALID_USER_NAME.
+  5. QUIT answers OK bye then closes; EOF or a socket error performs the same
+     cleanup.
+
+Commands (obligatory)
+  CONNECT <username>            OK Connected
+  LOOK                          OK <JSON room: id, name, description, exits,
+                                   players, items, npcs>
+  MOVE <direction>              OK room=<new_room_id>
+  WHO                           OK players=<count>
+  CHAT GLOBAL|ROOM|GROUP <msg>  OK
+  TALK <npc>                    OK <JSON npc + dialogue>
+  TAKE <item>                   OK taken=<item_id>
+  DROP <item>                   OK dropped=<item_id>
+  INVENTORY                     OK <JSON array of item ids>
+  EXAMINE <item>                OK <JSON item details>
+  ATTACK <npc>                  OK <JSON hp/damage/status>
+  STATUS                        OK <JSON hp, max_hp, gold, status>
+  QUEST <npc>                   OK <JSON quest offer or completion>
+  QUESTS                        OK <JSON array of quest states>
+  ABANDON_QUEST <quest>         OK <JSON abandoned state>
+  SLEEP                         OK <full-health reply in a safe room>
+  DEFEND / FLEE                 OK <JSON combat state>
+  HELP                          OK commands=<supported verbs>
+  GROUP CREATE <name>           OK group=<id>
+  GROUP INVITE <player>         OK
+  GROUP JOIN <group|inviter>    OK group=<id>
+  GROUP LEAVE / KICK <player>   OK
+  GROUP DISBAND / INFO          OK / OK <JSON group state>
+  QUIT                          OK bye
+
+Name matching: NPCs and items are matched by PARTIAL id, so `TALK guard`
+resolves `npc.guard` and `TAKE sword` resolves `item.sword`.
+
+Replies are exact: a command that succeeds answers exactly one OK line bearing
+the payload the RFC specifies for it (JSON payloads are COMPACT — a newline would
+split the message — and an empty collection is [], never null).
+
+Events (asynchronous)
+  EVT ROOM PRESENCE ENTER <player>          someone entered your room
+  EVT ROOM PRESENCE LEAVE <player>          someone left your room
+  EVT ROOM ITEM TAKE <player> <item>        someone picked an item up
+  EVT ROOM ITEM DROP <player> <item>        someone dropped an item
+  EVT ROOM COMBAT <player> attacks <npc> ... a fight round you can see
+  EVT ROOM COMBAT <npc> defeated by <player>
+  EVT ROOM COMBAT <player> was killed by <npc>
+  EVT GROUP INVITE <inviter>                you have been invited
+  EVT GROUP JOIN <player>                   a player joined your group
+  EVT GROUP LEAVE <player>                  a player left your group
+  EVT GROUP LEADER <player>                 leadership transferred
+  EVT STATS players=<count>                 the online count changed
+  (GLOBAL)/(ROOM)/(GROUP) <user>: <message>
+ENTER / LEAVE events exclude the player who caused them (they already got the
+reply); CHAT includes the sender, per the RFC's example.
+
+Error codes (§7.2 — normative RFC entries are not changed)
+  201 NAME_IN_USE              username already taken
+  301 NO_EXIT                  no exit in that direction
+  401 NOT_IN_GROUP             group command without a group
+  402 ALREADY_IN_GROUP         already in a group / already invited
+  404 ITEM_NOT_FOUND           item not in the room
+  404 ITEM_NOT_IN_INVENTORY    item not carried
+  404 NPC_NOT_FOUND            NPC not in the current room
+  404 PLAYER_NOT_FOUND         player not connected
+  404 GROUP_NOT_FOUND          group does not exist
+  404 PLAYER_NOT_IN_GROUP      target is not in the group
+  405 NPC_NOT_HOSTILE          attacking a friendly NPC
+  406 NO_QUEST_AVAILABLE       no quest, or already completed
+  900 CONNECTION_FAILED        TCP-level failure
+  901 SEND_FAILED              sending a reply failed
+  902 FLOODING                 client exceeded the rate limit
+
+Code 404 is intentionally shared: clients and servers MUST key on the SYMBOL,
+never on the code alone. The code carries only the severity split.
+
+Documented implementation extensions
+  202 INVALID_USER_NAME        bad username (1–20 ASCII letters/digits/_/-)
+  211 GROUP_NAME_IN_USE        group id already taken
+  212 INVALID_GROUP_NAME       group id outside 1–25 ASCII letters/digits/_/-
+  400 NOT_AUTHENTICATED        CONNECT first
+  400 BAD_REQUEST              malformed request or invalid CHAT scope
+  400 UNKNOWN_COMMAND          verb or subcommand not implemented
+  400 MISSING_ARGUMENT         required token absent
+  403 NOT_GROUP_LEADER         group leadership required
+  407 CANNOT_INVITE_SELF       cannot invite oneself
+  407 CANNOT_KICK_SELF         cannot kick oneself
+  407 NOT_INVITED              no invitation for this group
+  404 QUEST_NOT_ACTIVE         quest is not currently active
+  408 QUEST_NOT_COMPLETE       objective not yet satisfied
+  409 PLAYER_DEAD              player is awaiting respawn
+  409 ALREADY_CONNECTED        this socket already has a player
+  410 CANNOT_SLEEP_HERE         room is not a sleep location
+  413 LINE_TOO_LONG             line exceeds 1024 UTF-8 bytes
+  415 NOT_IN_COMBAT             DEFEND/FLEE require an active fight
+  416 IN_COMBAT                 MOVE is refused until FLEE or victory
+
+A command is parsed as {verb, scope, sub, arg} with ONE free-form rest-of-line
+argument, so multi-word chat and item names survive. Every non-empty line gets
+exactly one OK/ERR reply; asynchronous events may be interleaved on that stream.
+
+VI. WORLD
+--------------------------------------------------------------------------------
+The world file declares rooms, items, NPCs and quests:
+
+  rooms   id, name, description, exits {direction: room_id}, items, npcs
+  items   id, name, description, damage / armor / heal, value, obtainable
+  npcs    id, name, role (dialogue | quest_giver | enemy), dialogue, hp, damage
+  quests  id, giver, type (fetch | kill | deliver), target, target_count,
+          reward, description, requires (prerequisite quest)
+
+Startup validation refuses to start when an exit targets an unknown room, a room
+references an unknown item or NPC, or a quest references an unknown giver, target
+or reward. Ids are canonicalised once at load (loc./item./npc./quest. prefixes) so
+the world file stays readable and the wire stays unambiguous.
+
+VII. COMBAT, QUESTS AND GROUPS (team design, RFC §6.1)
+--------------------------------------------------------------------------------
+Combat
+  * Turn-based: the player strikes first on ATTACK, then a surviving enemy
+    counter-attacks in the same round.
+  * Player damage = base 10 + the best carried weapon bonus; the best carried
+    armor reduces incoming damage.
+  * A friendly NPC answers 405 NPC_NOT_HOSTILE; an absent or defeated NPC answers
+    404 NPC_NOT_FOUND.
+  * A player at 0 HP is hidden from the room, then respawns after 3 seconds in the
+    start room with half HP, retaining inventory. EVT ROOM COMBAT announces it.
+  * A defeated NPC is absent for 30 seconds, then returns at max HP. DEFEND heals
+    5 HP while in combat; FLEE returns to the previous room when possible.
+  * MOVE during combat answers 416 IN_COMBAT.
+
+Quests
+  * QUEST <giver> on an unaccepted quest offers and accepts it (status active);
+    an active objective can be completed by asking again at its giver, otherwise
+    408 QUEST_NOT_COMPLETE is returned.
+  * Objective types: fetch an item (live inventory), kill a target NPC, or deliver
+    an item to a named recipient. Deliver quests are turned in at that recipient.
+  * A quest may declare `requires`: until that quest is completed the giver
+    answers 406 NO_QUEST_AVAILABLE, which is how quest chains are built.
+  * On completion the required item count is consumed and the reward is added;
+    completed quests cannot be accepted again. QUESTS reports active progress.
+  * ABANDON_QUEST <id> clears an active quest without consuming its items.
+
+Groups
+  * GROUP CREATE names a group (default: the player's name), leader = creator.
+  * GROUP INVITE (leader only) sends EVT GROUP INVITE <inviter> to the target.
+  * GROUP JOIN accepts a pending invite by group id or inviter name.
+  * GROUP LEAVE / KICK notify the remaining members; leadership transfers to the
+    first remaining member. An empty group is removed; DISBAND notifies everyone.
+  * A player is in at most one group; being in one answers 402 ALREADY_IN_GROUP.
+
+VIII. BONUS
+--------------------------------------------------------------------------------
+  * GUI client served over HTTP, with a live room view, clickable exits, chat
+    panel, inventory, HP bar and an interactive map. WebSocket bridge follows RFC
+    6455 for masking, canonical lengths, fragmentation, control/close frames,
+    UTF-8 and standard close codes; TCP connects only from the server-side bridge.
+  * Structured JSON logging: one object per line (time, level, msg, type, player,
+    ip, command, response, code).
+  * Flood control: a one-second sliding-window limiter per client. The 11th
+    command warns; command 21 returns 902 FLOODING and disconnects the client.
+  * Anti-abuse hardening: 1024-byte UTF-8 line limit, invalid UTF-8 gets
+    BAD_REQUEST, names reject control/punctuation characters, and oversized TCP
+    lines are answered once then discarded through their LF boundary.
+  * Graceful SIGINT/SIGTERM shutdown: sessions are removed, inventories dropped,
+    sockets closed, and JSON shutdown records written.
+  * Item and NPC respawn timers (30 seconds); player respawn timer (3 seconds).
+  * Server-wide STATS event so clients keep the online count live.
+  * A world editor / validator command (`tap.py check-world`).
+  * A scripted scenario runner (`tap.py demo`) that drives the protocol end to
+    end without a human, which doubles as an integration test.
+
+IX. TESTS
+--------------------------------------------------------------------------------
+The suite must cover, at minimum:
+  * protocol: parsing every command, case-insensitivity, malformed input, exact
+    reply and event formatting, JSON compactness, every error symbol;
+  * world: loading, id canonicalisation, referential-integrity failures;
+  * state: connect/disconnect, movement and events, item take/drop/respawn,
+    inventory, dialogue, combat (hit, victory, defeat, respawn), quests (accept,
+    progress, chain, completion, refusal), groups (create, invite, join, leave,
+    leadership transfer, disband);
+  * server: greeting, authentication gating, one reply per line, broadcast
+    routing excluding the sender, dead-socket isolation, flood kick;
+  * clients: the CLI sends exactly what is typed and redraws live terminal input;
+    GUI covers HTTP, the RFC 6455 handshake, all frame types, malformed frames,
+    close statuses, UTF-8, limits, and both bridge directions;
+  * integration: several simulated clients in one shared world, driven over real
+    TCP sockets, including cleanup and asynchronous room/global/group events.
+
+The implemented suite currently has 252 tests. Run `make coverage` to enforce
+100% statement and branch coverage across all source modules.
+
+================================================================================

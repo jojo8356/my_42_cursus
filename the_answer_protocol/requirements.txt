@@ -1,0 +1,4 @@
+# The server, CLI, GUI bridge, and world validator use only Python's standard library.
+# Optional development/test dependencies:
+pytest>=7.0
+coverage>=7.0
