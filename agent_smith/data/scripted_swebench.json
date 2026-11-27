@@ -1,0 +1,8 @@
+{
+  "repeat_last": false,
+  "script": [
+    "Thought: let me look at the file first.\n```python\nprint(read_file('calc.py', 1, 10))\n```",
+    "Thought: the bug is in `add`; I fix it.\n```python\nprint(edit_file('calc.py', 'return a - b   # bug', 'return a + b'))\nprint(run_tests())\n```",
+    "Thought: the tests pass, I submit the patch.\n```python\nfinal_answer('fixed add()')\n```"
+  ]
+}

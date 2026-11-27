@@ -1,0 +1,6 @@
+# The core is stdlib-only: no mandatory dependency.
+# Test dependencies:
+pytest>=7.0
+# Optional extras:
+#   pip install docker      -> DockerWorkspace backend
+#   pip install pydantic    -> schema validation in a real deployment

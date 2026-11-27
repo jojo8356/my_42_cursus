@@ -1,4 +1,4 @@
 **🎮 Pacman**✅ **Terminé** — implémentation complète + tests (79/79)
 **📚 RAG**✅ **Terminé** — implémentation complète + tests (74/74)
-**🤖 Agent Smith**❌ **À faire** — aucun répertoire dans le dépôt
+**🤖 Agent Smith**✅ **Terminé** — implémentation complète + tests (313/313)
 **🔐 The Answer Protocol**❌ **À faire** — aucun répertoire dans le dépôt

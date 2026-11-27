@@ -1,0 +1,7 @@
+{
+  "repeat_last": false,
+  "script": [
+    "Thought: I write the function then verify it with run_tests.\n```python\ndef add(a, b):\n    return a + b\nprint(run_tests('def add(a, b):\\n    return a + b'))\n```",
+    "Thought: every assertion passed, I submit.\n```python\nfinal_answer('def add(a, b):\\n    return a + b')\n```"
+  ]
+}

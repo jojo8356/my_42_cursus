@@ -1,0 +1,6 @@
+{
+  "providers": {
+    "groq": {"url": "https://api.groq.com/openai/v1", "models": ["qwen/qwen3-27b"]},
+    "gemini": {"url": "https://generativelanguage.googleapis.com/v1beta/openai", "models": ["gemini-2.0-flash"]}
+  }
+}

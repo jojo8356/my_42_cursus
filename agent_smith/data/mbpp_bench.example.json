@@ -1,0 +1,10 @@
+{
+  "tasks": [
+    {"task_id": "mbpp_001", "benchmark": "mbpp",
+     "prompt": "Write add(a, b) returning a + b.",
+     "entry_point": "add", "test_list": ["assert add(1, 2) == 3"]},
+    {"task_id": "mbpp_002", "benchmark": "mbpp",
+     "prompt": "Write mul(a, b) returning a * b.",
+     "entry_point": "mul", "test_list": ["assert mul(2, 3) == 6"]}
+  ]
+}

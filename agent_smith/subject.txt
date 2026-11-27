@@ -1,0 +1,287 @@
+================================================================================
+ AGENT SMITH — 42 Common Core (Milestone 5: DevOps & systems)
+ Autonomous coding agent — ReAct loop, sandbox, MCP tools, benchmarks
+================================================================================
+
+I. DESCRIPTION
+--------------------------------------------------------------------------------
+Agent Smith is an autonomous coding agent. Given a programming task, it reasons
+about the problem (Thought), writes Python code (Code), executes that code inside
+a restricted sandbox, and observes the result (Observation). It iterates until it
+calls `final_answer(...)` or reaches a configured limit.
+
+Unlike a one-shot LLM application, the model never sees the solution: it explores,
+uses tools, runs code and refines its answer based on REAL execution feedback.
+
+Two benchmarks are targeted:
+
+  * MBPP (Mostly Basic Python Problems)
+      Short, self-contained problems: a natural-language description plus a
+      function signature. The agent writes one Python function, verifies it
+      against the hidden unit tests through a tool, then submits.
+
+  * SWE-bench (Software Engineering Benchmark)
+      Real GitHub issues on real repositories. The agent explores the checked-out
+      repository, locates the bug, edits source files, runs the project's test
+      suite and produces a unified git patch.
+
+Central components:
+
+  * Agent loop        Thought -> Code -> Observation -> Iteration.
+  * Sandbox           A controlled execution environment for generated code:
+                      import allowlist, filesystem allowlist, no network,
+                      restricted builtins, memory and time limits.
+  * MCP integration   Tools are exposed to the agent through the Model Context
+                      Protocol, so the reasoning loop stays benchmark-agnostic:
+                      the tool list is discovered at runtime, never hardcoded.
+  * LLM providers     Several providers/models, key rotation, fallback.
+  * Traceability      Every run produces solution.json: system prompt, per-step
+                      LLM output, sandbox input/output, tokens, timing, model.
+  * Evaluation        MBPP and SWE-bench support, benchmarking of models.
+
+The main objectives: build an autonomous framework that is modular,
+configurable, measurable, secure and reproducible.
+
+II. INSTRUCTIONS
+--------------------------------------------------------------------------------
+Prerequisites
+  * Python 3.10+
+  * No mandatory third-party dependency for the core (stdlib only).
+  * Optional: an LLM provider API key to run a real model.
+
+Setup
+    make install            # install test dependencies
+    make test               # run the test suite
+
+Run the sandbox on its own (no LLM) — REPL mode
+    python3 agent_smith.py sandbox                       # bare REPL
+    python3 agent_smith.py sandbox --config data/sandbox.json
+    python3 agent_smith.py sandbox --mcp mbpp            # with the MBPP tools
+    python3 agent_smith.py sandbox --mcp swebench --repo /path/to/repo
+
+Run the agent loop
+    python3 agent_smith.py run --benchmark mbpp \
+        --task-file data/mbpp_task.example.json --output solution.json \
+        --model-name demo-model
+
+    python3 agent_smith.py run --benchmark swebench \
+        --task-file data/swe_task.example.json --output solution.json \
+        --model-name demo-model --repo /path/to/repo
+
+    python3 agent_smith.py run ... --provider-url https://api.example.com/v1
+    python3 agent_smith.py run ... --scripted data/scripted_mbpp.json
+
+Evaluate a benchmark
+    python3 agent_smith.py evaluate --benchmark mbpp --tasks-file data/mbpp_bench.json
+
+List the tools exposed by a server
+    python3 agent_smith.py tools --mcp swebench
+
+III. RESOURCES
+--------------------------------------------------------------------------------
+  * Python `ast`, `multiprocessing`, `resource`, `subprocess` documentation
+  * Model Context Protocol specification
+  * SWE-bench paper / repository
+  * Google Research MBPP dataset
+  * Pydantic (optional, for schema validation in a real deployment)
+
+IV. SYSTEM ARCHITECTURE
+--------------------------------------------------------------------------------
+    agent_smith.py              CLI: run / sandbox / evaluate / tools
+    src/models.py               Task, StepMetrics, SolutionOutput, ExecutionResult
+    src/config.py               SandboxConfig, AgentConfig (validated, loadable)
+    src/parsing.py              Code extraction from raw LLM output
+    src/sandbox.py              Restricted execution (process isolation, limits)
+    src/mcp.py                  Tool registry + dynamic manual (MCP-shaped)
+    src/tools_mbpp.py           MBPP tool server: run_tests, check_syntax
+    src/tools_swebench.py       SWE-bench tool server: the 9 mandatory tools
+    src/workspace.py            Repository backend (exec, read, atomic write, diff)
+    src/llm.py                  Provider abstraction, key rotation, fallback
+    src/agent_loop.py           Thought -> Code -> Observation loop
+    src/evaluator.py            Benchmark evaluation (pass@1, Recall-style report)
+    src/reporting.py            solution.json writer
+
+The agent side and the execution side only talk through three functions:
+
+    Sandbox.execute(code) -> ExecutionResult
+    Sandbox.get_manual()  -> str
+    Sandbox.close()       -> None
+
+The agent loop never knows which server is connected nor what tools it exposes.
+The manual injected into the system prompt is generated at runtime from the
+connected server's tool list.
+
+V. AGENT LOOP
+--------------------------------------------------------------------------------
+`AgentLoop.run(task) -> SolutionOutput` drives the loop until `final_answer` or a
+limit:
+
+  1. Prompt. The benchmark system prompt is followed by the sandbox manual, so the
+     tool list always comes from the connected server. The manual is compacted:
+     every tool signature is kept, only long allowlists inside the limits section
+     are shortened, so the allowed directories, the network ban and the
+     final_answer contract still reach the model.
+
+  2. History within budget. The task and the last turns are sent intact; older
+     observations are truncated. The window shrinks until the request fits the
+     remaining input budget (with a 10% margin). The limit is checked BEFORE each
+     request.
+
+  3. Call. The provider is built from the model's provider entry (URL + key
+     variable). Generation stops on `<end_code>` / `</tool_call>` so the model
+     cannot invent an observation.
+
+  4. Extraction. `extract_code` accepts a Python fenced block (primary format),
+     Anthropic XML `<invoke>`, Hermes `<tool_call>` JSON, ReAct `Action:` /
+     `Action Input:`, an unclosed block, or code after a bare `Code:`.
+     Non-Python calls are converted into Python calls. EVERY liberty taken is
+     named back to the model in a `note` prefixed to the observation: a converted
+     call, an unclosed block, a fence with no language tag, a fence end mistaken
+     inside a string, or an answer holding several blocks of which only the last
+     runs. Notes accumulate.
+
+  5. Execution. stdout, stderr, errors, timeouts and truncation become the next
+     Observation. When 2 iterations or 20% of the input budget remain, the model
+     is told to submit; that warning is added to the COPY of the history sent, so
+     it never lingers in stored history.
+
+  6. Provider failures. On 429 the next API key of the same provider is used. On
+     404/408/413/429/500/502/503/504 or a network error with no key left, the
+     loop switches to the next model; the new model keeps the whole history plus a
+     handover note. If every model failed, it waits and retries a full round
+     before giving up. A 413 first shrinks the history.
+
+  7. Stop. `final_answer`, or a limit (iterations, input/output tokens, wall
+     time). Every stop condition is an AgentLoopError turned into
+     SolutionOutput(success=False, error=...), never a crash. If the agent did not
+     submit, the CLI keeps the last code (MBPP) or the container's patch
+     (SWE-bench).
+
+Every step is recorded as a StepMetrics: llm_output, sandbox_input,
+sandbox_output, tokens, time, retries, model and URL used.
+
+VI. SANDBOX DESIGN
+--------------------------------------------------------------------------------
+`class Sandbox` satisfies `SandboxProtocol`: `execute(code)`, `get_manual()`,
+`close()`.
+
+Isolation
+  * A dedicated worker PROCESS (not in-process `exec()`), so a hard timeout and a
+    memory limit can really be enforced: SIGTERM on timeout, and RLIMIT_AS /
+    RLIMIT_NPROC / RLIMIT_NOFILE applied with `resource.setrlimit`.
+  * Persistence: variables and functions defined in a block remain available in
+    the next block. On a timeout the worker is replaced and the previous
+    successful blocks are replayed, so the session keeps its meaning.
+
+Security layers (stdlib only)
+  * Imports — `__import__` is replaced by an allowlist check
+    (`SandboxConfig.authorized_imports`, supporting `"pkg.*"` wildcards).
+  * Filesystem — `open()` is wrapped: paths are normalized and resolved with
+    `os.path.realpath` BEFORE being compared to `allowed_directories`, so
+    `/repo/../etc/passwd` cannot escape the allowlist.
+  * Network — `socket.socket` always raises, inside the worker only.
+  * Builtins — the namespace only exposes an explicit allowlist; dangerous ones
+    (`eval`, `exec`, `compile`, `open`, `__import__`, `input`, `breakpoint`,
+    `globals`, `help`) are removed or overridden.
+  * Attributes, checked at parse time — the code is parsed with `ast` first and
+    rejected if it touches a dunder attribute (the classic
+    `().__class__.__bases__[0].__subclasses__()` route) or a frame/code attribute
+    (`gi_frame`, `f_back`, `f_globals`, `f_builtins`, `tb_frame`, ...).
+  * Audit hook, the backstop — right before the code runs, a
+    `sys.addaudithook` hook is installed; it cannot be removed afterwards. It sees
+    what the interpreter actually does: every `open` (also `os.open`, `pathlib`)
+    must stay inside `allowed_directories` (plus the Python install, so authorized
+    modules can still be imported), and network (`socket.connect`/`bind`/
+    `getaddrinfo`), process spawning (`os.system`, `subprocess.Popen`, `os.exec*`,
+    `os.posix_spawn`) and `ctypes` events are refused.
+  * Timeout / memory — enforced by the parent (kill on deadline) and by
+    `resource.setrlimit` inside the worker.
+  * KeyboardInterrupt / SystemExit — the worker only catches `Exception`. If
+    generated code raises one itself, only the worker dies and the observation
+    reports it, so the model cannot shut the agent down.
+
+`final_answer(value)` is injected into every namespace regardless of the connected
+server: it is NOT a tool. It raises an internal exception that `execute()` catches
+and turns into `ExecutionResult.final_answer`.
+
+MCP bridge
+  * The MCP client lives in the PARENT process, never in the sandboxed worker.
+    Tool calls cross a pipe to the parent, which is why MCP tool actions are not
+    subject to the sandbox's own timeout (a tool like `run_command` can
+    legitimately take longer than the code that called it).
+  * Every tool from the connected server becomes a Python function in the sandbox
+    namespace; no tool name is ever hardcoded. Connecting a different server
+    changes the available functions and the generated manual automatically.
+
+VII. TOOL IMPLEMENTATION DETAILS
+--------------------------------------------------------------------------------
+MBPP — one mandatory tool
+  run_tests(code, test_list=None) -> {"success": bool, "output": str}
+      Runs the candidate against each assertion, one after the other, in a
+      separate process under a wall-clock timeout via SIGTERM. `output` holds the
+      first failing assertion plus captured stdout/stderr, truncated with an
+      explicit notice past max_std_length.
+  check_syntax(code) (extra) so the agent can catch a SyntaxError before spending
+  an iteration on a failed test run.
+
+SWE-bench — the nine mandatory tools
+  read_file(filepath, start_line, end_line)
+      1-based inclusive bounds, 200-line cap with a pagination hint giving the
+      next start_line. Output is `cat -n` style: "42: content".
+  edit_file(filepath, old_str, new_str)
+      Exact string replace; refuses AMBIGUOUS matches and reports all the line
+      numbers; writes atomically (temp file + rename). Returns a success message
+      plus a context window around the edit. If the edited Python file no longer
+      parses, the edit is kept but the answer says so, with the error and line.
+  list_files(directory, pattern)
+      Glob patterns, sorted, "/" suffix on directories, 100-entry pagination.
+  search_code(pattern, file_pattern)
+      Regex search, skips .git and binary files, 100-match pagination,
+      "path:line content".
+  search_function_or_class_definition_in_code(name)
+      AST-based, so it survives syntax errors in the tree.
+  find_references(name, filepath, line)
+      Word-boundary search across the workspace, excluding the definition line.
+  run_command(command, workdir)
+      Returns stdout, stderr AND the exit code; timeout kill with partial-output
+      rescue; tail-kept output cap.
+  get_patch()
+      `git -c core.fileMode=false diff` with intent-to-add (`git add -N`) so new
+      files are included; permission-only changes excluded.
+  run_tests()
+      Runs the task's eval_script (its literal bash content), 600s timeout,
+      tail-kept output.
+
+Backends: a Docker container per task (state persists across the whole task) or a
+local checkout at TESTBED_PATH when no task is given — the mode used to test the
+tools in isolation.
+
+VIII. BONUS
+--------------------------------------------------------------------------------
+  * Deterministic offline model (scripted provider) so the whole loop is testable
+    and reproducible without any API key.
+  * Multi-provider registry with key rotation on 429 and model fallback.
+  * Token/latency accounting per step and per run.
+  * Budget-aware history compaction (fit_view / truncate_history).
+  * Interactive REPL on top of the sandbox (`agent_smith.py sandbox`).
+  * Tool listing / manual generation (`agent_smith.py tools`).
+  * Benchmark evaluation with a pass@1 report and per-task diagnostics.
+  * Full solution.json trace (system prompt, every step, every observation).
+  * Graceful shutdown: SIGINT/SIGTERM keep the trace and close everything.
+
+IX. TESTS
+--------------------------------------------------------------------------------
+The suite must cover, at minimum:
+  * parsing: every accepted format, every note, conversion cases;
+  * sandbox: persistence, timeout, memory, output truncation, final_answer,
+    import allowlist, filesystem allowlist, network ban, dunder rejection,
+    builtins restriction, tool calls, restart after timeout;
+  * tools: MBPP run_tests (pass, fail, timeout, syntax) and the nine SWE-bench
+    tools (pagination, ambiguity, atomic write, patch, exit codes);
+  * LLM: scripted provider, registry, key rotation, fallback;
+  * agent loop: success, iteration limit, token limit, wall-time limit,
+    provider failure, budget compaction, notes;
+  * config: validation, defaults, JSON loading;
+  * integration: end-to-end MBPP run producing a valid solution.json.
+
+================================================================================
