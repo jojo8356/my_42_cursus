@@ -2,7 +2,7 @@
 
 # 42 Cursus — Systems Programming in C
 
-**Complete 42 School Portfolio: Piscine 42 · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · CPP Modules 00–09 · FT_Containers · Cub3D · NetPratice · MiniRT · FT_Transcendence · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · Exam Rank 05 · Exam Rank 06**
+**Complete 42 School Portfolio: Piscine 42 (C) · Piscine Python · A-Maze-ing · Libft · get_next_line · ft_printf · Minitalk · Born2beRoot · Inception · Pipex · So_long · Push_swap · FdF · Fract'ol · Minishell · Philosophers · Codexion · CPP Modules 00–09 · FT_Containers · Cub3D · NetPratice · MiniRT · FT_Transcendence · Exam Rank 02 · Exam Rank 03 · Exam Rank 04 · Exam Rank 05 · Exam Rank 06**
 
 [![Language: C](https://img.shields.io/badge/Language-C_(ISO_C89%2FC99)-00599C?style=flat-square&logo=c&logoColor=white)](https://en.cppreference.com/w/c)
 [![42 Norm](https://img.shields.io/badge/42_Norm-v4.1_Compliant-00BABC?style=flat-square)](https://github.com/42School/norminette)
@@ -20,7 +20,7 @@
 
 ### Overview
 
-**`my_42_cursus`** is a curated systems-programming monorepo containing my projects from **École 42** — from the intensive 4-week **C Piscine** through the **Common Core** curriculum. Every project is written from scratch in pure C under strict constraints: **no standard high-level shortcuts**, **strict `-Wall -Wextra -Werror` compilation**, **42 Norm v4.1 compliance**, **deterministic error handling**, and **zero memory leaks**.
+**`my_42_cursus`** is a curated systems-programming monorepo containing my projects from **École 42** — from the intensive 4-week **C Piscine** and the **Python Piscine** through the **Common Core** curriculum. The portfolio spans pure-C systems engineering (**Libft**, **Minitalk**, **Pipex**, **Philosophers**, **Codexion**), algorithmic and Python work (**A-Maze-ing** maze generator, the **Piscine Python** modules 00–10), DevOps infrastructure (**Born2beRoot**, **Inception** Docker stack), and the C++/web tracks. Every project is written from scratch under strict constraints: **no standard high-level shortcuts**, **strict `-Wall -Wextra -Werror` compilation**, **42 Norm v4.1 compliance**, **deterministic error handling**, and **zero memory leaks**.
 
 Beyond passing 42 evaluations, each repository module is structured according to professional C engineering conventions (see [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) and backed by automated differential, unit, fault-injection, and sanitizer test suites totaling **over 57,000 automated test cases**.
 
@@ -49,6 +49,8 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | **Rank 01** | [**`ft_printf/`**](ft_printf/README.md) | `libftprintf.a` | Variadic functions (`stdarg.h`), zero-heap stack rendering, partial `write(2)` resilience, format state machine | ✅ All (`-0.# +*`) | **26,921 differential cases** vs `glibc` + ASan/UBSan + Tripouille |
 | **Rank 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Static storage duration, buffered POSIX `read(2)`, amortized $O(L)$ dynamic stash, multi-FD linked list *(Subject v14.3)* | ✅ 1 Static + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1,000 FDs, `malloc` mock) + GNL Station + ASan/UBSan |
 | **Rank 02** | [**`born2beroot/`**](born2beroot/README.md) | Debian VM + `monitoring.sh` | LUKS2 + LVM partitioning, `pam_pwquality`/`login.defs` policy, `sudoers` hardening, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 static + 167 requirement checks + 5 community testers (80 checks) + `verify.sh` (64)** |
+| **DevOps** | [**`inception/`**](inception/README.md) | Docker Compose stack | Full web infrastructure via **Docker Compose**: NGINX (TLS 1.2/1.3, port 443) + WordPress/php-fpm (TCP 9000) + MariaDB, all images built from **Debian bookworm**; secrets via Docker secrets | ✅ Adminer · Redis · FTP · personal site | **58 tests** (static YAML/Dockerfile/compose/Nginx/php-fpm/MariaDB/.env analysis) |
+| **DevOps** | [**`ft_services/`**](ft_services/README.md) | Kubernetes cluster | **Micro-services cluster** on **Kubernetes** (minikube + MetalLB load balancer): one pod per service, images built from **Alpine** with hand-written Dockerfiles (no hub prebuilt images); Nginx (SSL, reverse proxy) + WordPress + MariaDB + FTPS + phpMyAdmin | ✅ Grafana · InfluxDB · Telegraf · SSH | **73 tests** (static: shell syntax, Dockerfiles, nginx, WordPress, MySQL, Kubernetes manifests, ConfigMap/Secret, probes, bonus) |
 
 #### 🟢 Circle 2 — Core Systems
 
@@ -69,6 +71,7 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rank 03** | [**`minishell/`**](minishell/README.md) | `minishell` binary | Mini shell: lexer/parser, env & variable expansion, pipes, redirections, logical operators (`&&`/`||`), wildcards | ✅ Bonus features | **60 tests** (7 C suites: basic, variables, quotes, pipes, redirects, logical, wildcards) |
 | **Rank 03** | [**`philosophers/`**](philosophers/README.md) | `philo` & `philo_bonus` binaries | Dining philosophers: threads + mutex (mandatory), processes + named semaphores (bonus), race-free timing & messaging | ✅ Named semaphores | **87/87 tests** (Python suite, mandatory + bonus) |
+| **Rank 03** | [**`codexion/`**](codexion/README.md) | `codexion` binary | Dining-philosophers-style concurrency: `n_coders` threads each needing **both** neighboring USB dongles to compile, monitor thread tracking burnout deadlines, POSIX mutex + condition variables, **no global variables** (single `t_sim` struct), FIFO & EDF scheduling | ✅ EDF scheduler · dongle cooldown | **157/158 student tests** (log format, monotonicity, burnout deadline, cooldown, stability) + **Norm v4.1** |
 
 #### 🔴 Circle 4 — C++
 
@@ -76,6 +79,17 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rank 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercises (`cpp_00`–`cpp_09`) | OOP: classes, inheritance, exceptions, templates, orthodox canonical form; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, functional, edge cases, 3000-element stress, ASan/TSan) |
 | **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | STL containers recoded from scratch in C++98, namespace `ft`, `std::allocator`: `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), red-black trees, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ All bonus containers | **3,408 ASan/UBSan assertions** + **5 testers** (llefranc, monkey, mazoise, mli, static) + **official libstdc++ GCC 4.9.4 testsuite** (0 applicable bugs) |
+| **Rank 05** | [**`ft_irc/`**](ft_irc/README.md) | `ircserv` binary | **IRC server** in strict C++98: a **single `poll()`** multiplexes all clients (non-blocking TCP/IPv4 sockets, no threads, no `fork`), command parsing, channels & private messaging, numerics, full bonus set (OPER, WHOIS, WHO, CITEBOT, CAP, JOIN 0, multi-channel) | ✅ All bonus commands & modes | **43 tests** (static audit + real integration: server compiled & driven by real socket clients, every command/mode) |
+| **Rank 05** | [**`webserv/`**](webserv/README.md) | `webserv` binary | **HTTP/1.1 web server** in strict C++98 (NGINX-inspired): single event loop via `select()`, RFC 7230 request parsing, static files, **CGI**, uploads, redirects, error pages, keep-alive, chunked encoding, concurrent clients | ✅ CGI · uploads · chunked · keep-alive | **19 tests** (stdlib-only Python suite: static, CGI, uploads, redirects, errors, concurrency, bonus) |
+
+#### 🐍 Python Track — Piscine Python & Algorithmic
+
+| Stage | Project | Deliverable | Key Systems Concepts | Bonus | Automated Verification |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Piscine** | [**`piscine_python/`**](piscine_python/README.md) | Modules 00–10 | Complete **Python Piscine**: fundamentals, OOP, exceptions, collections, I/O, ABC, import/packages, design patterns, env & deps, Pydantic v2 validation, functional programming | ✅ All bonus modules | **44/44** reference checker (modules 00–08) + **65/65** home pytest suite (modules 09–10 + structure) |
+| **Algorithmic** | [**`a_maze_ing/`**](a_maze_ing/README.md) | `a_maze_ing` + `mazegen` package | Maze **generator, solver & visualizer**: `KEY=VALUE` config, DFS/Prim generation, BFS shortest path, hex wall-file output, terminal UI, hidden **"42"**, perfect-maze vs Pac-Man board | ✅ Prim algorithm · SEED · reusable `mazegen` (pip-installable) | **20 pytest tests** + independent maze analyzer (wall coherence, connectivity, 3×3 areas, loops, path optimality) |
+| **Algorithmic** | [**`fly_in/`**](fly_in/README.md) | `main.py` + `src/` | **Multi-drone routing simulation**: a fleet must cross a graph of zones (normal/priority/restricted/blocked) from a start hub to an end hub in the fewest turns, respecting zone & connection capacities and two-turn restricted flights. **Space-time Dijkstra with per-turn reservations**, strict parser, independent replay checker, colored terminal output | ✅ **Challenger map**: 43 turns (beats the 45-turn record) · all targets met | **205 tests** (parser fuzzing, planner, simulation, all 10 maps, stress) + flake8/mypy `--strict` |
+| **Piscine** | [**`django_pool/`**](django_pool/README.md) | Piscine Django (d00–d08) | Complete **Django Piscine**: web intro (HTML/CSS/JS), Python basics & OOP, Django base (projects, apps, templates, forms), Python libs, ORM & SQL (models, foreign keys, M2M), sessions & auth, advanced (generic views, template tags, i18n, tests), AJAX & WebSockets | ✅ All 9 modules | **9 module checkers** (d00–d08) + community & official testers |
 
 #### 🟣 Final Project — Web
 
@@ -136,6 +150,14 @@ my_42_cursus/
 │   ├── config/                         # vm.conf, partitions.layout, sshd, sudoers, ufw, pwquality
 │   ├── scripts/                        # setup.sh orchestrator, 10 steps, monitoring.sh, verify.sh
 │   └── tests/                          # VM emulator, per-requirement cases, 5 community testers
+├── inception/                          # DevOps — Docker Compose web infrastructure (NGINX + WordPress + MariaDB)
+│   ├── srcs/                           # .env, docker-compose.yml, requirements/{nginx,wordpress,mariadb,bonus}
+│   ├── tests/                          # 58-check static suite (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB)
+│   └── Makefile                        # up / down / test orchestration
+├── ft_services/                        # DevOps — Kubernetes micro-services cluster (minikube + MetalLB)
+│   ├── srcs/                           # Kubernetes manifests, Dockerfiles (Alpine), scripts, configs
+│   ├── tests/                          # 73-check static suite (shell, Dockerfiles, nginx, WP, MySQL, k8s, bonus)
+│   └── Makefile                        # cluster orchestration
 ├── so_long/                            # Rank 02 — 2D game with the miniLibX
 │   ├── include/                        # so_long.h
 │   ├── src/                            # Parsing, rendering, hooks + src/bonus
@@ -155,6 +177,25 @@ my_42_cursus/
     ├── bsq/                            # Capstone dynamic-programming square solver
     ├── subjects/pdf/                   # 34 archived subject PDFs
     └── tests/                          # Non-intrusive C & POSIX sh test drivers
+├── piscine_python/                     # Python Piscine — modules 00–10 (fundamentals → OOP → functional)
+│   ├── module00/ .. module10/          # Per-module exXX/ deliverables (11 modules)
+│   ├── tests/                          # Reference checker (00–08) + home pytest suite (09–10, structure)
+│   └── README.md                       # 44/44 + 65/65 validation table
+├── django_pool/                        # Piscine Django — modules d00–d08 (web, OOP, ORM, sessions, AJAX/WS)
+│   ├── d00_initiation/ .. d08_final/    # Per-module Django projects & apps
+│   ├── tests/                          # 9 module checkers (d00–d08) + community & official testers
+│   └── README.md                       # module table + run instructions
+├── a_maze_ing/                         # Algorithmic — maze generator, solver & visualizer
+│   ├── mazegen/                        # Reusable, pip-installable generation package (independent of CLI/UI)
+│   ├── a_maze_ing.py                   # CLI front-end: config parsing, output writing, terminal UI
+│   ├── tests/                          # 20 pytest tests + independent maze analyzer
+│   └── pyproject.toml                  # Packaging (mazegen wheel)
+├── fly_in/                             # Algorithmic — multi-drone routing simulation
+│   ├── main.py                         # entry point, args, interactive map menu
+│   ├── src/                            # models, strict parser, planner, simulation, renderer
+│   ├── maps/                           # 9 mandatory + Challenger maps
+│   ├── tests/                          # 205-test suite (parser, planner, replay, maps, stress)
+│   └── Makefile                        # install/run/debug/clean/lint/lint-strict/test
 ├── fdf/                               # Rank 02 — miniLibX wireframe 3D terrain renderer
 │   ├── includes/                      # fdf.h (types, prototypes)
 │   ├── src/                           # parse, math, color, draw, render, hooks
@@ -181,6 +222,13 @@ my_42_cursus/
 │   ├── philo/                         # mandatory: threads + mutex
 │   ├── philo_bonus/                   # bonus: processes + named semaphores
 │   ├── tests/                         # Python suite (87/87)
+│   └── Makefile
+├── codexion/                          # Rank 03 — dining-philosophers concurrency (coders + USB dongles)
+│   ├── codexion.c / codexion.h        # main, arg parsing, t_sim orchestration
+│   ├── coder/                         # coder threads + compilation cycle (wait/compile/debug/refactor)
+│   ├── dongle/                        # per-dongle mini-heap (FIFO/EDF) + acquisition logic
+│   ├── monitor/                       # monitor thread tracking burnout deadlines
+│   ├── log/ utils/                    # thread-safe logging + helpers
 │   └── Makefile
 ├── exam_rank02/                       # Exam Rank 02 practice — 4 levels
 │   ├── include/exam_rank02.h          # prototypes level 1–4 (+ list_t)
@@ -213,7 +261,7 @@ my_42_cursus/
 │   │   ├── Makefile                    # all/clean/fclean/re targets
 │   │   └── *.hpp / *.cpp / main.cpp    # Orthodox canonical form, C++98 strict
 │   └── tests/                          # 93-check Python suite (functional, stress, ASan/TSan)
-└── ft_containers/                      # C++98 — STL containers recoded in namespace ft
+├── ft_containers/                      # C++98 — STL containers recoded in namespace ft
     ├── Makefile                        # Orchestrates: internal suite + 5 student testers
     ├── subjects/                       # Official subject (ft_containers_subject.md)
     ├── includes/                       # vector.hpp, map.hpp, stack.hpp, set.hpp, deque.hpp,
@@ -225,6 +273,16 @@ my_42_cursus/
     │   ├── official/                   # Official libstdc++ GCC 4.9.4 testsuite (shim + run.sh)
     │   └── testers/                    # llefranc, monkey, mazoise, mli, static testers
     └── (no binaries tracked)           # header-only library, builds via Makefile
+├── ft_irc/                             # Rank 05 — IRC server in strict C++98 (single poll())
+│   ├── src/                            # socket loop, command/numeric handlers, channels, bonus
+│   ├── Makefile                        # builds ./ircserv (C++98, -Wall -Wextra -Werror)
+│   └── tests/                          # 43 tests (static audit + real integration over sockets)
+├── webserv/                            # Rank 05 — HTTP/1.1 web server in strict C++98 (select)
+│   ├── srcs/                           # event loop, request parser, static/CGI, responses
+│   ├── includes/                       # Config.hpp, Request.hpp, Server.hpp, Utils.hpp
+│   ├── www/                            # static files, CGI, error pages
+│   ├── Makefile                        # builds ./webserv (C++98, -Wall -Wextra -Werror)
+│   └── tests/                          # 19 tests (stdlib-only Python: static, CGI, uploads, ...)
 ├── ft_transcendence/                   # Final — Full-stack Pong web app (Django + Channels + SPA)
 │   ├── config/                         # settings (JWT/OAuth/Channels), ASGI, urls + SPA catch-all
 │   ├── accounts/ games/ tournaments/ chat/   # Django apps: auth, engine/AI, bracket, chat
@@ -342,6 +400,33 @@ bash minishell/tests/run_tests.sh
 # Philosophers: 87/87 tests (Python, mandatory + bonus)
 python3 philosophers/tests/test_philo.py
 
+# Codexion: 157/158 student tests (log format, monotonicity, burnout deadline, cooldown, stability)
+#   via the external Testeur-Codexion suite (./run_all_tests.sh <codexion dir> --no-valgrind)
+
+# Piscine Python: 44/44 reference checker (modules 00-08) + 65/65 home pytest (09-10 + structure)
+cd piscine_python && python3 -m pytest tests/
+
+# A-Maze-ing: 20 pytest tests + independent maze analyzer
+cd a_maze_ing && python3 -m pytest tests/
+
+# Fly-In: 205-test suite (parser fuzzing, planner, replay checker, maps, stress)
+make -C fly_in test
+
+# Inception: 58-check static suite (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, .env)
+make -C inception test
+
+# Ft_services: 73-check static suite (shell, Dockerfiles, nginx, WordPress, MySQL, k8s, bonus)
+python3 ft_services/tests/run_tests.py
+
+# Ft_irc: 43 tests (static audit + real integration: server compiled & driven by socket clients)
+python3 ft_irc/tests/run_tests.py
+
+# Webserv: 19 tests (stdlib-only Python: static, CGI, uploads, redirects, concurrency, bonus)
+python3 webserv/tests/run_tests.py
+
+# Django pool: 9 module checkers (d00-d08) + community & official testers
+python3 django_pool/tests/run_all.py
+
 # Exam Rank 02: 4 C suites / 111 tests (level 1-4)
 make -C exam_rank02 test
 
@@ -393,7 +478,7 @@ cd ft_transcendence && python3 tests/run_tests.py
 
 ### Présentation
 
-**`my_42_cursus`** est le monorepo regroupant l'ensemble de mes projets de programmation système en **C** réalisés à l'**École 42** — depuis la **Piscine C** jusqu'aux projets du **Tronc Commun (*Common Core*)**. Chaque projet est développé intégralement à partir de zéro en C pur selon des contraintes d'ingénierie strictes : compilation sous **`-Wall -Wextra -Werror`**, respect intégral de la **Norme 42 v4.1**, gestion défensive des erreurs et **zéro fuite mémoire**.
+**`my_42_cursus`** est le monorepo regroupant l'ensemble de mes projets réalisés à l'**École 42** — de la **Piscine C** et de la **Piscine Python** jusqu'aux projets du **Tronc Commun (*Common Core*)**. Le portfolio couvre l'ingénierie système en C pur (**Libft**, **Minitalk**, **Pipex**, **Philosophes**, **Codexion**), le travail algorithmique et Python (générateur de labyrinthe **A-Maze-ing**, les modules **Piscine Python** 00–10), l'infrastructure DevOps (**Born2beRoot**, stack Docker **Inception**), ainsi que les tracks C++ et web. Chaque projet est développé intégralement à partir de zéro selon des contraintes d'ingénierie strictes : compilation sous **`-Wall -Wextra -Werror`**, respect intégral de la **Norme 42 v4.1**, gestion défensive des erreurs et **zéro fuite mémoire**.
 
 Chaque projet est structuré proprement selon les standards de l'industrie adaptés aux règles de la Moulinette 42 (voir le guide complet [`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`](docs/C_PROJECT_ARCHITECTURE_GUIDE.md)) et validé par plus de **57 000 tests automatisés** (tests unitaires, différentiels face à la `glibc`, injection de pannes `malloc`, AddressSanitizer, UBSan et Valgrind).
 
@@ -422,6 +507,8 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | **Rang 01** | [**`ft_printf/`**](ft_printf/README.md) | `libftprintf.a` | Fonctions variadiques (`stdarg.h`), rendu 100 % sur la pile (`0 malloc`), écriture robuste `write(2)`, automate de parsing | ✅ Complet (`-0.# +*`) | **26 921 tests différentiels** vs `glibc` + ASan/UBSan + Tripouille |
 | **Rang 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Variables `static`, `read(2)` bufferisé, tampon dynamique $\Theta(L)$, liste chaînée multi-FD *(Sujet v14.3)* | ✅ 1 `static` + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1 000 FDs, pannes `malloc`) + GNL Station + ASan/UBSan |
 | **Rang 02** | [**`born2beroot/`**](born2beroot/README.fr.md) | VM Debian + `monitoring.sh` | Partitionnement LUKS2 + LVM, politique `pam_pwquality`/`login.defs`, durcissement `sudoers`, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 vérifications statiques + 167 exigences + 5 testeurs communautaires (80 contrôles) + `verify.sh` (64)** |
+| **DevOps** | [**`inception/`**](inception/README.md) | Stack Docker Compose | Infrastructure web complète via **Docker Compose** : NGINX (TLS 1.2/1.3, port 443) + WordPress/php-fpm (TCP 9000) + MariaDB, images construites depuis **Debian bookworm**, secrets via Docker secrets | ✅ Adminer · Redis · FTP · site perso | **58 tests** (analyse statique YAML/Dockerfile/compose/Nginx/php-fpm/MariaDB/.env) |
+| **DevOps** | [**`ft_services/`**](ft_services/README.md) | Cluster Kubernetes | **Cluster de micro-services** sur **Kubernetes** (minikube + MetalLB load balancer) : un pod par service, images construites depuis **Alpine** avec Dockerfiles maison (pas d'images pré-faites de hub) ; Nginx (SSL, reverse proxy) + WordPress + MariaDB + FTPS + phpMyAdmin | ✅ Grafana · InfluxDB · Telegraf · SSH | **73 tests** (statique : syntaxe shell, Dockerfiles, nginx, WordPress, MySQL, manifestes Kubernetes, ConfigMap/Secret, probes, bonus) |
 
 #### 🟢 Cercle 2 — Systèmes de base
 
@@ -442,6 +529,7 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rang 03** | [**`minishell/`**](minishell/README.md) | binaire `minishell` | Mini shell : lexeur/parsing, expansion d'environnement et variables, pipes, redirections, opérateurs logiques (`&&`/`||`), wildcards | ✅ Fonctionnalités bonus | **60 tests** (7 suites C : basic, variables, quotes, pipes, redirects, logiques, wildcards) |
 | **Rang 03** | [**`philosophers/`**](philosophers/README.md) | binaires `philo` & `philo_bonus` | Philosophes dînant : threads + mutex (obligatoire), processus + sémaphores nommés (bonus), timing et messagerie sans courses | ✅ Sémaphores nommés | **87/87 tests** (suite Python, obligatoire + bonus) |
+| **Rang 03** | [**`codexion/`**](codexion/README.md) | binaire `codexion` | Concurrence sur le modèle des philosophes dînants : `n_coders` threads devant détenir **les deux** dongles USB voisins pour compiler, thread monitor traquant les deadlines de burnout, mutex + variables de condition POSIX, **aucune variable globale** (un seul `t_sim`), ordonnancement FIFO & EDF | ✅ Ordonnanceur EDF · cooldown des dongles | **157/158 tests étudiants** (format de log, monotonie, deadline de burnout, cooldown, stabilité) + **Norme v4.1** |
 
 #### 🔴 Cercle 4 — C++
 
@@ -449,6 +537,17 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rang 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercices (`cpp_00`–`cpp_09`) | POO : classes, héritage, exceptions, templates, forme canonique ; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, fonctionnels, cas limites, stress 3000, ASan/TSan) |
 | **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | Conteneurs STL recodés de zéro en C++98, namespace `ft`, `std::allocator` : `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), arbres rouge-noir, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ Tous les conteneurs bonus | **3 408 assertions ASan/UBSan** + **5 testeurs** (llefranc, monkey, mazoise, mli, static) + **testsuite OFFICIELLE libstdc++ GCC 4.9.4** (0 bug applicable) |
+| **Rang 05** | [**`ft_irc/`**](ft_irc/README.md) | binaire `ircserv` | **Serveur IRC** en **C++98 strict** : un **seul `poll()`** multiplexe tous les clients (sockets TCP/IPv4 non-bloquants, pas de threads, pas de `fork`), parsing des commandes, canaux & messages privés, numerics, bonus complet (OPER, WHOIS, WHO, CITEBOT, CAP, JOIN 0, multi-canaux) | ✅ Toutes les commandes & modes bonus | **43 tests** (audit statique + intégration réelle : serveur compilé & piloté par vrais clients socket, chaque commande/mode) |
+| **Rang 05** | [**`webserv/`**](webserv/README.md) | binaire `webserv` | **Serveur web HTTP/1.1** en **C++98 strict** (inspiré NGINX) : boucle d'événements unique via `select()`, parsing RFC 7230, fichiers statiques, **CGI**, uploads, redirections, pages d'erreur, keep-alive, chunked, clients concurrents | ✅ CGI · uploads · chunked · keep-alive | **19 tests** (suite Python stdlib uniquement : statique, CGI, uploads, redirections, erreurs, concurrence, bonus) |
+
+#### 🐍 Track Python — Piscine Python & Algorithmique
+
+| Étape | Projet | Livrable | Compétences clés | Bonus | Validation automatisée |
+| :--- | :--- | :--- | :--- | :---: | :--- |
+| **Piscine** | [**`piscine_python/`**](piscine_python/README.md) | Modules 00–10 | **Piscine Python** complète : fondamentaux, POO, exceptions, collections, E/S, ABC, import/packages, patterns de conception, environnement & dépendances, validation Pydantic v2, programmation fonctionnelle | ✅ Tous les modules bonus | **44/44** checker de référence (modules 00–08) + **65/65** suite pytest maison (modules 09–10 + structure) |
+| **Algorithmique** | [**`a_maze_ing/`**](a_maze_ing/README.md) | `a_maze_ing` + package `mazegen` | **Générateur, solveur & visualiseur** de labyrinthes : config `KEY=VALUE`, génération DFS/Prim, plus court chemin BFS, sortie fichier murs hexadécimal, UI terminale, **« 42 »** caché, labyrinthe parfait vs plateau Pac-Man | ✅ Algorithme Prim · SEED · `mazegen` réutilisable (pip) | **20 tests pytest** + analyseur de labyrinthe indépendant (cohérence des murs, connectivité, zones 3×3, boucles, optimalité du chemin) |
+| **Algorithmique** | [**`fly_in/`**](fly_in/README.md) | `main.py` + `src/` | **Simulation de routage multi-drones** : une flotte doit traverser un graphe de zones (normal/priorité/restreint/bloqué) d'un hub de départ à un hub d'arrivée en le minimum de tours, en respectant les capacités de zones & connexions et les vols restreints à 2 tours. **Dijkstra espace-temps avec réservations**, parser strict, checker de relecture indépendant, sortie terminale colorée | ✅ **Carte Challenger** : 43 tours (bat le record de 45) · tous les cibles atteints | **205 tests** (fuzzing parser, planificateur, simulation, les 10 cartes, stress) + flake8/mypy `--strict` |
+| **Piscine** | [**`django_pool/`**](django_pool/README.md) | Piscine Django (d00–d08) | **Piscine Django** complète : intro web (HTML/CSS/JS), Python de base & POO, base Django (projets, apps, templates, forms), librairies Python, ORM & SQL (models, clés étrangères, M2M), sessions & auth, avancé (vues génériques, tags templates, i18n, tests), AJAX & WebSockets | ✅ Les 9 modules | **9 checkers de module** (d00–d08) + testeurs communautaires & officiels |
 
 #### 🟣 Projet final — Web
 
@@ -476,11 +575,17 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`get_next_line/`** conserve les **6 fichiers de rendu imposés à la racine** (`get_next_line.{c,h}`, `get_next_line_utils.c` et leurs variantes `_bonus.{c,h}`) — le sujet v14.3 n'attend **aucun `Makefile`** — tout en déportant le sujet dans `docs/`, les testeurs dans `tests/` et `gnlTester/`, et l'orchestrateur dans `run_tests.sh`.
 - **`libft/`** conserve volontairement `Makefile`, `libft.h`, `README.md` et les 43 `ft_*.c` à sa racine conformément à l'exigence stricte du **Chapitre IV.1 du sujet Libft 2026 v19.3**, tout en isolant le sujet dans `docs/` et les tests dans `tests/`.
 - **`piscine42/`** préserve des dossiers `exXX/` strictement purs (prêts pour la Moulinette) et déporte l'intégralité des bancs d'essai dans `piscine42/tests/`.
+- **`piscine_python/`** est la **Piscine Python** (modules 00–10) : fondamentaux, POO, exceptions, collections, E/S, ABC, import/packages, patterns, env & dépendances, validation Pydantic v2, programmation fonctionnelle. Validée par un **checker de référence 44/44** (modules 00–08) et une **suite pytest maison 65/65** (modules 09–10 + structure).
+- **`django_pool/`** est la **Piscine Django** (modules d00–d08) : intro web (HTML/CSS/JS), Python de base & POO, base Django (projets, apps, templates, forms), librairies Python, ORM & SQL (models, clés étrangères, M2M), sessions & auth, avancé (vues génériques, tags templates, i18n, tests), AJAX & WebSockets. Validée par **9 checkers de module** (d00–d08) + testeurs communautaires & officiels.
+- **`a_maze_ing/`** est le **générateur, solveur et visualiseur de labyrinthes** : parsing `KEY=VALUE`, génération DFS/Prim, plus court chemin BFS, sortie hexadécimale, UI terminale, « 42 » caché, labyrinthe parfait vs Pac-Man. Le cœur génératif est isolé dans le package **`mazegen`** (réutilisable, installable via pip). Validée par **20 tests pytest** + un analyseur de labyrinthe indépendant.
+- **`inception/`** est l'infrastructure **DevOps** : stack **Docker Compose** NGINX (TLS) + WordPress/php-fpm + MariaDB (images depuis Debian bookworm, secrets via Docker secrets) + services bonus (Adminer, Redis, FTP, site perso). Validée par une **suite statique de 58 tests** (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, `.env`).
+- **`ft_services/`** est le cluster **DevOps** : déploiement automatique d'un **cluster Kubernetes** (minikube + MetalLB) de micro-services, un pod par service, images construites depuis **Alpine** avec Dockerfiles maison (Nginx SSL, WordPress, MariaDB, FTPS, phpMyAdmin) + bonus (Grafana, InfluxDB, Telegraf, SSH). Validée par une **suite statique de 73 tests** (syntaxe shell, Dockerfiles, nginx, WordPress, MySQL, manifestes k8s, ConfigMap/Secret, probes).
 - **`fdf/`** est le rendu de terrain 3D en wireframe miniLibX : parsing de height-maps `.fdf`, projection isométrique, 5 modes de couleur, rotation 3D. Validé par **5 suites / 248 tests**.
 - **`fract-ol/`** est le rendu de fractales 2D miniLibX : Mandelbrot, Julia + bonus (Burning Ship, Tricorn, Phoenix, Multibrot), rendu multithread. Validé par **6 suites / 1 077 tests** (sans X11).
 - **`push_swap/`** trie deux piles d'entiers en un minimum de mouvements : `push_swap.c` (sorteur + pousseur), `push_swap_utils.c` (opérations SA/SB/PA/PB), validé par **388 vérifications** (cas, benchmark, différentiel).
 - **`minishell/`** est un mini shell C : lexeur/parser, expansion d'environnement et variables, pipes, redirections, opérateurs logiques (`&&`/`||`) et wildcards. Validé par **7 suites C / 60 tests** (`tests/run_tests.sh`).
 - **`philosophers/`** implémente le problème des philosophes dînants : `philo/` (threads + mutex, obligatoire) et `philo_bonus/` (processus + sémaphores nommés, bonus). Validé par une **suite Python 87/87**.
+- **`codexion/`** est une simulation de concurrence sur le modèle des philosophes dînants : `n_coders` threads doivent détenir les deux dongles USB voisins pour compiler, un thread **monitor** traque les deadlines de burnout, synchronisation par mutex + variables de condition POSIX, **aucune variable globale** (un seul `t_sim` partagé), ordonnancement **FIFO/EDF** via tas mini par dongle. Validée par la **suite étudiante 157/158** et conforme à la **Norme v4.1**.
 - **`exam_rank02/`** est le recueil d'examen Rank 02 : 4 niveaux (chaînes, manipulation avancée, algorithmes, mémoire & listes) regroupés par dossier `level_1/`…`level_4/`, prototypes dans `include/exam_rank02.h`. Validé par **4 suites C / 111 tests** (`make test`).
 - **`exam_rank_03/`** est le recueil d'examen Rank 03 : niveau 1 (`filter`, `ft_scanf`, `get_next_line`) et niveau 2 (`n_queens`, `permutations`, `powerset`, `rip`, `tsp`), chacun autonome. Validé par une **suite Python 90/90**.
 - **`cub3d/`** est le raycasting (Wolfenstein 3D) : lancer de rayons DDA, cartographie de textures, portes, sprites, minimap, miniLibX — **Rang 04 avec bonus complet**. Validé par **8 suites / 186 tests**.
@@ -489,6 +594,8 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`miniRT/`** est le traceur de rayons CPU (Exam Rank 05) : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras. Validé par **9 suites / 14 660 tests**.
 - **`cpp_modules/`** contient les 10 modules **CPP 00–09** : chaque exercice (`cpp_XX/exYY/`) est autonome avec son `Makefile` et ses fichiers `*.hpp`/`*.cpp` en **C++98 strict** (`-Wall -Wextra -Werror`), forme canonique obligatoire de `cpp_02` à `cpp_09`, STL réservée aux modules 08–09. Les énoncés officiels sont dans `subjects/` et la suite de tests Python dans `tests/`.
 - **`ft_containers/`** recode les **conteneurs STL en C++98 strict** dans le namespace **`ft`** avec `std::allocator` : `vector`, `map` (arbre rouge-noir), `stack` (obligatoires) + `set`, `deque`, `queue`, `multimap`, `multiset` (bonus), ainsi que `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair`. Bibliothèque entièrement en headers (`includes/`), aucun binaire suivi. Validée par une **suite interne ASan/UBSan (3 408 assertions)**, **5 testeurs élèves** (llefranc, monkey, mazoise, mli, static) et la **testsuite OFFICIELLE libstdc++ GCC 4.9.4** (0 bug applicable). Le `Makefile` orchestre la suite interne et tous les testeurs via `make re`.
+- **`ft_irc/`** est un **serveur IRC** en **C++98 strict** : un **seul `poll()`** multiplexe tous les clients (sockets TCP/IPv4 non-bloquants, ni threads ni `fork`), parsing des commandes, canaux & messages privés, numerics, bonus complet (OPER, WHOIS, WHO, CITEBOT, CAP, JOIN 0, multi-canaux). Validée par une **suite de 43 tests** (audit statique + intégration réelle : serveur compilé et piloté par vrais clients socket).
+- **`webserv/`** est un **serveur web HTTP/1.1** en **C++98 strict** (inspiré NGINX) : boucle d'événements unique via `select()`, parsing RFC 7230, fichiers statiques, **CGI**, uploads, redirections, pages d'erreur, keep-alive, chunked, clients concurrents. Validée par une **suite de 19 tests** (Python stdlib uniquement).
 
 Pour aller plus loin sur l'organisation professionnelle d'un projet C en entreprise et à 42, consultez [**`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`**](docs/C_PROJECT_ARCHITECTURE_GUIDE.md).
 
@@ -583,6 +690,33 @@ bash minishell/tests/run_tests.sh
 
 # Philosophers : 87/87 tests (Python, obligatoire + bonus)
 python3 philosophers/tests/test_philo.py
+
+# Codexion : 157/158 tests étudiants (format de log, monotonie, deadline de burnout, cooldown, stabilité)
+#   via le testeur externe Testeur-Codexion (./run_all_tests.sh <dir codexion> --no-valgrind)
+
+# Piscine Python : 44/44 checker de référence (00-08) + 65/65 pytest maison (09-10 + structure)
+cd piscine_python && python3 -m pytest tests/
+
+# A-Maze-ing : 20 tests pytest + analyseur de labyrinthe indépendant
+cd a_maze_ing && python3 -m pytest tests/
+
+# Fly-In : suite de 205 tests (fuzzing parser, planificateur, checker de relecture, cartes, stress)
+make -C fly_in test
+
+# Inception : suite statique de 58 tests (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, .env)
+make -C inception test
+
+# Ft_services : suite statique de 73 tests (shell, Dockerfiles, nginx, WordPress, MySQL, k8s, bonus)
+python3 ft_services/tests/run_tests.py
+
+# Ft_irc : 43 tests (audit statique + intégration réelle : serveur compilé & piloté par sockets)
+python3 ft_irc/tests/run_tests.py
+
+# Webserv : 19 tests (Python stdlib uniquement : statique, CGI, uploads, redirections, concurrence, bonus)
+python3 webserv/tests/run_tests.py
+
+# Django pool : 9 checkers de module (d00-d08) + testeurs communautaires & officiels
+python3 django_pool/tests/run_all.py
 
 # Exam Rank 02 : 4 suites C / 111 tests (niveaux 1–4)
 make -C exam_rank02 test
