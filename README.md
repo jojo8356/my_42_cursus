@@ -50,6 +50,7 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | **Rank 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Static storage duration, buffered POSIX `read(2)`, amortized $O(L)$ dynamic stash, multi-FD linked list *(Subject v14.3)* | ✅ 1 Static + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1,000 FDs, `malloc` mock) + GNL Station + ASan/UBSan |
 | **Rank 02** | [**`born2beroot/`**](born2beroot/README.md) | Debian VM + `monitoring.sh` | LUKS2 + LVM partitioning, `pam_pwquality`/`login.defs` policy, `sudoers` hardening, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 static + 167 requirement checks + 5 community testers (80 checks) + `verify.sh` (64)** |
 | **DevOps** | [**`inception/`**](inception/README.md) | Docker Compose stack | Full web infrastructure via **Docker Compose**: NGINX (TLS 1.2/1.3, port 443) + WordPress/php-fpm (TCP 9000) + MariaDB, all images built from **Debian bookworm**; secrets via Docker secrets | ✅ Adminer · Redis · FTP · personal site | **58 tests** (static YAML/Dockerfile/compose/Nginx/php-fpm/MariaDB/.env analysis) |
+| **DevOps** | [**`ft_services/`**](ft_services/README.md) | Kubernetes cluster | **Micro-services cluster** on **Kubernetes** (minikube + MetalLB load balancer): one pod per service, images built from **Alpine** with hand-written Dockerfiles (no hub prebuilt images); Nginx (SSL, reverse proxy) + WordPress + MariaDB + FTPS + phpMyAdmin | ✅ Grafana · InfluxDB · Telegraf · SSH | **73 tests** (static: shell syntax, Dockerfiles, nginx, WordPress, MySQL, Kubernetes manifests, ConfigMap/Secret, probes, bonus) |
 
 #### 🟢 Circle 2 — Core Systems
 
@@ -78,6 +79,8 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rank 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercises (`cpp_00`–`cpp_09`) | OOP: classes, inheritance, exceptions, templates, orthodox canonical form; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, functional, edge cases, 3000-element stress, ASan/TSan) |
 | **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | STL containers recoded from scratch in C++98, namespace `ft`, `std::allocator`: `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), red-black trees, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ All bonus containers | **3,408 ASan/UBSan assertions** + **5 testers** (llefranc, monkey, mazoise, mli, static) + **official libstdc++ GCC 4.9.4 testsuite** (0 applicable bugs) |
+| **Rank 05** | [**`ft_irc/`**](ft_irc/README.md) | `ircserv` binary | **IRC server** in strict C++98: a **single `poll()`** multiplexes all clients (non-blocking TCP/IPv4 sockets, no threads, no `fork`), command parsing, channels & private messaging, numerics, full bonus set (OPER, WHOIS, WHO, CITEBOT, CAP, JOIN 0, multi-channel) | ✅ All bonus commands & modes | **43 tests** (static audit + real integration: server compiled & driven by real socket clients, every command/mode) |
+| **Rank 05** | [**`webserv/`**](webserv/README.md) | `webserv` binary | **HTTP/1.1 web server** in strict C++98 (NGINX-inspired): single event loop via `select()`, RFC 7230 request parsing, static files, **CGI**, uploads, redirects, error pages, keep-alive, chunked encoding, concurrent clients | ✅ CGI · uploads · chunked · keep-alive | **19 tests** (stdlib-only Python suite: static, CGI, uploads, redirects, errors, concurrency, bonus) |
 
 #### 🐍 Python Track — Piscine Python & Algorithmic
 
@@ -85,6 +88,7 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Piscine** | [**`piscine_python/`**](piscine_python/README.md) | Modules 00–10 | Complete **Python Piscine**: fundamentals, OOP, exceptions, collections, I/O, ABC, import/packages, design patterns, env & deps, Pydantic v2 validation, functional programming | ✅ All bonus modules | **44/44** reference checker (modules 00–08) + **65/65** home pytest suite (modules 09–10 + structure) |
 | **Algorithmic** | [**`a_maze_ing/`**](a_maze_ing/README.md) | `a_maze_ing` + `mazegen` package | Maze **generator, solver & visualizer**: `KEY=VALUE` config, DFS/Prim generation, BFS shortest path, hex wall-file output, terminal UI, hidden **"42"**, perfect-maze vs Pac-Man board | ✅ Prim algorithm · SEED · reusable `mazegen` (pip-installable) | **20 pytest tests** + independent maze analyzer (wall coherence, connectivity, 3×3 areas, loops, path optimality) |
+| **Piscine** | [**`django_pool/`**](django_pool/README.md) | Piscine Django (d00–d08) | Complete **Django Piscine**: web intro (HTML/CSS/JS), Python basics & OOP, Django base (projects, apps, templates, forms), Python libs, ORM & SQL (models, foreign keys, M2M), sessions & auth, advanced (generic views, template tags, i18n, tests), AJAX & WebSockets | ✅ All 9 modules | **9 module checkers** (d00–d08) + community & official testers |
 
 #### 🟣 Final Project — Web
 
@@ -149,6 +153,10 @@ my_42_cursus/
 │   ├── srcs/                           # .env, docker-compose.yml, requirements/{nginx,wordpress,mariadb,bonus}
 │   ├── tests/                          # 58-check static suite (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB)
 │   └── Makefile                        # up / down / test orchestration
+├── ft_services/                        # DevOps — Kubernetes micro-services cluster (minikube + MetalLB)
+│   ├── srcs/                           # Kubernetes manifests, Dockerfiles (Alpine), scripts, configs
+│   ├── tests/                          # 73-check static suite (shell, Dockerfiles, nginx, WP, MySQL, k8s, bonus)
+│   └── Makefile                        # cluster orchestration
 ├── so_long/                            # Rank 02 — 2D game with the miniLibX
 │   ├── include/                        # so_long.h
 │   ├── src/                            # Parsing, rendering, hooks + src/bonus
@@ -172,6 +180,10 @@ my_42_cursus/
 │   ├── module00/ .. module10/          # Per-module exXX/ deliverables (11 modules)
 │   ├── tests/                          # Reference checker (00–08) + home pytest suite (09–10, structure)
 │   └── README.md                       # 44/44 + 65/65 validation table
+├── django_pool/                        # Piscine Django — modules d00–d08 (web, OOP, ORM, sessions, AJAX/WS)
+│   ├── d00_initiation/ .. d08_final/    # Per-module Django projects & apps
+│   ├── tests/                          # 9 module checkers (d00–d08) + community & official testers
+│   └── README.md                       # module table + run instructions
 ├── a_maze_ing/                         # Algorithmic — maze generator, solver & visualizer
 │   ├── mazegen/                        # Reusable, pip-installable generation package (independent of CLI/UI)
 │   ├── a_maze_ing.py                   # CLI front-end: config parsing, output writing, terminal UI
@@ -242,7 +254,7 @@ my_42_cursus/
 │   │   ├── Makefile                    # all/clean/fclean/re targets
 │   │   └── *.hpp / *.cpp / main.cpp    # Orthodox canonical form, C++98 strict
 │   └── tests/                          # 93-check Python suite (functional, stress, ASan/TSan)
-└── ft_containers/                      # C++98 — STL containers recoded in namespace ft
+├── ft_containers/                      # C++98 — STL containers recoded in namespace ft
     ├── Makefile                        # Orchestrates: internal suite + 5 student testers
     ├── subjects/                       # Official subject (ft_containers_subject.md)
     ├── includes/                       # vector.hpp, map.hpp, stack.hpp, set.hpp, deque.hpp,
@@ -254,6 +266,16 @@ my_42_cursus/
     │   ├── official/                   # Official libstdc++ GCC 4.9.4 testsuite (shim + run.sh)
     │   └── testers/                    # llefranc, monkey, mazoise, mli, static testers
     └── (no binaries tracked)           # header-only library, builds via Makefile
+├── ft_irc/                             # Rank 05 — IRC server in strict C++98 (single poll())
+│   ├── src/                            # socket loop, command/numeric handlers, channels, bonus
+│   ├── Makefile                        # builds ./ircserv (C++98, -Wall -Wextra -Werror)
+│   └── tests/                          # 43 tests (static audit + real integration over sockets)
+├── webserv/                            # Rank 05 — HTTP/1.1 web server in strict C++98 (select)
+│   ├── srcs/                           # event loop, request parser, static/CGI, responses
+│   ├── includes/                       # Config.hpp, Request.hpp, Server.hpp, Utils.hpp
+│   ├── www/                            # static files, CGI, error pages
+│   ├── Makefile                        # builds ./webserv (C++98, -Wall -Wextra -Werror)
+│   └── tests/                          # 19 tests (stdlib-only Python: static, CGI, uploads, ...)
 ├── ft_transcendence/                   # Final — Full-stack Pong web app (Django + Channels + SPA)
 │   ├── config/                         # settings (JWT/OAuth/Channels), ASGI, urls + SPA catch-all
 │   ├── accounts/ games/ tournaments/ chat/   # Django apps: auth, engine/AI, bracket, chat
@@ -383,6 +405,18 @@ cd a_maze_ing && python3 -m pytest tests/
 # Inception: 58-check static suite (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, .env)
 make -C inception test
 
+# Ft_services: 73-check static suite (shell, Dockerfiles, nginx, WordPress, MySQL, k8s, bonus)
+python3 ft_services/tests/run_tests.py
+
+# Ft_irc: 43 tests (static audit + real integration: server compiled & driven by socket clients)
+python3 ft_irc/tests/run_tests.py
+
+# Webserv: 19 tests (stdlib-only Python: static, CGI, uploads, redirects, concurrency, bonus)
+python3 webserv/tests/run_tests.py
+
+# Django pool: 9 module checkers (d00-d08) + community & official testers
+python3 django_pool/tests/run_all.py
+
 # Exam Rank 02: 4 C suites / 111 tests (level 1-4)
 make -C exam_rank02 test
 
@@ -464,6 +498,7 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | **Rang 01** | [**`get_next_line/`**](get_next_line/README.md) | `get_next_line*.[ch]` | Variables `static`, `read(2)` bufferisé, tampon dynamique $\Theta(L)$, liste chaînée multi-FD *(Sujet v14.3)* | ✅ 1 `static` + Multi-FD | **Tripouille + Francinette `STRICT_MEM`** (1 000 FDs, pannes `malloc`) + GNL Station + ASan/UBSan |
 | **Rang 02** | [**`born2beroot/`**](born2beroot/README.fr.md) | VM Debian + `monitoring.sh` | Partitionnement LUKS2 + LVM, politique `pam_pwquality`/`login.defs`, durcissement `sudoers`, UFW, AppArmor, systemd + cron | ✅ WordPress · vsftpd · fail2ban | **106 vérifications statiques + 167 exigences + 5 testeurs communautaires (80 contrôles) + `verify.sh` (64)** |
 | **DevOps** | [**`inception/`**](inception/README.md) | Stack Docker Compose | Infrastructure web complète via **Docker Compose** : NGINX (TLS 1.2/1.3, port 443) + WordPress/php-fpm (TCP 9000) + MariaDB, images construites depuis **Debian bookworm**, secrets via Docker secrets | ✅ Adminer · Redis · FTP · site perso | **58 tests** (analyse statique YAML/Dockerfile/compose/Nginx/php-fpm/MariaDB/.env) |
+| **DevOps** | [**`ft_services/`**](ft_services/README.md) | Cluster Kubernetes | **Cluster de micro-services** sur **Kubernetes** (minikube + MetalLB load balancer) : un pod par service, images construites depuis **Alpine** avec Dockerfiles maison (pas d'images pré-faites de hub) ; Nginx (SSL, reverse proxy) + WordPress + MariaDB + FTPS + phpMyAdmin | ✅ Grafana · InfluxDB · Telegraf · SSH | **73 tests** (statique : syntaxe shell, Dockerfiles, nginx, WordPress, MySQL, manifestes Kubernetes, ConfigMap/Secret, probes, bonus) |
 
 #### 🟢 Cercle 2 — Systèmes de base
 
@@ -492,6 +527,8 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Rang 03** | [**`cpp_modules/`**](cpp_modules/README.md) | 37 exercices (`cpp_00`–`cpp_09`) | POO : classes, héritage, exceptions, templates, forme canonique ; STL (`map`/`vector`/`deque`/`stack`) | ✅ BSP · Forms · DiamondTrap | **93/93 tests** (build `-Wall -Wextra -Werror -std=c++98`, fonctionnels, cas limites, stress 3000, ASan/TSan) |
 | **C++98** | [**`ft_containers/`**](ft_containers/subjects/ft_containers_subject.md) | 10 headers `<container>.hpp` | Conteneurs STL recodés de zéro en C++98, namespace `ft`, `std::allocator` : `vector`, `map`, `stack` (+ bonus `set`, `deque`, `queue`, `multimap`, `multiset`), arbres rouge-noir, `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair` | ✅ Tous les conteneurs bonus | **3 408 assertions ASan/UBSan** + **5 testeurs** (llefranc, monkey, mazoise, mli, static) + **testsuite OFFICIELLE libstdc++ GCC 4.9.4** (0 bug applicable) |
+| **Rang 05** | [**`ft_irc/`**](ft_irc/README.md) | binaire `ircserv` | **Serveur IRC** en **C++98 strict** : un **seul `poll()`** multiplexe tous les clients (sockets TCP/IPv4 non-bloquants, pas de threads, pas de `fork`), parsing des commandes, canaux & messages privés, numerics, bonus complet (OPER, WHOIS, WHO, CITEBOT, CAP, JOIN 0, multi-canaux) | ✅ Toutes les commandes & modes bonus | **43 tests** (audit statique + intégration réelle : serveur compilé & piloté par vrais clients socket, chaque commande/mode) |
+| **Rang 05** | [**`webserv/`**](webserv/README.md) | binaire `webserv` | **Serveur web HTTP/1.1** en **C++98 strict** (inspiré NGINX) : boucle d'événements unique via `select()`, parsing RFC 7230, fichiers statiques, **CGI**, uploads, redirections, pages d'erreur, keep-alive, chunked, clients concurrents | ✅ CGI · uploads · chunked · keep-alive | **19 tests** (suite Python stdlib uniquement : statique, CGI, uploads, redirections, erreurs, concurrence, bonus) |
 
 #### 🐍 Track Python — Piscine Python & Algorithmique
 
@@ -499,6 +536,7 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Piscine** | [**`piscine_python/`**](piscine_python/README.md) | Modules 00–10 | **Piscine Python** complète : fondamentaux, POO, exceptions, collections, E/S, ABC, import/packages, patterns de conception, environnement & dépendances, validation Pydantic v2, programmation fonctionnelle | ✅ Tous les modules bonus | **44/44** checker de référence (modules 00–08) + **65/65** suite pytest maison (modules 09–10 + structure) |
 | **Algorithmique** | [**`a_maze_ing/`**](a_maze_ing/README.md) | `a_maze_ing` + package `mazegen` | **Générateur, solveur & visualiseur** de labyrinthes : config `KEY=VALUE`, génération DFS/Prim, plus court chemin BFS, sortie fichier murs hexadécimal, UI terminale, **« 42 »** caché, labyrinthe parfait vs plateau Pac-Man | ✅ Algorithme Prim · SEED · `mazegen` réutilisable (pip) | **20 tests pytest** + analyseur de labyrinthe indépendant (cohérence des murs, connectivité, zones 3×3, boucles, optimalité du chemin) |
+| **Piscine** | [**`django_pool/`**](django_pool/README.md) | Piscine Django (d00–d08) | **Piscine Django** complète : intro web (HTML/CSS/JS), Python de base & POO, base Django (projets, apps, templates, forms), librairies Python, ORM & SQL (models, clés étrangères, M2M), sessions & auth, avancé (vues génériques, tags templates, i18n, tests), AJAX & WebSockets | ✅ Les 9 modules | **9 checkers de module** (d00–d08) + testeurs communautaires & officiels |
 
 #### 🟣 Projet final — Web
 
@@ -527,8 +565,10 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`libft/`** conserve volontairement `Makefile`, `libft.h`, `README.md` et les 43 `ft_*.c` à sa racine conformément à l'exigence stricte du **Chapitre IV.1 du sujet Libft 2026 v19.3**, tout en isolant le sujet dans `docs/` et les tests dans `tests/`.
 - **`piscine42/`** préserve des dossiers `exXX/` strictement purs (prêts pour la Moulinette) et déporte l'intégralité des bancs d'essai dans `piscine42/tests/`.
 - **`piscine_python/`** est la **Piscine Python** (modules 00–10) : fondamentaux, POO, exceptions, collections, E/S, ABC, import/packages, patterns, env & dépendances, validation Pydantic v2, programmation fonctionnelle. Validée par un **checker de référence 44/44** (modules 00–08) et une **suite pytest maison 65/65** (modules 09–10 + structure).
+- **`django_pool/`** est la **Piscine Django** (modules d00–d08) : intro web (HTML/CSS/JS), Python de base & POO, base Django (projets, apps, templates, forms), librairies Python, ORM & SQL (models, clés étrangères, M2M), sessions & auth, avancé (vues génériques, tags templates, i18n, tests), AJAX & WebSockets. Validée par **9 checkers de module** (d00–d08) + testeurs communautaires & officiels.
 - **`a_maze_ing/`** est le **générateur, solveur et visualiseur de labyrinthes** : parsing `KEY=VALUE`, génération DFS/Prim, plus court chemin BFS, sortie hexadécimale, UI terminale, « 42 » caché, labyrinthe parfait vs Pac-Man. Le cœur génératif est isolé dans le package **`mazegen`** (réutilisable, installable via pip). Validée par **20 tests pytest** + un analyseur de labyrinthe indépendant.
 - **`inception/`** est l'infrastructure **DevOps** : stack **Docker Compose** NGINX (TLS) + WordPress/php-fpm + MariaDB (images depuis Debian bookworm, secrets via Docker secrets) + services bonus (Adminer, Redis, FTP, site perso). Validée par une **suite statique de 58 tests** (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, `.env`).
+- **`ft_services/`** est le cluster **DevOps** : déploiement automatique d'un **cluster Kubernetes** (minikube + MetalLB) de micro-services, un pod par service, images construites depuis **Alpine** avec Dockerfiles maison (Nginx SSL, WordPress, MariaDB, FTPS, phpMyAdmin) + bonus (Grafana, InfluxDB, Telegraf, SSH). Validée par une **suite statique de 73 tests** (syntaxe shell, Dockerfiles, nginx, WordPress, MySQL, manifestes k8s, ConfigMap/Secret, probes).
 - **`fdf/`** est le rendu de terrain 3D en wireframe miniLibX : parsing de height-maps `.fdf`, projection isométrique, 5 modes de couleur, rotation 3D. Validé par **5 suites / 248 tests**.
 - **`fract-ol/`** est le rendu de fractales 2D miniLibX : Mandelbrot, Julia + bonus (Burning Ship, Tricorn, Phoenix, Multibrot), rendu multithread. Validé par **6 suites / 1 077 tests** (sans X11).
 - **`push_swap/`** trie deux piles d'entiers en un minimum de mouvements : `push_swap.c` (sorteur + pousseur), `push_swap_utils.c` (opérations SA/SB/PA/PB), validé par **388 vérifications** (cas, benchmark, différentiel).
@@ -543,6 +583,8 @@ Le dépôt est organisé sans aucun fichier binaire parasite (`.o`, `.a`, exécu
 - **`miniRT/`** est le traceur de rayons CPU (Exam Rank 05) : parsing de scènes `.rt`, intersections, éclairage, ombres, réflexions, caméras. Validé par **9 suites / 14 660 tests**.
 - **`cpp_modules/`** contient les 10 modules **CPP 00–09** : chaque exercice (`cpp_XX/exYY/`) est autonome avec son `Makefile` et ses fichiers `*.hpp`/`*.cpp` en **C++98 strict** (`-Wall -Wextra -Werror`), forme canonique obligatoire de `cpp_02` à `cpp_09`, STL réservée aux modules 08–09. Les énoncés officiels sont dans `subjects/` et la suite de tests Python dans `tests/`.
 - **`ft_containers/`** recode les **conteneurs STL en C++98 strict** dans le namespace **`ft`** avec `std::allocator` : `vector`, `map` (arbre rouge-noir), `stack` (obligatoires) + `set`, `deque`, `queue`, `multimap`, `multiset` (bonus), ainsi que `iterator_traits`, `reverse_iterator`, `enable_if`, `is_integral`, `lexicographical_compare`/`equal`, `pair`/`make_pair`. Bibliothèque entièrement en headers (`includes/`), aucun binaire suivi. Validée par une **suite interne ASan/UBSan (3 408 assertions)**, **5 testeurs élèves** (llefranc, monkey, mazoise, mli, static) et la **testsuite OFFICIELLE libstdc++ GCC 4.9.4** (0 bug applicable). Le `Makefile` orchestre la suite interne et tous les testeurs via `make re`.
+- **`ft_irc/`** est un **serveur IRC** en **C++98 strict** : un **seul `poll()`** multiplexe tous les clients (sockets TCP/IPv4 non-bloquants, ni threads ni `fork`), parsing des commandes, canaux & messages privés, numerics, bonus complet (OPER, WHOIS, WHO, CITEBOT, CAP, JOIN 0, multi-canaux). Validée par une **suite de 43 tests** (audit statique + intégration réelle : serveur compilé et piloté par vrais clients socket).
+- **`webserv/`** est un **serveur web HTTP/1.1** en **C++98 strict** (inspiré NGINX) : boucle d'événements unique via `select()`, parsing RFC 7230, fichiers statiques, **CGI**, uploads, redirections, pages d'erreur, keep-alive, chunked, clients concurrents. Validée par une **suite de 19 tests** (Python stdlib uniquement).
 
 Pour aller plus loin sur l'organisation professionnelle d'un projet C en entreprise et à 42, consultez [**`docs/C_PROJECT_ARCHITECTURE_GUIDE.md`**](docs/C_PROJECT_ARCHITECTURE_GUIDE.md).
 
@@ -649,6 +691,18 @@ cd a_maze_ing && python3 -m pytest tests/
 
 # Inception : suite statique de 58 tests (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, .env)
 make -C inception test
+
+# Ft_services : suite statique de 73 tests (shell, Dockerfiles, nginx, WordPress, MySQL, k8s, bonus)
+python3 ft_services/tests/run_tests.py
+
+# Ft_irc : 43 tests (audit statique + intégration réelle : serveur compilé & piloté par sockets)
+python3 ft_irc/tests/run_tests.py
+
+# Webserv : 19 tests (Python stdlib uniquement : statique, CGI, uploads, redirections, concurrence, bonus)
+python3 webserv/tests/run_tests.py
+
+# Django pool : 9 checkers de module (d00-d08) + testeurs communautaires & officiels
+python3 django_pool/tests/run_all.py
 
 # Exam Rank 02 : 4 suites C / 111 tests (niveaux 1–4)
 make -C exam_rank02 test
