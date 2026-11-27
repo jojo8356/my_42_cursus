@@ -1,0 +1,22 @@
+{
+  "highscore_filename": "highscores.json",
+  "lives": 3,
+  "screen_width": 1000,
+  "screen_height": 1000,
+  "level_max_time": 90,
+  "points_per_pacgum": 10,
+  "points_per_super_pacgum": 50,
+  "points_per_ghost": 200,
+  "levels": [
+    {"name": "Level 1", "width": 10, "height": 10, "pacgums": 5, "seed": 42, "time": 90},
+    {"name": "Level 2", "width": 15, "height": 15, "pacgums": 8, "seed": 0, "time": 180},
+    {"name": "Level 3", "width": 20, "height": 21, "pacgums": 13, "seed": 0, "time": 200},
+    {"name": "Level 4", "width": 25, "height": 25, "pacgums": 16, "seed": 0, "time": 250},
+    {"name": "Level 5", "width": 30, "height": 30, "pacgums": 19, "seed": 0, "time": 300},
+    {"name": "Level 6", "width": 35, "height": 35, "pacgums": 23, "seed": 0, "time": 350},
+    {"name": "Level 7", "width": 39, "height": 39, "pacgums": 26, "seed": 0, "time": 400},
+    {"name": "Level 8", "width": 42, "height": 42, "pacgums": 30, "seed": 0, "time": 450},
+    {"name": "Level 9", "width": 45, "height": 45, "pacgums": 33, "seed": 0, "time": 500},
+    {"name": "Level 10", "width": 20, "height": 20, "pacgums": 8, "seed": 0, "time": 550}
+  ]
+}

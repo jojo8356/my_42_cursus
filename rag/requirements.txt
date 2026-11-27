@@ -1,0 +1,17 @@
+# RAG — RAG Against the Machine
+# Core pipeline uses only the Python standard library.
+# Tests:
+pytest>=7.0
+
+# Optional — real semantic embeddings (falls back to the local hashing
+# embedder when not installed):
+# sentence-transformers>=2.2
+# faiss-cpu>=1.7
+
+# Optional — model-backed answer generation (falls back to the local
+# template generator when not installed):
+# openai>=1.0
+
+# Optional — HTTP API (bonus):
+# fastapi>=0.100
+# uvicorn>=0.20

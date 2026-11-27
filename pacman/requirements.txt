@@ -1,0 +1,4 @@
+# Pacman — Ghosts! More ghosts!
+# The game uses only the Python standard library (curses, json, random).
+# pytest is only needed to run the test suite.
+pytest>=7.0
