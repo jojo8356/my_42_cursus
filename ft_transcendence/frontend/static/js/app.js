@@ -717,7 +717,7 @@ const Tournament = (function () {
       data.tournaments.forEach((t) => {
         const row = document.createElement("div");
         row.className = "d-flex justify-content-between align-items-center border rounded p-2 my-1";
-        row.innerHTML = `<span>${t.name} <span class="badge">${t.status}</span></span>
+        row.innerHTML = `<span>${escapeHtml(t.name)} <span class="badge">${escapeHtml(t.status)}</span></span>
           <button class="btn btn-sm btn-outline-primary join-tour" data-id="${t.id}">Join</button>`;
         el.appendChild(row);
       });
@@ -727,19 +727,25 @@ const Tournament = (function () {
   }
   async function create() {
     const name = document.getElementById("tour-name").value || "Tournament";
-    await API.post("/api/tournaments/", { name });
-    load();
+    try {
+      await API.post("/api/tournaments/", { name });
+      load();
+    } catch (e) { console.error(e); }
   }
   async function join(id) {
     const alias = prompt("Your alias:") || "player";
-    await API.post("/api/tournaments/" + id + "/", { alias });
-    load();
+    try {
+      await API.post("/api/tournaments/" + id + "/", { alias });
+      load();
+    } catch (e) { console.error(e); }
   }
   async function joinQueue() {
-    const data = await API.post("/api/tournaments/matchmaking/", {});
-    const info = document.getElementById("queue-info");
-    if (data.matched) info.textContent = "Match found: you vs user " + data.match[1];
-    else info.textContent = "Waiting in queue... (" + data.queue_size + " waiting)";
+    try {
+      const data = await API.post("/api/tournaments/matchmaking/", {});
+      const info = document.getElementById("queue-info");
+      if (data.matched) info.textContent = "Match found: you vs user " + data.match[1];
+      else info.textContent = "Waiting in queue... (" + data.queue_size + " waiting)";
+    } catch (e) { console.error(e); }
   }
   function init() {
     document.getElementById("create-tour").addEventListener("click", create);
@@ -810,7 +816,9 @@ const Chat = (function () {
     });
     document.getElementById("new-channel").addEventListener("click", async () => {
       const name = prompt("Channel name:");
-      if (name) { await API.post("/api/chat/channels/", { name }); renderChannels(); }
+      if (!name) return;
+      try { await API.post("/api/chat/channels/", { name }); renderChannels(); }
+      catch (e) { console.error(e); }
     });
   }
   return { init, connect };
