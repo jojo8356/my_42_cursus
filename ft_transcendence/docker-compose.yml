@@ -1,6 +1,27 @@
 # One command to run the whole app:  docker-compose up --build
 # Serves HTTPS (wss) on port 443, redirects HTTP (80) to HTTPS.
+#
+# By default the app runs self-contained on SQLite + in-memory channel layer.
+# Set POSTGRES_HOST (and the POSTGRES_* credentials) to use the bundled
+# PostgreSQL service, and REDIS_URL to use the bundled Redis channel layer for
+# scalable, multi-process websockets.
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: ft_transcendence_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-transcendence}
+      POSTGRES_USER: ${POSTGRES_USER:-transcendence}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-transcendence}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: ft_transcendence_redis
+    restart: unless-stopped
+
   transcendence:
     build: .
     container_name: ft_transcendence
@@ -17,4 +38,11 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
       POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      # Use the bundled Redis for the channel layer (production websockets).
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+    depends_on:
+      - redis
     restart: unless-stopped
+
+volumes:
+  pgdata:

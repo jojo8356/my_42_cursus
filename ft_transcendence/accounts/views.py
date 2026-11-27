@@ -415,3 +415,36 @@ def delete_account(request):
     """GDPR: permanently delete the account and all associated data."""
     request.user.delete_account()
     return Response({"deleted": True})
+
+
+# --------------------------------------------------------------------------- avatar
+# Allowed image extensions for avatar uploads.
+ALLOWED_AVATAR_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"}
+MAX_AVATAR_SIZE = 5 * 1024 * 1024  # 5 MB
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def avatar_upload(request):
+    """Upload a profile avatar (Standard user management module).
+
+    Accepts a single image file under ``avatar``. Validates the type and the
+    size server-side, stores it via the user's ``avatar`` FileField, and
+    returns the new avatar URL.
+    """
+    import os
+
+    upload = request.FILES.get("avatar")
+    if upload is None:
+        return Response({"error": "no avatar file provided"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    ext = os.path.splitext(upload.name)[1].lower()
+    if ext not in ALLOWED_AVATAR_EXT:
+        return Response({"error": "unsupported image type"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    if upload.size > MAX_AVATAR_SIZE:
+        return Response({"error": "avatar too large (5 MB max)"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    request.user.avatar.save(upload.name, upload, save=True)
+    return Response({"avatar": request.user.avatar.url},
+                    status=status.HTTP_200_OK)

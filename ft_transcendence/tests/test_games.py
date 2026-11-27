@@ -9,6 +9,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 from games.models import GameSession, GameCustomization, PowerUpTemplate
+from games.room import get_room, drop_room
 
 
 class GamesApiTests(TestCase):
@@ -85,3 +86,61 @@ class GamesApiTests(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.json()["direction"], 0)
+
+
+class GameRoomTests(TestCase):
+    """Authoritative game rooms for the Remote players module.
+
+    Two distant clients connect to the same session; the server owns the
+    shared game state and broadcasts it to every participant.
+    """
+
+    def tearDown(self):
+        # Clean the process-wide room cache between tests.
+        from games import room as room_mod
+        for key in list(room_mod._ROOMS.keys()):
+            room_mod._ROOMS.pop(key, None)
+
+    def test_room_is_shared_per_session(self):
+        r1 = get_room(1, kind="pong")
+        r2 = get_room(1, kind="pong")
+        self.assertIs(r1, r2)
+        self.assertEqual(r1.group_name, "game_1")
+
+    def test_pong_room_move_and_step(self):
+        room = get_room(2, kind="pong", is_ai=True)
+        room.move("left", 1)
+        room.step()
+        state = room.state()
+        self.assertEqual(state["state"], "playing")
+        self.assertIn("ball", state)
+
+    def test_pong_room_powerup(self):
+        room = get_room(3, kind="pong")
+        self.assertTrue(room.powerup("left", "speed"))
+        # power-ups are accepted; the game keeps running
+        self.assertTrue(room.state()["state"] in ("playing", "waiting", "over"))
+
+    def test_connect4_room_drop_and_ai(self):
+        room = get_room(4, kind="connect4", is_ai=True)
+        state = room.state()
+        self.assertEqual(state["current"], 1)
+        # drop in column 3 -> piece lands at the bottom (row 5)
+        self.assertTrue(room.drop(3))
+        state = room.state()
+        self.assertEqual(state["board"][5][3], 1)
+
+    def test_connect4_room_full_column_rejected(self):
+        room = get_room(5, kind="connect4")
+        for _ in range(6):
+            room.drop(0)
+        # column 0 is now full -> the 7th drop is rejected
+        self.assertFalse(room.drop(0))
+
+    def test_drop_room_clears_cache(self):
+        room = get_room(6, kind="pong")
+        self.assertIsNotNone(room)
+        drop_room(6)
+        # a fresh room is created on next access
+        fresh = get_room(6, kind="pong")
+        self.assertIsNot(room, fresh)
