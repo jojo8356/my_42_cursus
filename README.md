@@ -88,6 +88,7 @@ foundations (Circle 1) to advanced concurrency (Circle 3) and the C++ track
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Piscine** | [**`piscine_python/`**](piscine_python/README.md) | Modules 00–10 | Complete **Python Piscine**: fundamentals, OOP, exceptions, collections, I/O, ABC, import/packages, design patterns, env & deps, Pydantic v2 validation, functional programming | ✅ All bonus modules | **44/44** reference checker (modules 00–08) + **65/65** home pytest suite (modules 09–10 + structure) |
 | **Algorithmic** | [**`a_maze_ing/`**](a_maze_ing/README.md) | `a_maze_ing` + `mazegen` package | Maze **generator, solver & visualizer**: `KEY=VALUE` config, DFS/Prim generation, BFS shortest path, hex wall-file output, terminal UI, hidden **"42"**, perfect-maze vs Pac-Man board | ✅ Prim algorithm · SEED · reusable `mazegen` (pip-installable) | **20 pytest tests** + independent maze analyzer (wall coherence, connectivity, 3×3 areas, loops, path optimality) |
+| **Algorithmic** | [**`fly_in/`**](fly_in/README.md) | `main.py` + `src/` | **Multi-drone routing simulation**: a fleet must cross a graph of zones (normal/priority/restricted/blocked) from a start hub to an end hub in the fewest turns, respecting zone & connection capacities and two-turn restricted flights. **Space-time Dijkstra with per-turn reservations**, strict parser, independent replay checker, colored terminal output | ✅ **Challenger map**: 43 turns (beats the 45-turn record) · all targets met | **205 tests** (parser fuzzing, planner, simulation, all 10 maps, stress) + flake8/mypy `--strict` |
 | **Piscine** | [**`django_pool/`**](django_pool/README.md) | Piscine Django (d00–d08) | Complete **Django Piscine**: web intro (HTML/CSS/JS), Python basics & OOP, Django base (projects, apps, templates, forms), Python libs, ORM & SQL (models, foreign keys, M2M), sessions & auth, advanced (generic views, template tags, i18n, tests), AJAX & WebSockets | ✅ All 9 modules | **9 module checkers** (d00–d08) + community & official testers |
 
 #### 🟣 Final Project — Web
@@ -189,6 +190,12 @@ my_42_cursus/
 │   ├── a_maze_ing.py                   # CLI front-end: config parsing, output writing, terminal UI
 │   ├── tests/                          # 20 pytest tests + independent maze analyzer
 │   └── pyproject.toml                  # Packaging (mazegen wheel)
+├── fly_in/                             # Algorithmic — multi-drone routing simulation
+│   ├── main.py                         # entry point, args, interactive map menu
+│   ├── src/                            # models, strict parser, planner, simulation, renderer
+│   ├── maps/                           # 9 mandatory + Challenger maps
+│   ├── tests/                          # 205-test suite (parser, planner, replay, maps, stress)
+│   └── Makefile                        # install/run/debug/clean/lint/lint-strict/test
 ├── fdf/                               # Rank 02 — miniLibX wireframe 3D terrain renderer
 │   ├── includes/                      # fdf.h (types, prototypes)
 │   ├── src/                           # parse, math, color, draw, render, hooks
@@ -402,6 +409,9 @@ cd piscine_python && python3 -m pytest tests/
 # A-Maze-ing: 20 pytest tests + independent maze analyzer
 cd a_maze_ing && python3 -m pytest tests/
 
+# Fly-In: 205-test suite (parser fuzzing, planner, replay checker, maps, stress)
+make -C fly_in test
+
 # Inception: 58-check static suite (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, .env)
 make -C inception test
 
@@ -536,6 +546,7 @@ track C++ (cercle 4) — complétés par les recueils d'examen **Exam Rank**.
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **Piscine** | [**`piscine_python/`**](piscine_python/README.md) | Modules 00–10 | **Piscine Python** complète : fondamentaux, POO, exceptions, collections, E/S, ABC, import/packages, patterns de conception, environnement & dépendances, validation Pydantic v2, programmation fonctionnelle | ✅ Tous les modules bonus | **44/44** checker de référence (modules 00–08) + **65/65** suite pytest maison (modules 09–10 + structure) |
 | **Algorithmique** | [**`a_maze_ing/`**](a_maze_ing/README.md) | `a_maze_ing` + package `mazegen` | **Générateur, solveur & visualiseur** de labyrinthes : config `KEY=VALUE`, génération DFS/Prim, plus court chemin BFS, sortie fichier murs hexadécimal, UI terminale, **« 42 »** caché, labyrinthe parfait vs plateau Pac-Man | ✅ Algorithme Prim · SEED · `mazegen` réutilisable (pip) | **20 tests pytest** + analyseur de labyrinthe indépendant (cohérence des murs, connectivité, zones 3×3, boucles, optimalité du chemin) |
+| **Algorithmique** | [**`fly_in/`**](fly_in/README.md) | `main.py` + `src/` | **Simulation de routage multi-drones** : une flotte doit traverser un graphe de zones (normal/priorité/restreint/bloqué) d'un hub de départ à un hub d'arrivée en le minimum de tours, en respectant les capacités de zones & connexions et les vols restreints à 2 tours. **Dijkstra espace-temps avec réservations**, parser strict, checker de relecture indépendant, sortie terminale colorée | ✅ **Carte Challenger** : 43 tours (bat le record de 45) · tous les cibles atteints | **205 tests** (fuzzing parser, planificateur, simulation, les 10 cartes, stress) + flake8/mypy `--strict` |
 | **Piscine** | [**`django_pool/`**](django_pool/README.md) | Piscine Django (d00–d08) | **Piscine Django** complète : intro web (HTML/CSS/JS), Python de base & POO, base Django (projets, apps, templates, forms), librairies Python, ORM & SQL (models, clés étrangères, M2M), sessions & auth, avancé (vues génériques, tags templates, i18n, tests), AJAX & WebSockets | ✅ Les 9 modules | **9 checkers de module** (d00–d08) + testeurs communautaires & officiels |
 
 #### 🟣 Projet final — Web
@@ -688,6 +699,9 @@ cd piscine_python && python3 -m pytest tests/
 
 # A-Maze-ing : 20 tests pytest + analyseur de labyrinthe indépendant
 cd a_maze_ing && python3 -m pytest tests/
+
+# Fly-In : suite de 205 tests (fuzzing parser, planificateur, checker de relecture, cartes, stress)
+make -C fly_in test
 
 # Inception : suite statique de 58 tests (YAML, Dockerfiles, compose, Nginx, php-fpm, MariaDB, .env)
 make -C inception test
