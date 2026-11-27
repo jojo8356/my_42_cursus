@@ -13,7 +13,7 @@ guarantees the structure: that is the job of the constraints.
 
 import json
 
-from src.models import FunctionDefinition
+from src.models import FunctionDefinition, ParameterSpec
 
 # Key holding the arguments in the text the model sees (Qwen's own key).
 # The output file uses "parameters", as the subject requires.
@@ -27,6 +27,27 @@ SYSTEM_INSTRUCTIONS = (
     "example a regular expression or a character), write the actual "
     "pattern or symbol."
 )
+
+
+def _type_text(spec: ParameterSpec) -> str:
+    """Write a parameter schema as compact JSON type text.
+
+    Args:
+        spec: The parameter schema.
+
+    Returns:
+        A type string like ``"number"``, ``"array<number>"`` or
+        ``"object{a:number}"``.
+    """
+    if spec.type == "array" and spec.items is not None:
+        return f"array<{_type_text(spec.items)}>"
+    if spec.type == "object" and spec.properties:
+        inner = ",".join(
+            f"{name}:{_type_text(sub)}"
+            for name, sub in spec.properties.items()
+        )
+        return f"object{{{inner}}}"
+    return spec.type
 
 
 def function_schema(function: FunctionDefinition) -> str:
@@ -43,7 +64,8 @@ def function_schema(function: FunctionDefinition) -> str:
         "name": function.name,
         "description": function.description,
         "parameters": {
-            name: spec.type for name, spec in function.parameters.items()
+            name: _type_text(spec)
+            for name, spec in function.parameters.items()
         },
     }
     return json.dumps(schema, ensure_ascii=False)

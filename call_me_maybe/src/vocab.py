@@ -212,6 +212,20 @@ class Vocabulary(BaseModel):
                 ids.append(token_id)
         return ids
 
+    def ids_for_any_prefixes(self, texts: list[str]) -> list[int]:
+        """Find tokens matching any of the given prefixes.
+
+        Args:
+            texts: Candidate prefix texts.
+
+        Returns:
+            The matching token ids, deduplicated and sorted.
+        """
+        ids: set[int] = set()
+        for text in texts:
+            ids.update(self.ids_for_prefixes(text))
+        return sorted(ids)
+
 
 def after_opening_quote(text: str) -> str | None:
     """Return what follows an opening quote at the start of a token.

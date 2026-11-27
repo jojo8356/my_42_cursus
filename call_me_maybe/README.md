@@ -89,5 +89,24 @@ tests/           tests unitaires + eval
 
 ## Types de paramètres
 
-`number` (float, virgule requise), `integer`, `string` (quotes + escapes),
-`boolean` (`true`/`false`).
+**Types de base** : `number` (float, virgule requise), `integer`,
+`string` (quotes + escapes), `boolean` (`true`/`false`).
+
+**Bonus — types étendus** : `null`, `array` (avec schéma `items`),
+`object` (avec schéma `properties`), y compris les structures imbriquées.
+
+## Bonus
+
+- **Types étendus** : `null`, `array`/`object` imbriqués (structure JSON
+  forcée par le programme, valeurs générées sous contrainte).
+- **Limite de tokens** : `max_tokens` par valeur + `force_close` de
+  reprise (anti-débordement).
+- **Visualisation** : `--visualize` imprime chaque token généré
+  (champ, nombre de tokens autorisés, id, fragment) sur stderr.
+- **Multiples modèles** : `--model <id>` pour charger un autre modèle
+  Hugging Face (défaut : `Qwen/Qwen3-0.6B`).
+- **Timeout** : `--timeout <secondes>` limite le temps par prompt.
+
+```bash
+uv run python -m src --model Qwen/Qwen3-1.7B --visualize --timeout 30
+```

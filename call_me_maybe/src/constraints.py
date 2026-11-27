@@ -40,6 +40,8 @@ class Constraint(BaseModel):
     Attributes:
         vocab: Decoded vocabulary.
         follow: Fixed text that comes right after the value.
+        follow_any: Optional list of alternative follow texts (for array
+            elements, which may be followed by ``,`` or ``]``).
         max_tokens: Maximum number of tokens generated for this value.
     """
 
@@ -47,7 +49,15 @@ class Constraint(BaseModel):
 
     vocab: Vocabulary
     follow: str = ""
+    follow_any: list[str] | None = None
     max_tokens: int = 32
+
+    def _follows(self) -> list[str]:
+        """Return the follow texts to consider (follow + follow_any)."""
+        follows = [self.follow] if self.follow else []
+        if self.follow_any:
+            follows.extend(self.follow_any)
+        return follows
 
     def allowed_ids(self, buffer: str) -> np.ndarray:
         """Return the token ids allowed after ``buffer``.
@@ -121,10 +131,11 @@ class ChoiceConstraint(Constraint):
         """
         allowed: set[int] = set()
         for option in self.options:
-            target = option + self.follow
-            if target.startswith(buffer):
-                remaining = target[len(buffer):]
-                allowed.update(self.vocab.ids_for_prefixes(remaining))
+            for follow in self._follows():
+                target = option + follow
+                if target.startswith(buffer):
+                    remaining = target[len(buffer):]
+                    allowed.update(self.vocab.ids_for_prefixes(remaining))
         return np.array(sorted(allowed), dtype=np.int64)
 
     def advance(self, buffer: str, token_text: str) -> tuple[str, bool]:
@@ -210,8 +221,9 @@ class NumberConstraint(Constraint):
             if self.is_prefix(buffer + self.vocab.text_of(token_id))
         ]
         if NUMBER_RE.fullmatch(buffer):
-            allowed += self.vocab.ids_for_prefixes(self.follow)
-        return np.array(allowed, dtype=np.int64)
+            for follow in self._follows():
+                allowed += self.vocab.ids_for_prefixes(follow)
+        return np.array(sorted(set(allowed)), dtype=np.int64)
 
     def advance(self, buffer: str, token_text: str) -> tuple[str, bool]:
         """Append a digit token, or finish on a token from ``follow``.
@@ -252,6 +264,71 @@ class NumberConstraint(Constraint):
         return int(buffer) if self.integer else float(buffer)
 
 
+class NullConstraint(Constraint):
+    """Generate the JSON literal ``null`` (bonus type).
+
+    The buffer is either empty (nothing written yet) or ``"null"``
+    (complete). Only tokens that keep the buffer a prefix of
+    ``"null" + follow`` are allowed.
+    """
+
+    max_tokens: int = 8
+
+    def allowed_ids(self, buffer: str) -> np.ndarray:
+        """Return tokens that keep the buffer a prefix of ``null``.
+
+        Args:
+            buffer: Text generated so far.
+
+        Returns:
+            Allowed token ids.
+        """
+        target = "null" + self.follow
+        if target.startswith(buffer):
+            return np.array(
+                self.vocab.ids_for_prefixes(target[len(buffer):]),
+                dtype=np.int64,
+            )
+        return np.array([], dtype=np.int64)
+
+    def advance(self, buffer: str, token_text: str) -> tuple[str, bool]:
+        """Append the token; finished once ``null`` is written.
+
+        Args:
+            buffer: Text generated so far.
+            token_text: Text of the chosen token.
+
+        Returns:
+            The new buffer and whether the literal is complete.
+        """
+        buffer += token_text
+        if buffer == "null":
+            return buffer, True
+        return buffer, False
+
+    def force_close(self, buffer: str) -> str:
+        """Complete the buffer to ``null``.
+
+        Args:
+            buffer: Unfinished text.
+
+        Returns:
+            ``"null"``.
+        """
+        return "null"
+
+    def to_value(self, buffer: str) -> ArgumentValue:
+        """Return ``None`` for the completed literal.
+
+        Args:
+            buffer: A complete ``null`` literal.
+
+        Returns:
+            ``None``.
+        """
+        return None
+
+
 class StringConstraint(Constraint):
     """Generate a JSON string, from its opening quote to its closing quote.
 
@@ -281,7 +358,7 @@ class StringConstraint(Constraint):
             open_and_close = [
                 token_id
                 for token_id, rest in self.vocab.opening_quote_splits
-                if self.follow.startswith(rest)
+                if any(follow.startswith(rest) for follow in self._follows())
             ]
             return np.concatenate([
                 self.vocab.opening_ids,
@@ -290,7 +367,7 @@ class StringConstraint(Constraint):
         closing = [
             token_id
             for token_id, _body, rest in self.vocab.quote_splits
-            if self.follow.startswith(rest)
+            if any(follow.startswith(rest) for follow in self._follows())
         ]
         return np.concatenate(
             [self.vocab.string_body_ids, np.array(closing, dtype=np.int64)]
