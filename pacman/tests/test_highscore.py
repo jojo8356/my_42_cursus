@@ -1,110 +1,148 @@
-"""Tests for the high-score store."""
+"""Tests for high-score validation, ordering and JSON persistence."""
 import json
+from pathlib import Path
 
 import pytest
 
-from highscore import validate_name, validate_score, HighscoreStore
+from highscore import HighscoreStore, validate_name, validate_score
 
 
-def test_validate_name_valid():
+def test_validate_name_valid() -> None:
     assert validate_name("Alice") == "Alice"
     assert validate_name("Player 1") == "Player 1"
     assert validate_name("A1B2C3D4E5") == "A1B2C3D4E5"
 
 
-def test_validate_name_invalid():
+@pytest.mark.parametrize(
+    "name",
+    ["", "   ", "ThisNameIsTooLong", "Has!Special@Chars", 123],
+)
+def test_validate_name_invalid(name: object) -> None:
     with pytest.raises(ValueError):
-        validate_name("")  # empty is technically valid (0 chars) but stripped
-    with pytest.raises(ValueError):
-        validate_name("ThisNameIsTooLong")
-    with pytest.raises(ValueError):
-        validate_name("Has!Special@Chars")
-    with pytest.raises(ValueError):
-        validate_name(123)  # not a string
+        validate_name(name)
 
 
-def test_validate_name_empty_invalid():
-    # Empty / whitespace-only names are rejected.
-    with pytest.raises(ValueError):
-        validate_name("   ")
-    with pytest.raises(ValueError):
-        validate_name("")
-
-
-def test_validate_score_valid():
+def test_validate_score_valid() -> None:
     assert validate_score(0) == 0
     assert validate_score(1000) == 1000
-    assert validate_score("500") == 500
 
 
-def test_validate_score_invalid():
+@pytest.mark.parametrize("score", [-1, "abc", None, True, 3.5, "500"])
+def test_validate_score_rejects_invalid_or_ambiguous_values(
+    score: object,
+) -> None:
     with pytest.raises(ValueError):
-        validate_score(-1)
-    with pytest.raises(ValueError):
-        validate_score("abc")
-    with pytest.raises(ValueError):
-        validate_score(None)
+        validate_score(score)
 
 
-def test_add_and_top(tmp_path):
-    store = HighscoreStore(str(tmp_path / "hs.json"))
+def test_add_and_top(tmp_path: Path) -> None:
+    store = HighscoreStore(tmp_path / "hs.json")
     store.add("Alice", 100)
     store.add("Bob", 300)
     store.add("Cara", 200)
-    top = store.top()
-    assert top[0] == {"name": "Bob", "score": 300}
-    assert top[1] == {"name": "Cara", "score": 200}
-    assert top[2] == {"name": "Alice", "score": 100}
+
+    assert store.top() == [
+        {"name": "Bob", "score": 300},
+        {"name": "Cara", "score": 200},
+        {"name": "Alice", "score": 100},
+    ]
 
 
-def test_top_ten_limit(tmp_path):
-    store = HighscoreStore(str(tmp_path / "hs.json"))
-    for i in range(15):
-        store.add(f"P{i}", i * 10)
+def test_top_ten_limit(tmp_path: Path) -> None:
+    store = HighscoreStore(tmp_path / "hs.json")
+    for index in range(15):
+        store.add(f"P{index}", index * 10)
+
     top = store.top()
     assert len(top) == 10
-    # Highest scores retained.
     assert top[0]["score"] == 140
     assert top[-1]["score"] == 50
 
 
-def test_save_and_load(tmp_path):
+def test_save_and_load(tmp_path: Path) -> None:
     path = tmp_path / "hs.json"
-    store = HighscoreStore(str(path))
+    store = HighscoreStore(path)
     store.add("Alice", 100)
     store.add("Bob", 300)
     store.save()
     assert path.exists()
 
-    store2 = HighscoreStore(str(path))
-    store2.load()
-    assert store2.top() == [{"name": "Bob", "score": 300},
-                            {"name": "Alice", "score": 100}]
+    reloaded = HighscoreStore(path)
+    reloaded.load()
+    assert reloaded.top() == [
+        {"name": "Bob", "score": 300},
+        {"name": "Alice", "score": 100},
+    ]
 
 
-def test_load_invalid_file(tmp_path):
+def test_load_invalid_file(tmp_path: Path) -> None:
     path = tmp_path / "hs.json"
-    path.write_text("not json")
-    store = HighscoreStore(str(path))
+    path.write_text("not json", encoding="utf-8")
+    store = HighscoreStore(path)
     store.load()
     assert store.top() == []
 
 
-def test_is_new_record(tmp_path):
-    store = HighscoreStore(str(tmp_path / "hs.json"))
-    for i in range(15):
-        store.add(f"P{i}", i * 10)
-    # After keeping the top 10, the lowest kept score is 50.
-    # A score below 50 is not a new record; strictly above 50 is.
+def test_load_ignores_invalid_record_shapes(tmp_path: Path) -> None:
+    path = tmp_path / "hs.json"
+    path.write_text(
+        json.dumps(
+            [
+                None,
+                {},
+                {"score": 10},
+                {"name": "Valid", "score": 10},
+            ]
+        ),
+        encoding="utf-8",
+    )
+    store = HighscoreStore(path)
+
+    assert store.load() == [{"name": "Valid", "score": 10}]
+    path.write_text(json.dumps({"name": "not a list"}), encoding="utf-8")
+    assert store.load() == []
+
+
+def test_load_discards_ambiguous_scores_and_limits_records(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "hs.json"
+    records = [
+        {"name": "Valid", "score": 100},
+        {"name": "Boolean", "score": True},
+        {"name": "Float", "score": 25.0},
+        {"name": "String", "score": "75"},
+        *[{"name": f"P{index}", "score": index} for index in range(20)],
+    ]
+    path.write_text(json.dumps(records), encoding="utf-8")
+
+    store = HighscoreStore(path)
+    store.load()
+
+    assert len(store.top()) == store.TOP_N
+    assert store.top()[0] == {"name": "Valid", "score": 100}
+    assert all(record["name"] not in {"Boolean", "Float", "String"}
+               for record in store.top())
+
+
+def test_is_new_record(tmp_path: Path) -> None:
+    store = HighscoreStore(tmp_path / "hs.json")
+    for index in range(15):
+        store.add(f"P{index}", index * 10)
+
     assert store.is_new_record(5) is False
     assert store.is_new_record(50) is False
     assert store.is_new_record(51) is True
     assert store.is_new_record(100) is True
+    with pytest.raises(ValueError):
+        store.is_new_record(True)
 
 
-def test_add_invalid_raises(tmp_path):
-    store = HighscoreStore(str(tmp_path / "hs.json"))
+def test_add_invalid_raises(tmp_path: Path) -> None:
+    store = HighscoreStore(tmp_path / "hs.json")
     with pytest.raises(ValueError):
         store.add("Invalid Name!", 100)
     with pytest.raises(ValueError):
         store.add("Alice", -5)
+    with pytest.raises(ValueError):
+        store.add("Alice", 8.5)

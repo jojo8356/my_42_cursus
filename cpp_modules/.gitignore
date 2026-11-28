@@ -2,10 +2,11 @@
 *.o
 *.a
 
-# Binaires des exercices ( Makefile clean/fclean les génère )
+# Binaires des exercices (Makefile clean/fclean les génère)
 megaphone
 phonebook
-tests
+# cpp_00/ex02 produces a binary named "tests"; keep the Python tests/ directory tracked.
+/cpp_00/ex02/tests
 zombie
 horde
 brain

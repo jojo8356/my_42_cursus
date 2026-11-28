@@ -7,7 +7,7 @@
 [![Language: C++](https://img.shields.io/badge/Language-C%2B%2B98-00599C?style=flat-square&logo=cpp&logoColor=white)](https://en.cppreference.com/w/)
 [![Compiler Flags](https://img.shields.io/badge/Flags--Wall_-Wextra_-Werror_-std%3Dc%2B%2B98-success?style=flat-square)](#compilation)
 [![Tests](https://img.shields.io/badge/Tests-93%2F93-brightgreen?style=flat-square)](#tests--validation)
-[![Memory Safety](https://img.shields.io/badge/Memory-0_Leaks_(ASan_%C2%B7_TSan)-brightgreen?style=flat-square)](#tests--validation)
+[![Sanitizers](https://img.shields.io/badge/Sanitizers-ASan%20%2B%20TSan-brightgreen?style=flat-square)](#tests--validation)
 
 **[ 🇬🇧 English ](#english) · [ 🇫🇷 Français ](#français)**
 
@@ -56,13 +56,15 @@ All code compiles cleanly under `c++ -Wall -Wextra -Werror -std=c++98`.
 python3 cpp_modules/tests/test_cpp_modules.py
 ```
 
-**93 checks** covering:
-- **Build** of all 37 exercises under `-Wall -Wextra -Werror -std=c++98`
-- **Functional tests** with expected-output references per exercise
-- **Edge cases** (empty, negative, non-digit, special values `inf`/`nan`)
-- **Argument validation** (missing args, bad types)
-- **Stress test** (PmergeMe over 3000 distinct integers, even & odd)
-- **Sanitizer builds** (ASan + TSan) with leak/corruption detection
+The suite runs **93 checks**: 37 isolated Makefile builds, 50 functional scenarios and 6 sanitizer
+build/runs. It covers:
+- All **37 exercise builds** under `-Wall -Wextra -Werror -std=c++98`; builds happen in temporary
+  copies and leave the source tree untouched
+- **Functional behavior and expected output** across all modules
+- **Edge cases** (empty input, negative values, non-digits, `inf`/`nan`) and CLI argument validation
+- **PmergeMe stress tests** on 3,000 distinct even and 3,000 distinct odd integers
+- **ASan and TSan** instrumented builds/runs on selected memory- and inheritance-heavy exercises;
+  sanitizer checks are skipped when that sanitizer is unavailable
 
 ### Rules Compliance
 
@@ -117,13 +119,16 @@ Tout le code compile proprement sous `c++ -Wall -Wextra -Werror -std=c++98`.
 python3 cpp_modules/tests/test_cpp_modules.py
 ```
 
-**93 checks** couvrant :
-- **Build** des 37 exercices sous `-Wall -Wextra -Werror -std=c++98`
-- **Tests fonctionnels** avec références de sortie attendues
-- **Cas limites** (vide, négatif, non-digit, valeurs spéciales `inf`/`nan`)
-- **Validation d'arguments** (args manquants, mauvais types)
-- **Test de stress** (PmergeMe sur 3000 entiers distincts, pair et impair)
-- **Builds sanitizers** (ASan + TSan) avec détection de fuites/corruption
+La suite exécute **93 checks** : 37 builds isolés via les Makefiles, 50 scénarios fonctionnels et
+6 builds/exécutions sous sanitizers. Elle couvre :
+- Les **37 builds** sous `-Wall -Wextra -Werror -std=c++98`, dans des copies temporaires qui ne
+  modifient pas les sources
+- Le **comportement fonctionnel et les sorties attendues** dans tous les modules
+- Les **cas limites** (entrée vide, valeurs négatives, non-chiffres, `inf`/`nan`) et la validation
+  des arguments CLI
+- **PmergeMe** sur 3 000 entiers pairs distincts et 3 000 entiers impairs distincts
+- Des exécutions instrumentées **ASan et TSan** sur des exercices sélectionnés ; les checks d’un
+  sanitizer sont ignorés si celui-ci n’est pas disponible
 
 ### Respect des règles
 
