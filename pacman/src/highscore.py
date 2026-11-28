@@ -1,37 +1,45 @@
-"""
-Persistent high-score table for Pacman.
+"""Persistent high-score table for Pacman.
 
 Scores are stored in a JSON file. Names are validated (up to 10 alphanumeric
 characters or spaces) and scores must be non-negative integers. Only the top
 10 entries are kept, sorted from highest to lowest.
 """
+from __future__ import annotations
+
 import json
 import os
 import re
+from os import PathLike
+from typing import TypedDict
 
 NAME_MAX = 10
-NAME_RE = re.compile(r"^[A-Za-z0-9 ]{1,10}$")
+NAME_RE = re.compile(r"[A-Za-z0-9 ]{1,10}")
 
 
-def validate_name(name):
+class HighscoreRecord(TypedDict):
+    """A validated name and score pair."""
+
+    name: str
+    score: int
+
+
+def validate_name(name: object) -> str:
     """Return a normalized name or raise ``ValueError`` if invalid."""
     if not isinstance(name, str):
         raise ValueError("name must be a string")
-    name = name.strip()
-    if not NAME_RE.match(name):
+    normalized = name.strip()
+    if NAME_RE.fullmatch(normalized) is None:
         raise ValueError("name must be 1-10 alphanumeric characters or spaces")
-    return name
+    return normalized
 
 
-def validate_score(score):
-    """Return an int score or raise ``ValueError`` if invalid."""
-    try:
-        s = int(score)
-    except (TypeError, ValueError):
+def validate_score(score: object) -> int:
+    """Return a non-negative integer score or raise ``ValueError``."""
+    if type(score) is not int:
         raise ValueError("score must be an integer")
-    if s < 0:
+    if score < 0:
         raise ValueError("score must be non-negative")
-    return s
+    return score
 
 
 class HighscoreStore:
@@ -39,53 +47,62 @@ class HighscoreStore:
 
     TOP_N = 10
 
-    def __init__(self, path):
+    def __init__(self, path: str | PathLike[str]) -> None:
         self.path = path
-        self.records = []
+        self.records: list[HighscoreRecord] = []
 
-    def load(self):
-        """Load records from the JSON file (empty if missing/invalid)."""
+    def load(self) -> list[HighscoreRecord]:
+        """Load records from JSON (empty if missing or invalid)."""
         self.records = []
         try:
-            with open(self.path, "r", encoding="utf-8") as fh:
-                data = json.load(fh)
+            with open(self.path, "r", encoding="utf-8") as score_file:
+                data = json.load(score_file)
         except (OSError, ValueError):
             return self.records
         if not isinstance(data, list):
             return self.records
         for entry in data:
-            if isinstance(entry, dict) and "name" in entry and "score" in entry:
-                try:
-                    name = validate_name(entry["name"])
-                    score = validate_score(entry["score"])
-                    self.records.append({"name": name, "score": score})
-                except ValueError:
-                    continue
-        self.records.sort(key=lambda r: r["score"], reverse=True)
+            if not isinstance(entry, dict):
+                continue
+            if "name" not in entry or "score" not in entry:
+                continue
+            try:
+                record: HighscoreRecord = {
+                    "name": validate_name(entry["name"]),
+                    "score": validate_score(entry["score"]),
+                }
+            except ValueError:
+                continue
+            self.records.append(record)
+        self.records.sort(key=lambda record: record["score"], reverse=True)
+        self.records = self.records[: self.TOP_N]
         return self.records
 
-    def save(self):
+    def save(self) -> None:
         """Write the current records to the JSON file."""
-        os.makedirs(os.path.dirname(os.path.abspath(self.path)) or ".", exist_ok=True)
-        with open(self.path, "w", encoding="utf-8") as fh:
-            json.dump(self.records, fh, indent=2, ensure_ascii=False)
+        parent = os.path.dirname(os.path.abspath(self.path))
+        os.makedirs(parent or ".", exist_ok=True)
+        with open(self.path, "w", encoding="utf-8") as score_file:
+            json.dump(self.records, score_file, indent=2, ensure_ascii=False)
 
-    def add(self, name, score):
+    def add(self, name: object, score: object) -> HighscoreRecord:
         """Validate and add a score, keeping only the top 10."""
-        name = validate_name(name)
-        score = validate_score(score)
-        record = {"name": name, "score": score}
+        record: HighscoreRecord = {
+            "name": validate_name(name),
+            "score": validate_score(score),
+        }
         self.records.append(record)
-        self.records.sort(key=lambda r: r["score"], reverse=True)
+        self.records.sort(key=lambda item: item["score"], reverse=True)
         self.records = self.records[: self.TOP_N]
         return record
 
-    def top(self):
-        """Return the current top-10 records (sorted)."""
+    def top(self) -> list[HighscoreRecord]:
+        """Return a shallow copy of the current top-10 records."""
         return list(self.records)
 
-    def is_new_record(self, score):
-        """Whether ``score`` would make the top-10."""
+    def is_new_record(self, score: object) -> bool:
+        """Whether ``score`` would make the top 10."""
+        validated_score = validate_score(score)
         if len(self.records) < self.TOP_N:
             return True
-        return score > self.records[-1]["score"]
+        return validated_score > self.records[-1]["score"]

@@ -228,10 +228,6 @@ char **ft_range(int min, int max)
         int j = len;
         s[j] = 0;
         j--;
-        if (n < 0)
-        {
-            s[j--] = '-';
-        }
         tmp = n_abs;
         if (tmp == 0)
             s[j--] = '0';
@@ -240,6 +236,8 @@ char **ft_range(int min, int max)
             s[j--] = '0' + (tmp % 10);
             tmp /= 10;
         }
+        if (n < 0)
+            s[0] = '-';
         result[i] = s;
         n++;
         i++;
@@ -286,10 +284,6 @@ char **ft_rrange(int min, int max)
         int j = len;
         s[j] = 0;
         j--;
-        if (n < 0)
-        {
-            s[j--] = '-';
-        }
         tmp = n_abs;
         if (tmp == 0)
             s[j--] = '0';
@@ -298,6 +292,8 @@ char **ft_rrange(int min, int max)
             s[j--] = '0' + (tmp % 10);
             tmp /= 10;
         }
+        if (n < 0)
+            s[0] = '-';
         result[i] = s;
         n--;
         i++;

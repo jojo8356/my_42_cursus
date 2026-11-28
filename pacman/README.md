@@ -1,38 +1,34 @@
 # 🎮 Pacman — Ghosts! More ghosts!
 
-Projet 42 — jeu Pacman complet, implémenté en **Python 3 pur** (moteur
-sans I/O + interface `curses`), accompagné d'une **suite de tests complète**.
+Projet 42 — jeu Pacman en **Python 3 pur** (moteur sans I/O + interface
+`curses`), accompagné d'une suite de tests couvrant le moteur et le parcours
+interactif.
 
 ## Structure
 
 ```
 pacman/
 ├── subject.txt            # Énoncé complet du projet (partie + bonus)
-├── pac-man.py             # Point d'entrée + interface curses (présentation)
-├── requirements.txt       # pytest (le jeu utilise seulement la stdlib)
-├── Makefile               # install / run / test / clean
+├── pac-man.py             # Point d'entrée + interface curses
+├── requirements.txt       # pytest
+├── requirements-dev.txt   # pytest, Flake8 et mypy
+├── mypy.ini               # Vérification stricte des types
+├── Makefile               # install / run / test / lint / typecheck
 ├── src/
-│   ├── maze.py            # Labyrinthe : génération non-parfaite + tunnel
+│   ├── maze.py            # Labyrinthe : génération + tunnel
 │   ├── model.py           # Types purs : Direction, Position, Pacman, Ghost…
-│   ├── ghosts.py          # IA fantômes : BFS, chasse/dispersion/peur/mort
-│   ├── game.py            # Moteur de jeu (règles, score, vies, timer)
-│   ├── config.py          # Parseur JSON robuste (10 niveaux par défaut)
-│   ├── highscore.py       # Tableau des hauts scores (top 10, JSON)
+│   ├── ghosts.py          # IA des fantômes et recherche de chemins
+│   ├── game.py            # Règles, score, vies, timers et transitions
+│   ├── config.py          # Parseur JSON et validation de configuration
+│   ├── highscore.py       # Tableau des scores (top 10, JSON)
 │   └── config.json        # Configuration par défaut
-└── tests/                 # Suite de tests (pytest)
-    ├── test_maze.py
-    ├── test_model.py
-    ├── test_ghosts.py
-    ├── test_game.py
-    ├── test_config.py
-    ├── test_highscore.py
-    └── test_integration.py
+└── tests/                 # Suite pytest, dont les tests curses non bloquants
 ```
 
 ## Démarrage
 
 ```bash
-# Installer les dépendances de test
+# Dépendance minimale pour jouer
 pip install -r requirements.txt
 
 # Lancer le jeu
@@ -40,36 +36,42 @@ python3 pac-man.py src/config.json
 #   ou : make run
 ```
 
-Contrôles : **flèches directionnelles** ou **ZQSD/WASD** pour bouger,
-**Espace / Échap** pour mettre en pause, **F1/f** pour le cheat (vies infinies).
+Pour installer également les outils de développement :
 
-## Tests
+```bash
+pip install -r requirements-dev.txt
+```
+
+Contrôles : **flèches**, **WASD** ou **ZQSD** pour bouger,
+**Espace / Échap** pour mettre en pause, **F1/f** pour le cheat.
+
+## Tests et contrôles statiques
 
 ```bash
 python3 -m pytest tests/ -v
-#   ou : make test
+python3 -m pytest tests/ --cov=src --cov=pacman_cli --cov-report=term-missing
+python3 -m flake8 .
+python3 -m mypy
+#   ou : make check / make coverage
 ```
 
-La suite couvre : la génération/connexité/tunnel du labyrinthe, le modèle de
-données, l'IA des fantômes (chasse, dispersion, peur, mort, cul-de-sac), le
-moteur (collisions, score, vies, timer, respawn, fin de niveau), le parser de
-config, la gestion des hauts scores, et des scénarios d'intégration
-(progression multi-niveaux jusqu'à la victoire, tunnel en jeu, persistance du
-score).
+Les tests couvrent la génération, la connexité et le tunnel du labyrinthe,
+les comportements chase/scatter/frightened/dead et les personnalités de
+Blinky, Pinky, Inky et Clyde, les règles de score et de vies, la validation
+stricte des configurations et scores, la progression réelle entre niveaux,
+la conservation du score et des vies, l'interface curses contrôlée par des
+entrées simulées, ainsi que l'enregistrement et le rechargement d'un score
+final via le parcours de `main()`.
 
 ## Fonctionnalités
 
-**Obligatoire** : labyrinthe généré (non-parfait, sans cul-de-sac), Pac-Man,
-4 fantômes aux comportements distincts, pac-gums, score, vies, timer,
-10 niveaux, tunnel gauche/droite, fin de partie / victoire, hauts scores
-persistés (top 10 JSON).
+Labyrinthe généré, Pac-Man, quatre fantômes aux comportements distincts,
+pac-gums, score, vies, timer, niveaux configurables, tunnel gauche/droite,
+fin de partie et victoire, hauts scores persistés (top 10 JSON).
 
-**Bonus** : super pac-gum → fantômes effrayés (édible), fruit bonus,
-vie bonus tous les 10 000 pts, mode cheat, mode mort/respawn des fantômes,
-animation des états (prévu via l'interface curses).
+Super pac-gum, fruit bonus, vie bonus tous les 10 000 points, mode cheat,
+retour à la base et réapparition des fantômes effrayés.
 
-## Implémentation
-
-Le moteur (`src/game.py`) est **pur et sans I/O** : il ne fait aucune lecture
-clavier ni écriture écran, ce qui le rend entièrement déterministe et testable.
-`pac-man.py` est uniquement la couche de présentation `curses`.
+Le moteur (`src/game.py`) est pur et sans I/O. `pac-man.py` gère la couche de
+présentation `curses`; sa boucle de jeu utilise des entrées non bloquantes et
+peut être testée avec un écran simulé.

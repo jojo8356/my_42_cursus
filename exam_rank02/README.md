@@ -26,6 +26,7 @@ exam_rank02/
 │   └── ...
 └── tests/
     ├── test_framework.h   # framework de test C léger
+    ├── test_utils.h       # capture de stdout pour les tests
     ├── run_tests.sh       # orchestrateur make test
     ├── test_level_1.c
     ├── test_level_2.c
@@ -50,7 +51,7 @@ exam_rank02/
 | `rot_13`          | Appliquer un décalage ROT13 sur une chaîne.             |
 | `rotone`          | Appliquer un décalage de 1 sur une chaîne.              |
 | `search_and_replace` | Remplacer tous les `a` par `b` dans une chaîne.     |
-| `ulstr`           | Mettre une chaîne en minuscules.                        |
+| `ulstr`           | Mettre une chaîne en minuscules puis trier ses caractères (ex. `ulstr("Hello")` → `ehllo`). |
 
 ### Level 2 — manipulation avancée
 
@@ -123,7 +124,7 @@ make re
 
 ## Tests
 
-Suite de tests C (4 suites, 111 tests) dans `tests/` :
+Suite locale de tests C (4 suites, 149 assertions) dans `tests/`. Les sources sont versionnées avec le projet ; aucune dépendance réseau n'est nécessaire :
 
 ```bash
 make test                # compile et lance les 4 suites
